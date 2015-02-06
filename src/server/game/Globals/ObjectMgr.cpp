@@ -8211,6 +8211,23 @@ void ObjectMgr::LoadTrainerSpell()
     TC_LOG_INFO("server.loading", ">> Loaded %d Trainers in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
+
+VendorItemData const* ObjectMgr::GetNpcVendorItemListShowOnly(uint32 entry) const
+{
+    CacheVendorItemContainer::const_iterator iter = _cacheVendorItemStore.find(entry);
+    if (iter == _cacheVendorItemStore.end())
+        return NULL;
+
+    // Force extendedCost to "disable" the items
+    VendorItemData newItems = iter->second;
+    int i = newItems.GetItemCount();
+    while (i)
+    {
+        newItems.getItem(i)->ExtendedCost = 2398;
+        i--;
+    }
+
+    return &newItems;
 }
 
 VendorItemData const* ObjectMgr::GetNpcVendorItemList(uint32 entry) const
