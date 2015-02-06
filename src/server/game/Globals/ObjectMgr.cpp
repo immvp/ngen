@@ -51,6 +51,8 @@
 #include "WaypointManager.h"
 #include "World.h"
 
+#define DISABLED_EXTENDED_COST 2398
+
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;
 ScriptMapMap sWaypointScripts;
@@ -274,6 +276,8 @@ ObjectMgr::~ObjectMgr()
     }
 
     for (CacheVendorItemContainer::iterator itr = _cacheVendorItemStore.begin(); itr != _cacheVendorItemStore.end(); ++itr)
+        itr->second.Clear();
+    for (CacheVendorItemContainer::iterator itr = _cacheVendorItemStoreShowOnly.begin(); itr != _cacheVendorItemStoreShowOnly.end(); ++itr)
         itr->second.Clear();
 
     _cacheTrainerSpellStore.clear();
@@ -8214,20 +8218,11 @@ void ObjectMgr::LoadTrainerSpell()
 
 VendorItemData const* ObjectMgr::GetNpcVendorItemListShowOnly(uint32 entry) const
 {
-    CacheVendorItemContainer::const_iterator iter = _cacheVendorItemStore.find(entry);
-    if (iter == _cacheVendorItemStore.end())
+    CacheVendorItemContainer::const_iterator iter = _cacheVendorItemStoreShowOnly.find(entry);
+    if (iter == _cacheVendorItemStoreShowOnly.end())
         return NULL;
 
-    // Force extendedCost to "disable" the items
-    VendorItemData newItems = iter->second;
-    int i = newItems.GetItemCount();
-    while (i)
-    {
-        newItems.getItem(i)->ExtendedCost = 2398;
-        i--;
-    }
-
-    return &newItems;
+    return &iter->second;
 }
 
 VendorItemData const* ObjectMgr::GetNpcVendorItemList(uint32 entry) const
@@ -8269,8 +8264,10 @@ int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *s
                 continue;
 
             VendorItemData& vList = _cacheVendorItemStore[vendor];
+            VendorItemData& vListShowOnly = _cacheVendorItemStoreShowOnly[vendor];
 
             vList.AddItem(item_id, maxcount, incrtime, ExtendedCost);
+            vListShowOnly.AddItem(item_id, maxcount, incrtime, DISABLED_EXTENDED_COST);
             ++count;
         }
     } while (result->NextRow());
@@ -8286,6 +8283,9 @@ void ObjectMgr::LoadVendors()
     for (CacheVendorItemContainer::iterator itr = _cacheVendorItemStore.begin(); itr != _cacheVendorItemStore.end(); ++itr)
         itr->second.Clear();
     _cacheVendorItemStore.clear();
+    for (CacheVendorItemContainer::iterator itr = _cacheVendorItemStoreShowOnly.begin(); itr != _cacheVendorItemStoreShowOnly.end(); ++itr)
+        itr->second.Clear();
+    _cacheVendorItemStoreShowOnly.clear();
 
     std::set<uint32> skip_vendors;
 
@@ -8319,8 +8319,10 @@ void ObjectMgr::LoadVendors()
                 continue;
 
             VendorItemData& vList = _cacheVendorItemStore[entry];
+            VendorItemData& vListShowOnly = _cacheVendorItemStoreShowOnly[entry];
 
             vList.AddItem(item_id, maxcount, incrtime, ExtendedCost);
+            vListShowOnly.AddItem(item_id, maxcount, incrtime, DISABLED_EXTENDED_COST);
             ++count;
         }
     }
@@ -8452,7 +8454,9 @@ void ObjectMgr::LoadGossipMenuItems()
 void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 incrtime, uint32 extendedCost, bool persist /*= true*/)
 {
     VendorItemData& vList = _cacheVendorItemStore[entry];
+    VendorItemData& vListShowOnly = _cacheVendorItemStore[entry];
     vList.AddItem(item, maxcount, incrtime, extendedCost);
+    vListShowOnly.AddItem(item, maxcount, incrtime, DISABLED_EXTENDED_COST);
 
     if (persist)
     {
@@ -8476,6 +8480,9 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool persist /*= tru
 
     if (!iter->second.RemoveItem(item))
         return false;
+
+    CacheVendorItemContainer::iterator  iter = _cacheVendorItemStoreShowOnly.find(entry);
+    iter->second.RemoveItem(item);
 
     if (persist)
     {

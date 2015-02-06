@@ -1436,6 +1436,7 @@ class ObjectMgr
         TrinityStringContainer _trinityStringStore;
 
         CacheVendorItemContainer _cacheVendorItemStore;
+        CacheVendorItemContainer _cacheVendorItemStoreShowOnly;
         CacheTrainerSpellContainer _cacheTrainerSpellStore;
 
         std::set<uint32> _difficultyEntries[MAX_DIFFICULTY - 1]; // already loaded difficulty 1 value in creatures, used in CheckCreatureTemplate
