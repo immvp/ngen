@@ -8481,7 +8481,7 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool persist /*= tru
     if (!iter->second.RemoveItem(item))
         return false;
 
-    CacheVendorItemContainer::iterator  iter = _cacheVendorItemStoreShowOnly.find(entry);
+    iter = _cacheVendorItemStoreShowOnly.find(entry);
     iter->second.RemoveItem(item);
 
     if (persist)
