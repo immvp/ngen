@@ -8211,6 +8211,17 @@ void ObjectMgr::LoadTrainerSpell()
     TC_LOG_INFO("server.loading", ">> Loaded %d Trainers in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
+}
+
+VendorItemData const* ObjectMgr::GetNpcVendorItemList(uint32 entry) const
+{
+    CacheVendorItemContainer::const_iterator iter = _cacheVendorItemStore.find(entry);
+    if (iter == _cacheVendorItemStore.end())
+        return NULL;
+
+    return &iter->second;
+}
+
 int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *skip_vendors)
 {
     // find all items from the reference vendor
