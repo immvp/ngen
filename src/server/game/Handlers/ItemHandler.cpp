@@ -748,7 +748,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorGuid)
     if (vendor->HasUnitState(UNIT_STATE_MOVING))
         vendor->StopMoving();
 
-    VendorItemData const* items = vendor->GetVendorItems();
+    VendorItemData const* items = vendor->GetVendorItems(GetPlayer());
     if (!items)
     {
         WorldPacket data(SMSG_LIST_INVENTORY, 8 + 1 + 1);

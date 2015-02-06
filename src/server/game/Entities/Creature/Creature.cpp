@@ -2318,16 +2318,19 @@ uint32 Creature::GetScriptId() const
 
 VendorItemData const* Creature::GetVendorItems() const
 {
-    return sObjectMgr->GetNpcVendorItemList(entry);
+	std::cout << "I love turtle" << std::endl;
+	return sObjectMgr->GetNpcVendorItemList(GetEntry());
 }
 
 VendorItemData const* Creature::GetVendorItems(Player const* player) const
 {
-    uint32 const entry = GetEntry();
-    if (player->HasTitle(sObjectMgr->GetCreatureTemplate(entry)->SkinLootId)) {
+	uint32 const entry = GetEntry();
+	uint32 title = sObjectMgr->GetCreatureTemplate(entry)->SkinLootId;
+	std::cout << player->GetName() << " - has title : " << player->HasTitle(title) << std::endl;
+	if (title == 0 || player->HasTitle(title)) {
         return sObjectMgr->GetNpcVendorItemList(entry);
     }
-    return sObjectMgr->GetNpcVendorItemListShowOnly(entry);
+	return sObjectMgr->GetNpcVendorItemListShowOnly(entry);
 }
 
 uint32 Creature::GetVendorItemCurrentCount(VendorItem const* vItem)
