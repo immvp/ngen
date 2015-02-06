@@ -1423,6 +1423,7 @@ void AddSC_cyclone_customs();
 void AddSC_enchanter();
 void AddSC_npc_glyph_template();
 void AddSC_npc_item_template();
+void AddSC_title_system();
 //void AddSC_npc_glyph_template2();
 //void arena_spectator_commands();
 //void npc_arena_spectator();
@@ -1442,6 +1443,7 @@ void AddCustomScripts()
 	AddSC_enchanter();
 	AddSC_npc_glyph_template();
 	AddSC_npc_item_template();
+	AddSC_title_system();
 //	arena_spectator_commands();
 //  npc_arena_spectator();
 //	AddSC_ProfessionNpc();

@@ -51,7 +51,7 @@
 #include "WaypointManager.h"
 #include "World.h"
 
-#define DISABLED_EXTENDED_COST 2600
+#define DISABLED_EXTENDED_COST 2398
 
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;

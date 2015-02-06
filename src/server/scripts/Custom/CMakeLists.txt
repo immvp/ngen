@@ -23,6 +23,7 @@ Custom/npc_profession2.cpp
 Custom/npc_enchanter.cpp
 Custom/npc_glyph_template.cpp
 Custom/npc_item_template.cpp
+Custom/npc_title_vendor.cpp
 )
 
 message("  -> Prepared: Custom")
