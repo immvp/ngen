@@ -2318,7 +2318,7 @@ uint32 Creature::GetScriptId() const
 
 VendorItemData const* Creature::GetVendorItems() const
 {
-    return sObjectMgr->GetNpcVendorItemList(GetEntry());
+    return sObjectMgr->GetNpcVendorItemListShowOnly(GetEntry());
 }
 
 uint32 Creature::GetVendorItemCurrentCount(VendorItem const* vItem)
