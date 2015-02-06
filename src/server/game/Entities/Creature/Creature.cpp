@@ -2318,7 +2318,16 @@ uint32 Creature::GetScriptId() const
 
 VendorItemData const* Creature::GetVendorItems() const
 {
-    return sObjectMgr->GetNpcVendorItemListShowOnly(GetEntry());
+    return sObjectMgr->GetNpcVendorItemList(entry);
+}
+
+VendorItemData const* Creature::GetVendorItems(Player const* player) const
+{
+    uint32 const entry = GetEntry();
+    if (player->HasTitle(sObjectMgr->GetCreatureTemplate(entry)->SkinLootId)) {
+        return sObjectMgr->GetNpcVendorItemList(entry);
+    }
+    return sObjectMgr->GetNpcVendorItemListShowOnly(entry);
 }
 
 uint32 Creature::GetVendorItemCurrentCount(VendorItem const* vItem)
