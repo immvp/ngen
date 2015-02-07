@@ -94,20 +94,6 @@ static const char   *titlesNames[28] =
 	"High Warlord"
 };
 
-//this function handle sending the buyitem decomposed opcode
-static bool SellItem(Player* player, Creature* me, uint32 data, uint32 itemId)
-{
-	ItemPosCountVec dest;
-	int32 randomEnchant = (data & 0x7FFFFF);   //init ench to the 23 first bits
-	uint32 vendorslot = ((data >> 24) & 0xFF); // get the last 8 bits for the vendorslot
-	if ((data >> 23) & 0x1)                    //check if the 24th bit is set
-		randomEnchant = -randomEnchant;        //it's a suffix, we need to send a negative value
-	player->BuyItemFromVendorSlot(me->GetGUID(), vendorslot, itemId, 1, NULL_BAG, NULL_SLOT, randomEnchant);
-
-	//return to the vendor list
-	sScriptMgr->OnGossipHello(player, me);
-	return true;
-}
 
 static uint32 GetTotalTokens(Player* Player)
 {
@@ -124,70 +110,6 @@ static uint32 GetTotalTokens(Player* Player)
 	}
 	return (0);
 }
-
-class npc_title_vendor : public CreatureScript
-{
-public:
-	npc_title_vendor() : CreatureScript("npc_title_vendor") {}
-
-	uint16 NeededToken(uint32 rank)
-	{
-		uint16 total = 0;
-
-		while (rank)
-		{
-			total += TOKEN_COUNT * rank;
-			rank--;
-		}
-		return (total);
-	}
-
-	bool OnGossipHello(Player* player, Creature* me)
-	{
-		std::ostringstream  ss;
-		const uint32        totalTokens = GetTotalTokens(player);
-		const int8          faction = (player->GetTeam() == ALLIANCE) ? -1 : 13;
-		const uint8         npcTitle = me->GetCreatureTemplate()->maxgold;
-		const uint16        reqTokens = NeededToken(npcTitle);
-
-		if (totalTokens >= reqTokens)
-		{
-			if (!me->IsVendor())
-				return (false);
-			player->PlayerTalkClass->ClearMenus();
-			player->GetSession()->SendListInventory(me->GetGUID());
-		}
-		else
-		{
-			player->PlayerTalkClass->ClearMenus();
-			ss << TXT_REQ_TITLE;
-			if (npcTitle < 10)
-				ss << "0";
-			ss << 0 + npcTitle << FORMAT_END << titlesNames[npcTitle + faction];
-			ss << " still " << reqTokens - totalTokens << TXT_WSG_MARK;
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, ss.str().c_str(), GOSSIP_SENDER_MAIN, CUSTOM_OPTION_VENDOR);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, TXT_KTHXBY, GOSSIP_SENDER_MAIN, CUSTOM_OPTION_EXIT);
-			player->PlayerTalkClass->SendGossipMenu(8, me->GetGUID());
-		}
-		return (true);
-	}
-
-	bool OnGossipSelect(Player* player, Creature* me, uint32 data, uint32 uiAction)
-	{
-		player->PlayerTalkClass->ClearMenus();
-		if (uiAction == GOSSIP_OPTION_VENDOR)
-			OnGossipHello(player, me);
-		else if (uiAction == CUSTOM_OPTION_VENDOR)
-			player->GetSession()->SendListInventory(me->GetGUID() - 1000);
-		else if (uiAction >= CUSTOM_OPTION_ITEM_MENU && uiAction < CUSTOM_OPTION_ITEM_MENU_MAX)
-			return (GetList(player, me, data, uiAction - CUSTOM_OPTION_ITEM_MENU + 1));
-		else if (uiAction > CUSTOM_OPTION_MAX) //in that case uiAction == itemID lol
-			SellItem(player, me, data, uiAction);
-		else
-			player->PlayerTalkClass->SendCloseGossip();
-		return (true);
-	}
-};
 
 class npc_title_giver : public CreatureScript
 {
@@ -245,6 +167,5 @@ public:
 void AddSC_title_system()
 {
 	new npc_title_giver();
-	new npc_title_vendor();
 
 }
