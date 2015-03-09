@@ -24,6 +24,7 @@ Custom/npc_enchanter.cpp
 Custom/npc_glyph_template.cpp
 Custom/npc_item_template.cpp
 Custom/npc_title_vendor.cpp
+Custom/npc_talentspec.cpp
 )
 
 message("  -> Prepared: Custom")

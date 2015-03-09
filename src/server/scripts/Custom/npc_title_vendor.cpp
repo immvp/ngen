@@ -8,7 +8,7 @@
 #define A_X             -1208.98f
 #define A_Y             -88.27f
 #define A_Z             161.50f
-#define TOKEN           41596
+#define TOKEN           20558
 #define TOKEN_COUNT     8
 #define TITLE_REWARDED  47 // title "The Conqueror"
 #define ELEM_COUNT      25 // Amount of enchants showed per page

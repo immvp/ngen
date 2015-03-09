@@ -45,9 +45,9 @@ enum CharterItemIDs
 enum CharterCosts
 {
     GUILD_CHARTER_COST                            = 1000,
-    ARENA_TEAM_CHARTER_2v2_COST                   = 800000,
-    ARENA_TEAM_CHARTER_3v3_COST                   = 1200000,
-    ARENA_TEAM_CHARTER_5v5_COST                   = 2000000
+    ARENA_TEAM_CHARTER_2v2_COST                   = 0,
+    ARENA_TEAM_CHARTER_3v3_COST                   = 0,
+    ARENA_TEAM_CHARTER_5v5_COST                   = 0
 };
 
 void WorldSession::HandlePetitionBuyOpcode(WorldPacket& recvData)
