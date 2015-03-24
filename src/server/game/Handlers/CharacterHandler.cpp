@@ -1832,16 +1832,16 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
             stmt->setUInt32(0, lowGuid);
 
             WorldLocation loc;
-            uint16 zoneId = 0;
+            uint16 zoneId = 3430;
             if (team == TEAM_ALLIANCE)
             {
-                loc.WorldRelocate(0, -8867.68f, 673.373f, 97.9034f, 0.0f);
-                zoneId = 1519;
+                loc.WorldRelocate(530, 8434, -7592, 159, 1.92f);
+                zoneId = 3430;
             }
             else
             {
-                loc.WorldRelocate(1, 1633.33f, -4439.11f, 15.7588f, 0.0f);
-                zoneId = 1637;
+                loc.WorldRelocate(530, 8434, -7592, 159, 1.92f);
+                zoneId = 3430;
             }
 
             stmt->setUInt16(1, loc.GetMapId());

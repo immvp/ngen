@@ -8,13 +8,13 @@ public:
 		switch (player->getClass())
 		{
 		case CLASS_WARRIOR:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Warrior_SavageBlow:50:50:-25:0|t |cff341C02Arms\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Warrior_SavageBlow:50:50:-25:0|t |cff341C02Arms\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nSpell Reflect", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Warrior_InnerRage:50:50:-25:0|t |cff990606Fury\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Warrior_DefensiveStance:50:50:-25:0|t |cff112552Protection\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
 		case CLASS_PALADIN:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_HolyBolt:50:50:-25:0|t |cffB26D06Holy\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_HolyBolt:50:50:-25:0|t |cffB26D06Holy\n|cffaa0ba8Passives:|r\nConcentration Aura\n|cff6722d6Actives:|r\nAura Mastery", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Paladin_ShieldoftheTemplar:50:50:-25:0|t |cff112552Protection\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_AuraofLight:50:50:-25:0|t |cffaa0ba8Retribution\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
@@ -26,14 +26,14 @@ public:
 			break;
 
 		case CLASS_ROGUE:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Rogue_Eviscerate:50:50:-25:0|t |cffb5351eAssassination\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Backstab:50:50:-25:0|t |cffb5351eCombat\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Stealth:50:50:-25:0|t |cffb5351eSublety\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Rogue_Eviscerate:50:50:-25:0|t |cffb5351eAssassination\n|cffaa0ba8Passives:|r\nVigor and Overkill\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Backstab:50:50:-25:0|t |cffb5351eCombat\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nRupture", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Stealth:50:50:-25:0|t |cffb5351eSublety\n|cffaa0ba8Passives:|r\nCheat Death\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
 		case CLASS_PRIEST:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_PowerWordShield:50:50:-25:0|t |cffFFFFFFDiscipline\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_GuardianSpirit:50:50:-25:0|t |cffFFFFFFHoly\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_PowerWordShield:50:50:-25:0|t |cffFFFFFFDiscipline\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nSmite (rank 4)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_GuardianSpirit:50:50:-25:0|t |cffFFFFFFHoly\n|cffaa0ba8Passives:|r\nBody and Soul 2/2\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 			//player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_ShadowWordPain:50:50:-25:0|t |cff160d1cShadow\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
@@ -49,20 +49,20 @@ public:
 
 		case CLASS_SHAMAN:
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_Lightning:50:50:-25:0|t |cff4000FFElemental\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_LightningShield:50:50:-25:0|t |cff013ADFEnhancement\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_LightningShield:50:50:-25:0|t |cff013ADFEnhancement\n|cffaa0ba8Passives:|r\nDual Wield\nImproved Stormstrike\nShamanistic Focus\n|cff6722d6Actives:|r\nStormstrike\nHealing Wave(rank 4)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_MagicImmunity:50:50:-25:0|t |cff04B404Restoration\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
 		case CLASS_MAGE:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_MagicalSentry:50:50:-25:0|t |cff3fb7fcArcane|r\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nArcane Barrage, Counterspell", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Fire_Firebolt02:50:50:-25:0|t |cffb5351eFire|r\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nDragon's Breath", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Frost_Frostbolt02:50:50:-25:0|t |cff0c378cFrost|r\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nIcy Veins, Ice Block, Cold Snap", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_MagicalSentry:50:50:-25:0|t |cff3fb7fcArcane|r\n|cffaa0ba8Passives:|r\nArcane Empowerment 3/3\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Fire_Firebolt02:50:50:-25:0|t |cffb5351eFire|r\n|cffaa0ba8Passives:|r\nImpact 3/3\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Frost_Frostbolt02:50:50:-25:0|t |cff0c378cFrost|r\n|cffaa0ba8Passives:|r\nShatter 2/3\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
 		case CLASS_WARLOCK:
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_DeathCoil:50:50:-25:0|t |cff279505Affliction\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_Metamorphosis:50:50:-25:0|t |cffb5351eDemonology\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_RainofFire:50:50:-25:0|t |cff613008Destruction\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_DeathCoil:50:50:-25:0|t |cff279505Affliction\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nCurse of Exhaustion", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_Metamorphosis:50:50:-25:0|t |cffb5351eDemonology\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nShadowfury", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_RainofFire:50:50:-25:0|t |cff613008Destruction\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nConflagrate", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 			break;
 
 		case CLASS_DRUID:
@@ -92,11 +92,11 @@ public:
 			switch (player->getClass())
 			{
 			case CLASS_WARRIOR: // Arms
-				player->LearnSpell(6673, true);
-				//player->LearnSpell(2, true); Fjern comment ( brugt til at vise det virker )
-				//player->LearnSpell(3, true);
-				//player->LearnSpell(4, true);
-				//player->LearnSpell(5, true);
+				player->LearnSpell(6673, false);
+				//player->LearnSpell(2, false); Fjern comment ( brugt til at vise det virker )
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
 				player->RemoveSpell(71);
 				player->RemoveSpell(469);
@@ -106,11 +106,11 @@ public:
 				break;
 
 			case CLASS_PALADIN: // Holy
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(19746, false);
+				player->LearnSpell(31821, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -120,11 +120,11 @@ public:
 				break;
 
 			case CLASS_HUNTER: // BeastMastery
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -134,25 +134,25 @@ public:
 				break;
 
 			case CLASS_ROGUE: // Assassination
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(58426, false);
+				player->LearnSpell(14983, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(1943);
+				player->RemoveSpell(31228);
+				//player->RemoveSpell(3);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_PRIEST: // Discipline
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -163,11 +163,11 @@ public:
 
 			case CLASS_DEATH_KNIGHT: // Blood
 				/*
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -179,11 +179,11 @@ public:
 				break;
 
 			case CLASS_SHAMAN: // Elemental
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -193,25 +193,25 @@ public:
 				break;
 
 			case CLASS_MAGE: // Arcane
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(31583, false);
+				//player->LearnSpell(2, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(12358);
+				player->RemoveSpell(12982);
+				//player->RemoveSpell(3);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_WARLOCK: // Affliction
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -221,11 +221,11 @@ public:
 				break;
 
 			case CLASS_DRUID: // Balance
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -246,11 +246,11 @@ public:
 			switch (player->getClass())
 			{
 			case CLASS_WARRIOR: // Fury
-				player->LearnSpell(469, true);
-				//player->LearnSpell(2, true); Fjern comment ( brugt til at vise det virker )
-				//player->LearnSpell(3, true);
-				//player->LearnSpell(4, true);
-				//player->LearnSpell(5, true);
+				player->LearnSpell(469, false);
+				//player->LearnSpell(2, false); Fjern comment ( brugt til at vise det virker )
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
 				player->RemoveSpell(6673);
 				player->RemoveSpell(71);
@@ -260,25 +260,25 @@ public:
 				break;
 
 			case CLASS_PALADIN: // Protection
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
+				player->RemoveSpell(19746);
+				player->RemoveSpell(31821);
 				player->RemoveSpell(3);
 				player->RemoveSpell(4);
 				player->RemoveSpell(5);
 				break;
 
 			case CLASS_HUNTER: // Marksmanship
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -288,25 +288,25 @@ public:
 				break;
 
 			case CLASS_ROGUE: // Combat
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1943, false);
+				//player->LearnSpell(2, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(31228);
+				player->RemoveSpell(14983);
+				player->RemoveSpell(58426);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_PRIEST: // Holy
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -317,11 +317,11 @@ public:
 
 			case CLASS_DEATH_KNIGHT: // Frost
 				/*
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -333,11 +333,11 @@ public:
 				break;
 
 			case CLASS_SHAMAN: // Enhancement
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -347,25 +347,25 @@ public:
 				break;
 
 			case CLASS_MAGE: // Fire
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(12358, false);
+				//player->LearnSpell(2, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(12982);
+				player->RemoveSpell(31583);
+				//player->RemoveSpell(3);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_WARLOCK: // Demonology
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -375,11 +375,11 @@ public:
 				break;
 
 			case CLASS_DRUID: // Feral
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -400,11 +400,11 @@ public:
 			switch (player->getClass())
 			{
 			case CLASS_WARRIOR: // Protection
-				player->LearnSpell(71, true);
-				//player->LearnSpell(2, true); Fjern comment ( brugt til at vise det virker )
-				//player->LearnSpell(3, true);
-				//player->LearnSpell(4, true);
-				//player->LearnSpell(5, true);
+				player->LearnSpell(71, false);
+				//player->LearnSpell(2, false); Fjern comment ( brugt til at vise det virker )
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
 				player->RemoveSpell(6673);
 				player->RemoveSpell(469);
@@ -414,25 +414,25 @@ public:
 				break;
 
 			case CLASS_PALADIN: // Retribution
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
+				player->RemoveSpell(19746);
+				player->RemoveSpell(31821);
 				player->RemoveSpell(3);
 				player->RemoveSpell(4);
 				player->RemoveSpell(5);
 				break;
 
 			case CLASS_HUNTER: // Survival
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -442,25 +442,25 @@ public:
 				break;
 
 			case CLASS_ROGUE: // Sublety
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(31228, false);
+				//player->LearnSpell(2, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(1943);
+				player->RemoveSpell(14983);
+				player->RemoveSpell(58426);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_PRIEST: // Shadow
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -471,11 +471,11 @@ public:
 
 			case CLASS_DEATH_KNIGHT: // Unholy
 				/*
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -487,11 +487,11 @@ public:
 				break;
 
 			case CLASS_SHAMAN: // Restoration
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -501,25 +501,25 @@ public:
 				break;
 
 			case CLASS_MAGE: // Frost
-				player->LearnSpell(12472, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(12982, false);
+				//player->LearnSpell(2, false);
+				//player->LearnSpell(3, false);
+				//player->LearnSpell(4, false);
+				//player->LearnSpell(5, false);
 
-				player->RemoveSpell(1);
-				player->RemoveSpell(2);
-				player->RemoveSpell(3);
-				player->RemoveSpell(4);
-				player->RemoveSpell(5);
+				player->RemoveSpell(12358);
+				player->RemoveSpell(31583);
+				//player->RemoveSpell(3);
+				//player->RemoveSpell(4);
+				//player->RemoveSpell(5);
 				break;
 
 			case CLASS_WARLOCK: // Destruction
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);
@@ -529,11 +529,11 @@ public:
 				break;
 
 			case CLASS_DRUID: // Restoration
-				player->LearnSpell(1, true);
-				player->LearnSpell(2, true);
-				player->LearnSpell(3, true);
-				player->LearnSpell(4, true);
-				player->LearnSpell(5, true);
+				player->LearnSpell(1, false);
+				player->LearnSpell(2, false);
+				player->LearnSpell(3, false);
+				player->LearnSpell(4, false);
+				player->LearnSpell(5, false);
 
 				player->RemoveSpell(1);
 				player->RemoveSpell(2);

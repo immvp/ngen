@@ -5499,7 +5499,7 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
 
 void Player::RepopAtGraveyard()
 {
-    // note: this can be called also when the player is alive
+    uint32 zoneId = GetZoneId();// note: this can be called also when the player is alive
     // for example from WorldSession::HandleMovementOpcodes
 
     AreaTableEntry const* zone = GetAreaEntryByAreaID(GetAreaId());
@@ -5518,7 +5518,7 @@ void Player::RepopAtGraveyard()
         ClosestGrave = bg->GetClosestGraveYard(this);
     else
     {
-        if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
+        if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(zoneId))
             ClosestGrave = bf->GetClosestGraveYard(this);
         else
             ClosestGrave = sObjectMgr->GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
@@ -5531,15 +5531,33 @@ void Player::RepopAtGraveyard()
     // and don't show spirit healer location
     if (ClosestGrave)
     {
-        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation());
-        if (isDead())                                        // not send if alive, because it used in TeleportTo()
+            if (zoneId == 33 || zoneId == 3430)
         {
-            WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4);  // show spirit healer position on minimap
-            data << ClosestGrave->map_id;
-            data << ClosestGrave->x;
-            data << ClosestGrave->y;
-            data << ClosestGrave->z;
-            GetSession()->SendPacket(&data);
+            TeleportTo(m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ, GetOrientation());
+            if (isDead()) // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4); // show spirit healer position on minimap
+                data << m_homebindMapId;
+                data << m_homebindX;
+                data << m_homebindY;
+                data << m_homebindZ;
+                GetSession()->SendPacket(&data);
+            }
+            ResurrectPlayer(0.5f);
+            SpawnCorpseBones();
+        }
+        else
+        {
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation());
+            if (isDead()) // not send if alive, because it used in TeleportTo()
+            {
+                WorldPacket data(SMSG_DEATH_RELEASE_LOC, 4*4); // show spirit healer position on minimap
+                data << ClosestGrave->map_id;
+                data << ClosestGrave->x;
+                data << ClosestGrave->y;
+                data << ClosestGrave->z;
+                GetSession()->SendPacket(&data);
+            }
         }
     }
     else if (GetPositionZ() < -500.0f)
@@ -7464,7 +7482,7 @@ void Player::UpdateArea(uint32 newArea)
     m_areaUpdateId    = newArea;
 
     AreaTableEntry const* area = GetAreaEntryByAreaID(newArea);
-    pvpInfo.IsInFFAPvPArea = area && (area->flags & AREA_FLAG_ARENA);
+    pvpInfo.IsInFFAPvPArea = area && ((area->flags & AREA_FLAG_ARENA) || (GetAreaId() == 19));
     UpdatePvPState(true);
 
     UpdateAreaDependentAuras(newArea);
@@ -8358,7 +8376,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
 void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 procVictim, uint32 procEx, Item* item, ItemTemplate const* proto)
 {
     // Can do effect if any damage done to target
-    if (procVictim & PROC_FLAG_TAKEN_DAMAGE)
+    if (procVictim & (PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK | PROC_FLAG_TAKEN_SPELL_MELEE_DMG_CLASS))
     //if (damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE)
     {
         for (uint8 i = 0; i < MAX_ITEM_SPELLS; ++i)
@@ -8423,7 +8441,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
             else
             {
                 // Can do effect if any damage done to target
-                if (!(procVictim & PROC_FLAG_TAKEN_DAMAGE))
+                if (!(procVictim & (PROC_FLAG_TAKEN_MELEE_AUTO_ATTACK | PROC_FLAG_TAKEN_SPELL_MELEE_DMG_CLASS)))
                 //if (!(damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE))
                     continue;
             }
@@ -12498,17 +12516,45 @@ void Player::QuickEquipItem(uint16 pos, Item* pItem)
 
 void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
-    if (pItem)
-    {
-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
-        SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
-        SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
-    }
-    else
-    {
-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
-    }
+	if (pItem)
+	{
+		QueryResult char_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_character where item1 = %u and charid = %u;", pItem->GetEntry(), GetGUIDLow());
+		QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
+
+		if (char_t)
+		{
+			Field* char_tfield = char_t->Fetch();
+			uint32 item_2 = char_tfield[0].GetUInt32();
+
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+		}
+		else if (class_t)
+		{
+			Field* class_tfield = class_t->Fetch();
+			uint32 item_2 = class_tfield[0].GetUInt32();
+
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+		}
+		else if (force_t)
+		{
+			Field* force_tfield = force_t->Fetch();
+			uint32 item_2 = force_tfield[0].GetUInt32();
+
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+		}
+		else
+		{
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+		}
+		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
+	}
+	else
+	{
+		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
+		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
+	}
 }
 
 void Player::VisualizeItem(uint8 slot, Item* pItem)
@@ -23168,6 +23214,19 @@ void Player::LearnCustomSpells()
         else                                                // but send in normal spell in game learn case
             LearnSpell(tspell, true);
     }
+    
+    // learn dualspec by default
+    if (!IsInWorld())
+    {
+        AddSpell(63644, true, true, true, false);
+        AddSpell(63645, true, true, true, false);
+    }
+    else
+    {
+        LearnSpell(63644, true);
+        LearnSpell(63645, true);
+    }
+    UpdateSpecCount(2);
 }
 
 void Player::LearnDefaultSkills()

@@ -25,6 +25,8 @@ Custom/npc_glyph_template.cpp
 Custom/npc_item_template.cpp
 Custom/npc_title_vendor.cpp
 Custom/npc_talentspec.cpp
+Custom/npc_heal.cpp
+Custom/npc_changer.cpp
 )
 
 message("  -> Prepared: Custom")

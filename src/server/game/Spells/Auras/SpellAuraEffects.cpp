@@ -385,6 +385,7 @@ m_canBeRecalculated(true), m_isPeriodic(false)
 {
     CalculatePeriodic(caster, true, false);
 
+    m_amount_calc = 0;
     m_amount = CalculateAmount(caster);
 
     CalculateSpellMod();
@@ -492,6 +493,30 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
     GetBase()->CallScriptEffectCalcAmountHandlers(this, amount, m_canBeRecalculated);
     amount *= GetBase()->GetStackAmount();
     return amount;
+}
+
+uint32 AuraEffect::CalculateAmountCalc(Unit* caster, Unit* target, uint32 damage)
+{
+    switch (GetAuraType())
+    {
+        case SPELL_AURA_PERIODIC_DAMAGE:
+            if (!target || !caster)
+            break;
+            damage = GetAmountCalc();
+            break;
+        case SPELL_AURA_PERIODIC_HEAL:
+        {
+            if (!target || !caster)
+                break;
+            damage = caster->SpellHealingBonusDone(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
+            break;
+        }
+        default:
+            break;
+    }
+
+    SetAmountCalc(damage);
+    return (damage);
 }
 
 void AuraEffect::CalculatePeriodic(Unit* caster, bool create, bool load)
@@ -604,6 +629,7 @@ void AuraEffect::CalculateSpellMod()
 void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)
 {
     // Reapply if amount change
+    m_amount_calc = 0;
     uint8 handleMask = 0;
     if (newAmount != GetAmount())
         handleMask |= AURA_EFFECT_HANDLE_CHANGE_AMOUNT;
@@ -749,7 +775,22 @@ void AuraEffect::Update(uint32 diff, Unit* caster)
     if (m_isPeriodic && (GetBase()->GetDuration() >=0 || GetBase()->IsPassive() || GetBase()->IsPermanent()))
     {
         if (m_periodicTimer > int32(diff))
+        {
             m_periodicTimer -= diff;
+
+            std::list<AuraApplication*> effectApplications;
+            GetApplicationList(effectApplications);
+            // tick on targets of effects
+
+            if (!m_amount_calc)
+            {
+                for (std::list<AuraApplication*>::const_iterator apptItr = effectApplications.begin(); apptItr != effectApplications.end(); ++apptItr)
+                {
+                    if ((*apptItr)->HasEffect(GetEffIndex()))
+                        CalculateAmountCalc(caster, (*apptItr)->GetTarget(), std::max(GetAmount(), 0));
+                }
+            }
+        }
         else // tick also at m_periodicTimer == 0 to prevent lost last tick in case max m_duration == (max m_periodicTimer)*N
         {
             ++m_tickNumber;
@@ -762,8 +803,14 @@ void AuraEffect::Update(uint32 diff, Unit* caster)
             GetApplicationList(effectApplications);
             // tick on targets of effects
             for (std::list<AuraApplication*>::const_iterator apptItr = effectApplications.begin(); apptItr != effectApplications.end(); ++apptItr)
+                {
                 if ((*apptItr)->HasEffect(GetEffIndex()))
+                 {
+                    if (!m_amount_calc)
+                    CalculateAmountCalc(caster, (*apptItr)->GetTarget(), std::max(GetAmount(), 0));
                     PeriodicTick(*apptItr, caster);
+                }
+            }
         }
     }
 }
@@ -2002,7 +2049,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                 {
                     uint32 model_id = 0;
 
-                    if (uint32 modelid = ci->GetRandomValidModelId())
+                    if (uint32 modelid = sObjectMgr->GetCreatureDisplay(ci->GetRandomValidModelId()))
                         model_id = modelid;                     // Will use the default model here
 
                     // Polymorph (sheep)
@@ -2049,7 +2096,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                 uint32 cr_id = target->GetAuraEffectsByType(SPELL_AURA_MOUNTED).front()->GetMiscValue();
                 if (CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(cr_id))
                 {
-                    uint32 displayID = ObjectMgr::ChooseDisplayId(ci);
+                    uint32 displayID = sObjectMgr->GetCreatureDisplay(ObjectMgr::ChooseDisplayId(ci));
                     sObjectMgr->GetCreatureModelRandomGender(&displayID);
 
                     target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, displayID);
@@ -2517,7 +2564,7 @@ void AuraEffect::HandleAuraMounted(AuraApplication const* aurApp, uint8 mode, bo
 
         if (CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(creatureEntry))
         {
-            displayId = ObjectMgr::ChooseDisplayId(creatureInfo);
+            displayId = sObjectMgr->GetCreatureDisplay(ObjectMgr::ChooseDisplayId(creatureInfo));
             sObjectMgr->GetCreatureModelRandomGender(&displayId);
 
             vehicleId = creatureInfo->VehicleId;
@@ -4924,7 +4971,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                         if (CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(creatureEntry))
                         {
-                            uint32 displayID = ObjectMgr::ChooseDisplayId(creatureInfo);
+                            uint32 displayID = sObjectMgr->GetCreatureDisplay(ObjectMgr::ChooseDisplayId(creatureInfo));
                             sObjectMgr->GetCreatureModelRandomGender(&displayID);
 
                             target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, displayID);
@@ -5897,8 +5944,11 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
         }
     }
     else
-        damage = uint32(target->CountPctFromMaxHealth(damage));
+        {
 
+        damage = std::max(GetAmount(), 0);
+        damage = uint32(target->CountPctFromMaxHealth(damage));
+    }
     if (!(m_spellInfo->AttributesEx4 & SPELL_ATTR4_FIXED_DAMAGE))
         if (m_spellInfo->Effects[m_effIndex].IsTargetingArea() || isAreaAura)
         {
@@ -5918,6 +5968,8 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
     int32 dmg = damage;
     if (!(GetSpellInfo()->AttributesEx4 & SPELL_ATTR4_FIXED_DAMAGE))
         caster->ApplyResilience(target, NULL, &dmg, crit, CR_CRIT_TAKEN_SPELL);
+        caster->ApplyResilience(target, NULL, &dmg, crit, CR_CRIT_TAKEN_SPELL);
+        dmg = caster->ApplyCustomArenaBalance(target, caster, dmg);
     damage = dmg;
 
     caster->CalcAbsorbResist(target, GetSpellInfo()->GetSchoolMask(), DOT, damage, &absorb, &resist, GetSpellInfo());
@@ -5974,7 +6026,7 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     {
         // Script Hook For HandlePeriodicDamageAurasTick -- Allow scripts to change the Damage pre class mitigation calculations
         sScriptMgr->ModifyPeriodicDamageAurasTick(target, caster, damage);
-        damage = caster->SpellDamageBonusDone(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount()) * caster->SpellDamagePctDone(target, m_spellInfo, DOT);
+        damage = GetAmountCalc() * caster->SpellDamagePctDone(target, m_spellInfo, DOT);
     }
     damage = target->SpellDamageBonusTaken(caster, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
 
@@ -6005,6 +6057,8 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     int32 dmg = damage;
     if (!(GetSpellInfo()->AttributesEx4 & SPELL_ATTR4_FIXED_DAMAGE))
         caster->ApplyResilience(target, NULL, &dmg, crit, CR_CRIT_TAKEN_SPELL);
+        dmg = caster->ApplyCustomArenaBalance(target, caster, dmg);
+        const float buff_mod = float(damage) / float(dmg);
     damage = dmg;
 
     caster->CalcAbsorbResist(target, GetSpellInfo()->GetSchoolMask(), DOT, damage, &absorb, &resist, m_spellInfo);
@@ -6027,6 +6081,8 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
     if (caster->IsAlive())
         caster->ProcDamageAndSpell(target, procAttacker, procVictim, procEx, damage, BASE_ATTACK, GetSpellInfo());
     int32 new_damage = caster->DealDamage(target, damage, &cleanDamage, DOT, GetSpellInfo()->GetSchoolMask(), GetSpellInfo(), false);
+
+    new_damage = new_damage * buff_mod;
     if (caster->IsAlive())
     {
         float gainMultiplier = GetSpellInfo()->Effects[GetEffIndex()].CalcValueMultiplier(caster);
@@ -6050,7 +6106,7 @@ void AuraEffect::HandlePeriodicHealthFunnelAuraTick(Unit* target, Unit* caster) 
         return;
     }
 
-    uint32 damage = std::max(GetAmount(), 0);
+	uint32 damage = std::max(GetAmount(), 0);
     // do not kill health donator
     if (caster->GetHealth() < damage)
         damage = caster->GetHealth() - 1;
@@ -6137,7 +6193,7 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
             damage += addition;
         }
         if (isAreaAura)
-            damage = caster->SpellHealingBonusDone(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount()) * caster->SpellHealingPctDone(target, m_spellInfo);
+            damage = GetAmountCalc() * caster->SpellHealingPctDone(target, m_spellInfo);
         damage = target->SpellHealingBonusTaken(caster, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
     }
 

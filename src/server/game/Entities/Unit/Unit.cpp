@@ -330,7 +330,7 @@ void Unit::Update(uint32 p_time)
         // Check UNIT_STATE_MELEE_ATTACKING or UNIT_STATE_CHASE (without UNIT_STATE_FOLLOW in this case) so pets can reach far away
         // targets without stopping half way there and running off.
         // These flags are reset after target dies or another command is given.
-        if (m_HostileRefManager.isEmpty())
+        if (m_HostileRefManager.isEmpty() && !GetCurrentSpell(CURRENT_CHANNELED_SPELL) && !HasNegativeAuraWithAttributeEx(SPELL_ATTR1_CHANNELED_1 | SPELL_ATTR1_CHANNELED_2))
         {
             // m_CombatTimer set at aura start and it will be freeze until aura removing
             if (m_CombatTimer <= p_time)
@@ -1066,6 +1066,7 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage* damageInfo, int32 dama
         }
     }
 
+	damage = ApplyCustomArenaBalance(damageInfo->target, damageInfo->attacker, damage);
     // Script Hook For CalculateSpellDamageTaken -- Allow scripts to change the Damage post class mitigation calculations
     sScriptMgr->ModifySpellDamageTaken(damageInfo->target, damageInfo->attacker, damage);
 
@@ -1290,6 +1291,11 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
     resilienceReduction = damageInfo->damage - resilienceReduction;
     damageInfo->damage      -= resilienceReduction;
     damageInfo->cleanDamage += resilienceReduction;
+
+	//Apply custom balance on white damages.
+	resilienceReduction = damageInfo->damage - ApplyCustomArenaBalance(damageInfo->target, damageInfo->attacker, damageInfo->damage);
+	damageInfo->damage -= resilienceReduction;
+	damageInfo->cleanDamage += resilienceReduction;
 
     // Calculate absorb resist
     if (int32(damageInfo->damage) > 0)
@@ -4406,6 +4412,17 @@ bool Unit::HasNegativeAuraWithAttribute(uint32 flag, ObjectGuid guid) const
     {
         Aura const* aura = iter->second->GetBase();
         if (!iter->second->IsPositive() && aura->GetSpellInfo()->Attributes & flag && (!guid || aura->GetCasterGUID() == guid))
+            return true;
+    }
+    return false;
+}
+
+bool Unit::HasNegativeAuraWithAttributeEx(uint32 flag, uint64 guid) const
+{
+    for (AuraApplicationMap::const_iterator iter = m_appliedAuras.begin(); iter != m_appliedAuras.end(); ++iter)
+    {
+        Aura const* aura = iter->second->GetBase();
+        if (!iter->second->IsPositive() && aura->GetSpellInfo()->AttributesEx & flag && (!guid || aura->GetCasterGUID() == guid))
             return true;
     }
     return false;
@@ -11185,6 +11202,120 @@ bool Unit::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) cons
     return false;
 }
 
+uint32 Unit::ApplyCustomArenaBalance(Unit* victim, Unit* attacker, uint32 value)
+{
+    Player* plrVictim;
+    if (victim->GetTypeId() == TYPEID_PLAYER)
+    {
+        switch (victim->getClass())
+        {
+            case CLASS_SHAMAN:
+                value *= 1.05f;
+                break ;
+            case CLASS_ROGUE:
+            case CLASS_MAGE:
+                value *= 0.95f;
+                break ;
+            default:
+                break ;
+        }
+        plrVictim = victim->ToPlayer();
+    }
+    else if (victim->ToCreature()->IsPet() && victim->GetOwner()->GetTypeId() == TYPEID_PLAYER)
+        plrVictim = victim->GetOwner()->ToPlayer();
+    else
+        return value;
+
+    switch (attacker->getClass())
+    {
+        case CLASS_SHAMAN:
+            value *= 0.9f;
+            break ;
+        case CLASS_WARLOCK:
+        case CLASS_HUNTER:
+            value *= 0.95f;
+            break ;
+        case CLASS_MAGE:
+        case CLASS_DRUID:
+            value *= 1.05f;
+            break ;
+        default:
+            break ;
+    }
+
+    if (!plrVictim->InArena())
+        return value;
+
+    Battleground* bg = plrVictim->GetBattleground();
+    if (!bg)
+        return value;
+
+    Group* group = bg->GetBgRaid(bg->GetOtherTeam(bg->GetPlayerTeam(plrVictim->GetGUID())));
+    if (!group)
+        return value;
+
+    uint32 teamClassMask = 0;
+    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+    {
+        Player* member = itr->GetSource();
+        if (!member)
+            continue;
+        teamClassMask |= member->getClassMask();
+    }
+
+    switch (bg->GetArenaType())
+    {
+        case ARENA_TYPE_2v2:
+        {
+            switch (teamClassMask)
+            {
+                case 1:    // War only
+                case 8:    // Rogue only
+                case 9:    // Rogue + War
+                case 128:  // Mage only
+                    return value * 1.05f;
+                case 258:  // Paladin + Warlock
+                case 1280: // Warlock + Druid
+                    return value * 0.95f; // -5%
+                case 20:  // Hunter  + Priest
+                case 65:  // Warrior + Shaman
+                case 64:  // Shaman only
+                case 192: // Shaman  + Mage
+                case 272: // Priest  + Warlock
+                    return value * 0.9f; // -10%
+                case 68:  // Hunter  + Shaman
+                case 320: // Warlock + Shaman
+                    return value * 0.8f; // -20%
+                default:
+                break ;
+            }
+        }
+        break ;
+
+        case ARENA_TYPE_3v3:
+        {
+            if ((teamClassMask & 68) || (teamClassMask & 320))
+                return value * 0.8f; // -20%
+        }
+        break ;
+
+        case ARENA_TYPE_5v5:
+        {
+            switch (teamClassMask)
+            {
+                default:
+                    break ;
+            }
+        }
+        break ;
+
+        default:
+        break ;
+    }
+    return value;
+}
+
+
 uint32 Unit::MeleeDamageBonusDone(Unit* victim, uint32 pdamage, WeaponAttackType attType, SpellInfo const* spellProto)
 {
     if (!victim || pdamage == 0)
@@ -11674,22 +11805,14 @@ bool Unit::IsServiceProvider() const
 void Unit::SetInCombatWith(Unit* enemy)
 {
     Unit* eOwner = enemy->GetCharmerOrOwnerOrSelf();
-    if (eOwner->IsPvP() || eOwner->IsFFAPvP())
+    if (eOwner->GetTypeId() == TYPEID_PLAYER)
     {
         SetInCombatState(true, enemy);
         return;
     }
 
     // check for duel
-    if (eOwner->GetTypeId() == TYPEID_PLAYER && eOwner->ToPlayer()->duel)
-    {
-        Unit const* myOwner = GetCharmerOrOwnerOrSelf();
-        if (((Player const*)eOwner)->duel->opponent == myOwner)
-        {
-            SetInCombatState(true, enemy);
-            return;
-        }
-    }
+
     SetInCombatState(false, enemy);
 }
 
@@ -11733,7 +11856,7 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy)
         return;
 
     if (PvP)
-        m_CombatTimer = 5000;
+        m_CombatTimer = 6000;
 
     if (IsInCombat() || HasUnitState(UNIT_STATE_EVADE))
         return;
@@ -17705,15 +17828,15 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target)
                     {
                         if (target->IsGameMaster())
                         {
-                            if (cinfo->Modelid1)
-                                displayId = cinfo->Modelid1;    // Modelid1 is a visible model for gms
+                            if (uint32 modelid = sObjectMgr->GetCreatureDisplay(cinfo->Modelid1))
+                                displayId = modelid;            // Modelid1 is a visible model for gms
                             else
                                 displayId = 17519;              // world visible trigger's model
                         }
                         else
                         {
-                            if (cinfo->Modelid2)
-                                displayId = cinfo->Modelid2;    // Modelid2 is an invisible model for players
+                               if (uint32 modelid = sObjectMgr->GetCreatureDisplay(cinfo->Modelid2))
+                               displayId = modelid;            // Modelid2 is an invisible model for players
                             else
                                 displayId = 11686;              // world invisible trigger's model
                         }

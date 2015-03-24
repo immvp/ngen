@@ -682,6 +682,31 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
     // selection by spell family
     switch (m_spellInfo->SpellFamilyName)
     {
+        case SPELLFAMILY_GENERIC:
+  switch (m_spellInfo->Id)
+  {
+   // Polarity Shift
+  case 28089:
+   if (unitTarget)
+    unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 28059 : 28084, true, NULL, NULL, m_caster->GetGUID());
+   break;
+   // Polarity Shift
+  case 39096:
+   if (unitTarget)
+    unitTarget->CastSpell(unitTarget, roll_chance_i(50) ? 39088 : 39091, true, NULL, NULL, m_caster->GetGUID());
+   break;
+  case 58984: // Shadowmeld
+  {
+   m_caster->InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
+   m_caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
+   m_caster->AttackStop();
+   ((Player*)m_caster)->SendAttackSwingCancelAttack();
+   m_caster->CombatStop();
+   return;
+  }
+  }
+  break;
+  
         case SPELLFAMILY_PALADIN:
             switch (m_spellInfo->Id)
             {

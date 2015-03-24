@@ -1425,6 +1425,7 @@ void AddSC_npc_glyph_template();
 void AddSC_npc_item_template();
 void AddSC_title_system();
 void AddSC_TalentGossip();
+void AddSC_npc_changer();
 //void AddSC_npc_glyph_template2();
 //void arena_spectator_commands();
 //void npc_arena_spectator();
@@ -1446,6 +1447,7 @@ void AddCustomScripts()
 	AddSC_npc_item_template();
 	AddSC_title_system();
 	AddSC_TalentGossip();
+	AddSC_npc_changer();
 //	arena_spectator_commands();
 //  npc_arena_spectator();
 //	AddSC_ProfessionNpc();

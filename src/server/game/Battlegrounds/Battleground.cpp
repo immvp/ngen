@@ -656,6 +656,43 @@ void Battleground::RemoveAuraOnTeam(uint32 SpellID, uint32 TeamID)
             player->RemoveAura(SpellID);
 }
 
+void Battleground::RewardTokenToAll(const uint32 token1, const uint32 token2, const uint32 winner, const uint32 quest)
+{
+    uint32 count = 1;
+
+    for (BattlegroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
+    {
+        if (Player* player = _GetPlayer(itr, "RewardTokenToBG"))
+        {
+            if (!quest)
+            {
+                if (winner == 666)
+                    count = 2;
+                else if ((winner == HORDE) || (winner == ALLIANCE))
+                {
+                    uint32 team = itr->second.Team;
+                    if (!team)
+                        team = player->GetTeam();
+                    if (team == winner)
+                        count = 3;
+                }
+                if (token1)
+                    player->AddItem(token1, count);
+                if (token2)
+                    player->AddItem(token2, count);
+            }
+            else if (player->GetQuestStatus(quest) == QUEST_STATUS_INCOMPLETE)
+            {
+                if (token1)
+                    player->AddItem(token1, count);
+                if (token2)
+                    player->AddItem(token2, count);
+            }
+        }
+    }
+}
+
+
 void Battleground::RewardHonorToTeam(uint32 Honor, uint32 TeamID)
 {
     for (BattlegroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)

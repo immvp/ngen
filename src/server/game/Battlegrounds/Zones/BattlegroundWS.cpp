@@ -765,15 +765,25 @@ void BattlegroundWS::Reset()
 
 void BattlegroundWS::EndBattleground(uint32 winner)
 {
-    // Win reward
-    if (winner == ALLIANCE)
-        RewardHonorToTeam(GetBonusHonorFromKill(m_HonorWinKills), ALLIANCE);
-    if (winner == HORDE)
-        RewardHonorToTeam(GetBonusHonorFromKill(m_HonorWinKills), HORDE);
-    // Complete map_end rewards (even if no team wins)
-    RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), ALLIANCE);
-    RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), HORDE);
-
+    if (GetStartTime() >= 6*MINUTE*IN_MILLISECONDS)
+    {
+ // Win reward
+        if ((winner == HORDE) || (winner == ALLIANCE))
+        {
+            RewardHonorToTeam(GetBonusHonorFromKill(m_HonorWinKills), winner);
+            RewardTokenToAll(20558, 0, winner, 0);
+            CastSpellOnTeam(SPELL_WS_QUEST_REWARD, winner);
+        }
+        else
+        {
+            // Complete map_end rewards (even if no team wins)
+            RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), ALLIANCE);
+            RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), HORDE);
+            RewardTokenToAll(41596, 0, 666, 0);
+            CastSpellOnTeam(SPELL_WS_QUEST_REWARD, HORDE);
+            CastSpellOnTeam(SPELL_WS_QUEST_REWARD, ALLIANCE);
+        }
+    }
     Battleground::EndBattleground(winner);
 }
 

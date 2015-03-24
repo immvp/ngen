@@ -491,14 +491,31 @@ void ArenaTeam::Inspect(WorldSession* session, ObjectGuid guid)
 
 void ArenaTeamMember::ModifyPersonalRating(Player* player, int32 mod, uint32 type)
 {
-    if (int32(PersonalRating) + mod < 0)
+        const uint8 slot = ArenaTeam::GetSlotByType(type);
+        uint8 arenaPointsGain = 15 * (type - 1);
+        
+
+        if (int32(PersonalRating) + mod < 0)
         PersonalRating = 0;
     else
+    {
         PersonalRating += mod;
+            if (PersonalRating >= 1100)
+            arenaPointsGain += ((PersonalRating - 1000) / 100);
+    }
+
+        if (mod > 0) //winners
+    {
+        arenaPointsGain += (mod * (type - 1));
+        if (arenaPointsGain > 20 * type)
+            arenaPointsGain = 20 * type;
+    }
+
 
     if (player)
     {
-        player->SetArenaTeamInfoField(ArenaTeam::GetSlotByType(type), ARENA_TEAM_PERSONAL_RATING, PersonalRating);
+        player->ModifyArenaPoints(arenaPointsGain);
+        player->SetArenaTeamInfoField(slot, ARENA_TEAM_PERSONAL_RATING, PersonalRating);
         player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_PERSONAL_RATING, PersonalRating, type);
     }
 }

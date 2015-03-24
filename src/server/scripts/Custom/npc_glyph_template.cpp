@@ -1066,8 +1066,8 @@ public:
         {
         	if (player->getClass() == CLASS_WARRIOR)
         	{
-            	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "PvP / DPS (Arms)", GOSSIP_SENDER_MAIN, 6);
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "PvP / DPS (Protection)", GOSSIP_SENDER_MAIN, 7);
+            	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Warrior_PunishingBlow:50:50:-25:0|t |cff990606Major Glyph of Barbaric Insults|r\n|cff08088AYour Mocking Blow ability generates 100% additional threat.|r", GOSSIP_SENDER_MAIN, 6);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Shockwave:50:50:-25:0|t |cff990606Major Glyph of Hamstring|r\n|cff08088AGives your Hamstring ability a 10% chance to immobilize the target for 5 sec.|r", GOSSIP_SENDER_MAIN, 7);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "PvP / Tank (Protection)", GOSSIP_SENDER_MAIN, 8);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "PvE / DPS (Arms/Fury)", GOSSIP_SENDER_MAIN, 9);
 				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "PvE / Tank (Protection)", GOSSIP_SENDER_MAIN, 10);
@@ -1082,23 +1082,27 @@ public:
             switch (action)
             {
             case 6:
-			    player->CLOSE_GOSSIP_MENU();
+			    player->SetGlyph(0, MAJOR_WARRIOR_GLYPH_OF_OVERPOWER);
+                            player->SendTalentsInfoData(false);
+                            OnGossipHello(player, creature);
 
 			    break;
-            case 7:
-			    player->CLOSE_GOSSIP_MENU();
+            case 7: 
+			    player->SetGlyph(0, MAJOR_WARRIOR_GLYPH_OF_HAMSTRING);
+                            player->SendTalentsInfoData(false);
+                            OnGossipHello(player, creature);
 
 			    break;
             case 8:
-			    player->CLOSE_GOSSIP_MENU();
+			    OnGossipHello(player, creature);
 			    
 			    break;
             case 9:
-			    player->CLOSE_GOSSIP_MENU();
+			    OnGossipHello(player, creature);
 
                 break;
             case 10:
-			    player->CLOSE_GOSSIP_MENU();
+			    OnGossipHello(player, creature);
 
 					//Glyph Slots
 

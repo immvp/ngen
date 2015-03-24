@@ -46,10 +46,10 @@ enum Enchants
 	ENCHANT_GLOVES_FIRE = 2616,
 	ENCHANT_GLOVES_FROST = 2615,
 
-	ENCHANT_BRACERS_INTELLECT = 905,
+	ENCHANT_BRACERS_INTELLECT = 1883,
 	ENCHANT_BRACERS_STAM = 1885,
 	ENCHANT_BRACERS_STRENGTH = 1886,
-	ENCHANT_BRACERS_MP = 1884,
+	ENCHANT_BRACERS_MP = 2565,
 	ENCHANT_BRACERS_DEFLECTION = 923,
 	ENCHANT_BRACERS_HEALING = 2319,
 	ENCHANT_BRACERS_AGILITY = 247,
@@ -71,6 +71,8 @@ enum Enchants
 
 	ENCHANT_LEGARMOR = 1843,
 
+	ENCHANT_SCOPE = 32,
+
 };
 
 #include "ScriptPCH.h"
@@ -88,7 +90,6 @@ void Enchant(Player* player, Item* item, uint32 enchantid)
 		player->GetSession()->SendNotification("Something blew up! Sorry for the inconvenience, we'll send the troubleshooting gnomes right on it.");
 		return;
 	}
-
 	player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, false);
 	item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantid, 0, 0);
 	player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, true);
@@ -124,6 +125,7 @@ public:
 		//player->ADD_GOSSIP_ITEM(1, "2H Weapon", GOSSIP_SENDER_MAIN, 2);
 		player->ADD_GOSSIP_ITEM(1, "Shield", GOSSIP_SENDER_MAIN, 3);
 		player->ADD_GOSSIP_ITEM(1, "Legs (+40 Armour)", GOSSIP_SENDER_MAIN, 215);
+		player->ADD_GOSSIP_ITEM(1, "Standard Scope (+2 damage)", GOSSIP_SENDER_MAIN, 226);
 		//player->ADD_GOSSIP_ITEM(1, "I would like to remove an enchantment.", GOSSIP_SENDER_MAIN, 14);
 
 		player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
@@ -297,7 +299,7 @@ public:
 				MainMenu(player, creature);
 				return false;
 			}
-			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPONOFFHAND || INVTYPE_WEAPONMAINHAND)
+			else if (item->GetTemplate()->InventoryType == INVTYPE_WEAPONOFFHAND || INVTYPE_WEAPONMAINHAND)
 			{
 				player->ADD_GOSSIP_ITEM(1, "+15 Agility", GOSSIP_SENDER_MAIN, 221);
 				player->ADD_GOSSIP_ITEM(1, "+15 Strength", GOSSIP_SENDER_MAIN, 222);
@@ -399,7 +401,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
+			if (item)
 			{
 
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_CRUSADER);
@@ -449,7 +451,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
+			if (item)
 			{
 
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_FIERY);
@@ -474,7 +476,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
+			if (item)
 			{
 
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_ICEY);
@@ -865,7 +867,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
+			if (item)
 			{
 
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_FIERY);
@@ -891,7 +893,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
+			if (item)
 			{
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_ICEY);
 				MainMenu(player, creature);
@@ -915,7 +917,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
+			if (item)
 			{
 
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_CRUSADER);
@@ -940,7 +942,7 @@ public:
 				return false;
 			}
 
-			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
+			if (item)
 			{
 				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND));
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_AGILITY1H);
@@ -1034,14 +1036,21 @@ public:
 		{
 			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
 
+			if (!item)
+			{
+				player->GetSession()->SendAreaTriggerMessage("This enchant needs a Two-handed weapon equipped.");
+				MainMenu(player, creature);
+				return false;
+			}
 			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
 			{
-				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_DAMAGE);
+				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND));
+				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_WEP_AGILITY1H);
 				MainMenu(player, creature);
 			}
 			else
 			{
-				player->GetSession()->SendAreaTriggerMessage("This enchant requires a two-handed Weapon");
+				player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
 				MainMenu(player, creature);
 			}
 		}
@@ -1058,14 +1067,21 @@ public:
 		{
 			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
 
+			if (!item)
+			{
+				player->GetSession()->SendAreaTriggerMessage("This enchant needs a Two-handed weapon equipped.");
+				MainMenu(player, creature);
+				return false;
+			}
 			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
 			{
+				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND));
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_HASTE);
 				MainMenu(player, creature);
 			}
 			else
 			{
-				player->GetSession()->SendAreaTriggerMessage("This enchant requires a two-handed Weapon");
+				player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
 				MainMenu(player, creature);
 			}
 		}
@@ -1246,12 +1262,36 @@ public:
 			}
 			else
 			{
-				player->GetSession()->SendAreaTriggerMessage("This enchant requires a two-handed Weapon");
+				player->GetSession()->SendAreaTriggerMessage("This enchant requires a weapon");
 				MainMenu(player, creature);
 			}
 		}
 		break;
 
+		case 226:
+		{
+			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
+			
+			if (item)
+			{
+				if ((item->GetTemplate()->InventoryType == INVTYPE_THROWN) || item->GetTemplate()->InventoryType == INVTYPE_RANGEDRIGHT)
+				{
+					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
+					MainMenu(player, creature);
+				}
+				else
+				{
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED), ENCHANT_SCOPE);
+					MainMenu(player, creature);
+				}
+			}
+				else
+				{
+					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
+					MainMenu(player, creature);
+				}
+			}
+		break;
 
 		case 300: //<-Back menu
 			player->ADD_GOSSIP_ITEM(1, "Weapon", GOSSIP_SENDER_MAIN, 1);
@@ -1317,6 +1357,7 @@ public:
 		//player->ADD_GOSSIP_ITEM(1, "2H Weapon", GOSSIP_SENDER_MAIN, 2);
 		player->ADD_GOSSIP_ITEM(1, "Shield", GOSSIP_SENDER_MAIN, 3);
 		player->ADD_GOSSIP_ITEM(1, "Legs (+40 Armour)", GOSSIP_SENDER_MAIN, 215);
+		player->ADD_GOSSIP_ITEM(1, "Standard Scope (+2 damage)", GOSSIP_SENDER_MAIN, 226);
 		//player->ADD_GOSSIP_ITEM(1, "I would like to remove an enchantment.", GOSSIP_SENDER_MAIN, 14);
 
 		player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
