@@ -1274,14 +1274,14 @@ public:
 			
 			if (item)
 			{
-				if ((item->GetTemplate()->InventoryType == INVTYPE_THROWN) || item->GetTemplate()->InventoryType == INVTYPE_RANGEDRIGHT)
+				if ((item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 2) || (item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 3))
 				{
-					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
+					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED), ENCHANT_SCOPE);
 					MainMenu(player, creature);
 				}
 				else
 				{
-					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED), ENCHANT_SCOPE);
+					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
 					MainMenu(player, creature);
 				}
 			}

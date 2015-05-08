@@ -699,6 +699,7 @@ enum RBACPermissions
 	RBAC_PERM_COMMAND_CHANGERACE							= 1011,
 	RBAC_PERM_COMMAND_VIP									= 1012,
     RBAC_PERM_COMMAND_WORLD_CHAT                            = 1013,
+    RBAC_PERM_COMMAND_VIPMALL                               = 1014,
 	RBAC_PERM_MAX
 };
 
