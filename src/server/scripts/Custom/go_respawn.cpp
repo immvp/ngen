@@ -3,7 +3,7 @@ class TimedGobjectSpawn : public GameObjectScript
 public:
         TimedGobjectSpawn() : GameObjectScript("TimedGobjectSpawn") { }
  
-        void OnLootStateChanged(GameObject* go, uint32 /*state*/, Unit* unit)
+        void OnLootStateChanged(GameObject* go, uint32 /*state*/, Unit* /*unit*/)
         {
                 switch (go->getLootState())
                 {
