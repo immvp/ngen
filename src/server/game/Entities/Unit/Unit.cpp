@@ -15659,8 +15659,6 @@ void Unit::SetControlled(bool apply, UnitState state)
                 if (!HasUnitState(UNIT_STATE_STUNNED))
                 {
                     SetRooted(true);
-                    if (HasUnitState(UNIT_STATE_FLEEING))
-                        SetFeared(false);
                 }
                 break;
             case UNIT_STATE_CONFUSED:

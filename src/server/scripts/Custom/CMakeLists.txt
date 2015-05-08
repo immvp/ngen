@@ -27,6 +27,7 @@ Custom/npc_title_vendor.cpp
 Custom/npc_talentspec.cpp
 Custom/npc_heal.cpp
 Custom/npc_changer.cpp
+Custom/go_respawn.cpp
 )
 
 message("  -> Prepared: Custom")
