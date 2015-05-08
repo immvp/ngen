@@ -1,4 +1,4 @@
-nclude "ScriptPCH.h"
+#include "ScriptPCH.h"
 #include "Pet.h"
  
 class Npc_Beastmaster : public CreatureScript {
