@@ -1268,30 +1268,20 @@ public:
 		}
 		break;
 
-		case 226:
+		case 226: 
 		{
-			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
-			
-			if (item)
-			{
-				if ((item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 2) || (item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 3))
-				{
-					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED), ENCHANT_SCOPE);
-					MainMenu(player, creature);
-				}
-				else
-				{
-					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
-					MainMenu(player, creature);
-				}
-			}
-				else
-				{
-					player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
-					MainMenu(player, creature);
-				}
-			}
-		break;
+  			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
+   
+  			if (item && ((item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 2) || (item->GetTemplate()->Class == 2 && item->GetTemplate()->SubClass == 3))) {
+    			Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED), ENCHANT_SCOPE);
+  			} 
+  			else 
+  			{
+    			player->GetSession()->SendAreaTriggerMessage("You need a ranged weapon equipped!");
+  			}
+  			MainMenu(player, creature);
+ 		}
+ 		break;
 
 		case 300: //<-Back menu
 			player->ADD_GOSSIP_ITEM(1, "Weapon", GOSSIP_SENDER_MAIN, 1);
