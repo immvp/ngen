@@ -1,5 +1,4 @@
 
-
 enum Enchants
 {
 	ENCHANT_WEP_FIERY = 803,
@@ -944,7 +943,7 @@ public:
 
 			if (item)
 			{
-				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND));
+				player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND), ENCHANT_WEP_AGILITY1H);
 				MainMenu(player, creature);
 			}
@@ -1044,7 +1043,7 @@ public:
 			}
 			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
 			{
-				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND));
+				player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_WEP_AGILITY1H);
 				MainMenu(player, creature);
 			}
@@ -1075,7 +1074,7 @@ public:
 			}
 			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
 			{
-				(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND));
+				player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
 				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_HASTE);
 				MainMenu(player, creature);
 			}

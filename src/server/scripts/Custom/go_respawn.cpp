@@ -5,9 +5,8 @@ public:
  
         void OnLootStateChanged(GameObject* go, uint32 /*state*/, Unit* /*unit*/)
         {
-                switch (go->getLootState())
+                if (go->getLootState() == GO_JUST_DEACTIVATED)
                 {
-                case GO_JUST_DEACTIVATED:
                         time(&currentTime);
                         localTime = localtime(&currentTime);
                         int m = localTime->tm_min;
@@ -15,7 +14,6 @@ public:
                         int respawnSeconds = ((60 - m) * 60) - s;
                         std::cout << std::endl << "Respawn in " << respawnSeconds << " seconds!" << std::endl;
                         go->SetRespawnTime(respawnSeconds);
-                        break;
                 }
         }
  
