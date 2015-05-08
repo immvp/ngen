@@ -958,19 +958,10 @@ public:
 		case 209:
 		{
 			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST);
-			if (item)
+			if (item && item->GetTemplate()->ItemLevel == 40)
 			{
-				if (item->GetTemplate()->ItemLevel == 40)
-				{
-
-					Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST), ENCHANT_CHEST_EXC_MANA);
-					MainMenu(player, creature);
-				}
-				else
-				{
-					player->GetSession()->SendAreaTriggerMessage("You need a chest with an itemlevel for 35+!");
-					MainMenu(player, creature);
-				}
+				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST), ENCHANT_CHEST_EXC_MANA);
+				MainMenu(player, creature);
 			}
 			else
 			{
