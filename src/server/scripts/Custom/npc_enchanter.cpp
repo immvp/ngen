@@ -1374,7 +1374,6 @@ public:
 		player->ADD_GOSSIP_ITEM(1, "Shield", GOSSIP_SENDER_MAIN, 3);
 		player->ADD_GOSSIP_ITEM(1, "Legs (+40 Armour)", GOSSIP_SENDER_MAIN, 215);
 		player->ADD_GOSSIP_ITEM(1, "Standard Scope (+2 damage)", GOSSIP_SENDER_MAIN, 226);
-		player->ADD_GOSSIP_ITEM(1, "Steel Weapon Chain", GOSSIP_SENDER_MAIN, 227);
 		//player->ADD_GOSSIP_ITEM(1, "I would like to remove an enchantment.", GOSSIP_SENDER_MAIN, 14);
 
 		player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
