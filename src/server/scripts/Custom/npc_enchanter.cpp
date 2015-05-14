@@ -72,6 +72,8 @@ enum Enchants
 
 	ENCHANT_SCOPE = 32,
 
+	ENCHANT_WEP_CHAIN = 37,
+
 };
 
 #include "ScriptPCH.h"
@@ -155,6 +157,7 @@ public:
 			player->ADD_GOSSIP_ITEM(1, "Lifestealing", GOSSIP_SENDER_MAIN, 107);
 			player->ADD_GOSSIP_ITEM(1, "Fiery Weapon", GOSSIP_SENDER_MAIN, 104);
 			player->ADD_GOSSIP_ITEM(1, "+5 Weapon Damage", GOSSIP_SENDER_MAIN, 213);
+			player->ADD_GOSSIP_ITEM(1, "Steel Weapon Chain", GOSSIP_SENDER_MAIN, 227);
 			//player->ADD_GOSSIP_ITEM(1, "<-Back", GOSSIP_SENDER_MAIN, 300);
 			player->PlayerTalkClass->SendGossipMenu(100002, creature->GetGUID());
 			break;
@@ -310,6 +313,7 @@ public:
 				player->ADD_GOSSIP_ITEM(1, "Lifestealing", GOSSIP_SENDER_MAIN, 220);
 				player->ADD_GOSSIP_ITEM(1, "Fiery Weapon", GOSSIP_SENDER_MAIN, 217);
 				player->ADD_GOSSIP_ITEM(1, "+5 Weapon Damage", GOSSIP_SENDER_MAIN, 225);
+				player->ADD_GOSSIP_ITEM(1, "Steel Weapon Chain", GOSSIP_SENDER_MAIN, 228);
 				player->PlayerTalkClass->SendGossipMenu(100002, creature->GetGUID());
 				return true;
 			}
@@ -1273,6 +1277,38 @@ public:
  		}
  		break;
 
+ 		case 227:
+ 		{
+ 			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+
+ 			if (item)
+ 			{
+ 				Enchant(player, item, ENCHANT_WEP_CHAIN);
+ 			}
+ 			else
+ 			{
+ 				player->GetSession()->SendAreaTriggerMessage("You need a weapon equipped!");
+ 			}
+ 			MainMenu(player, creature);
+ 		}
+ 		break;
+
+ 		case 228:
+ 		{
+ 			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+
+ 			if (item)
+ 			{
+ 				Enchant(player, item, ENCHANT_WEP_CHAIN);
+ 			}
+ 			else
+ 			{
+ 				player->GetSession()->SendAreaTriggerMessage("You need a weapon equipped!");
+ 			}
+ 			MainMenu(player, creature);
+ 		}
+ 		break;
+
 		case 300: //<-Back menu
 			player->ADD_GOSSIP_ITEM(1, "Weapon", GOSSIP_SENDER_MAIN, 1);
 			player->ADD_GOSSIP_ITEM(1, "Off-Hand Weapon", GOSSIP_SENDER_MAIN, 13);
@@ -1338,6 +1374,7 @@ public:
 		player->ADD_GOSSIP_ITEM(1, "Shield", GOSSIP_SENDER_MAIN, 3);
 		player->ADD_GOSSIP_ITEM(1, "Legs (+40 Armour)", GOSSIP_SENDER_MAIN, 215);
 		player->ADD_GOSSIP_ITEM(1, "Standard Scope (+2 damage)", GOSSIP_SENDER_MAIN, 226);
+		player->ADD_GOSSIP_ITEM(1, "Steel Weapon Chain", GOSSIP_SENDER_MAIN, 227);
 		//player->ADD_GOSSIP_ITEM(1, "I would like to remove an enchantment.", GOSSIP_SENDER_MAIN, 14);
 
 		player->PlayerTalkClass->SendGossipMenu(100001, creature->GetGUID());
