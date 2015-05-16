@@ -44,7 +44,7 @@ enum CharterItemIDs
 
 enum CharterCosts
 {
-    GUILD_CHARTER_COST                            = 1000,
+    GUILD_CHARTER_COST                            = 0,
     ARENA_TEAM_CHARTER_2v2_COST                   = 0,
     ARENA_TEAM_CHARTER_3v3_COST                   = 0,
     ARENA_TEAM_CHARTER_5v5_COST                   = 0
