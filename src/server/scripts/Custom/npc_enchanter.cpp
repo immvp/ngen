@@ -1297,7 +1297,7 @@ public:
  		{
  			item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
 
- 			if (item)
+ 			if (item->GetTemplate()->InventoryType == INVTYPE_WEAPON)
  			{
  				Enchant(player, item, ENCHANT_WEP_CHAIN);
  			}

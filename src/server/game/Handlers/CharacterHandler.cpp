@@ -1807,8 +1807,8 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
                 if (result)
                     if (Guild* guild = sGuildMgr->GetGuildById((result->Fetch()[0]).GetUInt32()))
                         guild->DeleteMember(factionChangeInfo.Guid, false, false, true);
-
-                Player::LeaveAllArenaTeams(factionChangeInfo.Guid);
+			
+		//Player::LeaveAllArenaTeams(factionChangeInfo.Guid);
             }
 
             if (!HasPermission(rbac::RBAC_PERM_TWO_SIDE_ADD_FRIEND))
