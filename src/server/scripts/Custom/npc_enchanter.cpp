@@ -1039,12 +1039,12 @@ public:
 			if (item->GetTemplate()->InventoryType == INVTYPE_2HWEAPON)
 			{
 				player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_WEP_AGILITY1H);
+				Enchant(player, player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND), ENCHANT_2WEP_DAMAGE);
 				MainMenu(player, creature);
 			}
 			else
 			{
-				player->GetSession()->SendAreaTriggerMessage("This enchant needs a one-hand weapon equipped in the off-hand.");
+				player->GetSession()->SendAreaTriggerMessage("This enchant requires a two-hander.");
 				MainMenu(player, creature);
 			}
 		}
