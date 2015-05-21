@@ -641,6 +641,7 @@ void Pet::Update(uint32 diff)
 
 void Creature::Regenerate(Powers power)
 {
+    return; // let's ignore this boring mechanic
     uint32 curValue = GetPower(power);
     uint32 maxValue = GetMaxPower(power);
 

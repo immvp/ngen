@@ -779,7 +779,7 @@ void BattlegroundWS::EndBattleground(uint32 winner)
             // Complete map_end rewards (even if no team wins)
             RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), ALLIANCE);
             RewardHonorToTeam(GetBonusHonorFromKill(m_HonorEndKills), HORDE);
-            RewardTokenToAll(41596, 0, 666, 0);
+            RewardTokenToAll(20558, 0, 666, 0);
             CastSpellOnTeam(SPELL_WS_QUEST_REWARD, HORDE);
             CastSpellOnTeam(SPELL_WS_QUEST_REWARD, ALLIANCE);
         }

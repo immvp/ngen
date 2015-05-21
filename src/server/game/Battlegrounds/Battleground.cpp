@@ -1712,7 +1712,23 @@ void Battleground::HandleTriggerBuff(ObjectGuid go_guid)
             }
     }
 
+        if (GetTypeID() != BATTLEGROUND_WS)
     SpawnBGObject(index, BUFF_RESPAWN_TIME);
+    else // Special case for WSG, regen is 30sec CD, Berserk 2min.
+    {
+        switch (obj->GetEntry())
+        {
+            case BG_OBJECTID_REGENBUFF_ENTRY:
+                SpawnBGObject(index, 30);
+                break;
+            case BG_OBJECTID_BERSERKERBUFF_ENTRY:
+                SpawnBGObject(index, 120);
+                break;
+            default:
+                SpawnBGObject(index, BUFF_RESPAWN_TIME);
+                break;
+        }
+    }
 }
 
 void Battleground::HandleKillPlayer(Player* victim, Player* killer)
