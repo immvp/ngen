@@ -11269,20 +11269,18 @@ uint32 Unit::ApplyCustomArenaBalance(Unit* victim, Unit* attacker, uint32 value)
         {
             switch (teamClassMask)
             {
-                case 1:    // War only
+                
                 case 8:    // Rogue only
-                case 9:    // Rogue + War
-                case 128:  // Mage only
                     return value * 1.05f;
                 case 258:  // Paladin + Warlock
-                case 1280: // Warlock + Druid
                     return value * 0.95f; // -5%
                 case 20:  // Hunter  + Priest
                 case 65:  // Warrior + Shaman
                 case 64:  // Shaman only
                 case 192: // Shaman  + Mage
                 case 272: // Priest  + Warlock
-                    return value * 0.9f; // -10%
+                case 1280: // Warlock + Druid    
+		    return value * 0.9f; // -10%
                 case 68:  // Hunter  + Shaman
                 case 320: // Warlock + Shaman
                     return value * 0.8f; // -20%
