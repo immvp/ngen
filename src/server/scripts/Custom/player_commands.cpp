@@ -12,7 +12,7 @@ public:
 		{
 			{ "summon", SEC_PLAYER, false, &HandleSummon, "", NULL },
 			{ "appear", SEC_PLAYER, false, &HandleAppear, "", NULL },
-			{ "vip", rbac::RBAC_PERM_COMMAND_VIPMALL, false, &HandleVipMallCommand, "", NULL },
+			{ "mall", rbac::RBAC_PERM_COMMAND_VIPMALL, false, &HandleVipMallCommand, "", NULL },
 			{ "changerace", rbac::RBAC_PERM_COMMAND_CHANGERACE, false, &HandleChangeRaceCommand, "", NULL },
 			{ "changefaction", rbac::RBAC_PERM_COMMAND_CHANGEF, false, &HandleChangeFactionCommand, "", NULL },
 			{ "maxskills", SEC_PLAYER, false, &HandleMaxSkillsCommand, "", NULL },
@@ -21,7 +21,7 @@ public:
 		};
 		static ChatCommand commandTable[] =
 		{
-			{ "tele", rbac::RBAC_PERM_COMMAND_VIP, true, NULL, "", vipCommandTable },
+			{ "vip", rbac::RBAC_PERM_COMMAND_VIP, true, NULL, "", vipCommandTable },
 			{ NULL, 0, false, NULL, "", NULL }
 		};
 		return commandTable;
