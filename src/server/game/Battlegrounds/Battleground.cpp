@@ -667,14 +667,14 @@ void Battleground::RewardTokenToAll(const uint32 token1, const uint32 token2, co
             if (!quest)
             {
                 if (winner == 666)
-                    count = 2;
+                    count = 4;
                 else if ((winner == HORDE) || (winner == ALLIANCE))
                 {
                     uint32 team = itr->second.Team;
                     if (!team)
                         team = player->GetTeam();
                     if (team == winner)
-                        count = 3;
+                        count = 6;
                 }
                 if (token1)
                     player->AddItem(token1, count);
