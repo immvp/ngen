@@ -11279,7 +11279,9 @@ uint32 Unit::ApplyCustomArenaBalance(Unit* victim, Unit* attacker, uint32 value)
                 case 64:  // Shaman only
                 case 192: // Shaman  + Mage
                 case 272: // Priest  + Warlock
-                case 1280: // Warlock + Druid    
+                case 1280: // Warlock + Druid
+		case 5: // Hunter + Warrior
+		case 17: //Priest + Warrior    
 		    return value * 0.9f; // -10%
                 case 68:  // Hunter  + Shaman
                 case 320: // Warlock + Shaman
