@@ -23264,7 +23264,7 @@ void Player::LearnCustomSpells()
     
     // learn dualspec by default
     if (!IsInWorld())
-    {
+    {   
         AddSpell(63644, true, true, true, false);
         AddSpell(63645, true, true, true, false);
     }
@@ -23278,16 +23278,30 @@ void Player::LearnCustomSpells()
 
 void Player::LearnDefaultSkills()
 {
-    // learn default race/class skills
-    PlayerInfo const* info = sObjectMgr->GetPlayerInfo(getRace(true), getClass());
-    for (PlayerCreateInfoSkills::const_iterator itr = info->skills.begin(); itr != info->skills.end(); ++itr)
+   // learn default race/class spells
+    PlayerInfo const* info = sObjectMgr->GetPlayerInfo(getRace(), getClass());
+    for (PlayerCreateInfoSpells::const_iterator itr = info->customSpells.begin(); itr != info->customSpells.end(); ++itr)
     {
-        uint32 skillId = itr->SkillId;
-        if (HasSkill(skillId))
-            continue;
-
-        LearnDefaultSkill(skillId, itr->Rank);
+        uint32 tspell = *itr;
+        TC_LOG_DEBUG("entities.player.loading", "PLAYER (Class: %u Race: %u): Adding initial spell, id = %u", uint32(getClass()), uint32(getRace()), tspell);
+        if (!IsInWorld())                                    // will send in INITIAL_SPELLS in list anyway at map add
+            AddSpell(tspell, true, true, true, false);
+        else                                                // but send in normal spell in game learn case
+            LearnSpell(tspell, true);
     }
+    
+    // learn dualspec by default
+    if (!IsInWorld())
+    {   
+        AddSpell(63644, true, true, true, false);
+        AddSpell(63645, true, true, true, false);
+    }
+    else
+    {
+        LearnSpell(63644, true);
+        LearnSpell(63645, true);
+    }
+    UpdateSpecCount(2
 }
 
 void Player::LearnDefaultSkill(uint32 skillId, uint16 rank)
