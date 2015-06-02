@@ -163,6 +163,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
 		// Crippling poison - Limit to 10 seconds in PvP (No SpellFamilyFlags)
 		else if (spellproto->SpellIconID == 163)
 			return DIMINISHING_LIMITONLY;
+		// Slice n Dice
+		else if (spellproto->SpellFamilyFlags[0] & 0x40000)
+			return DIMINISHING_NONE;
 		break;
 	}
 	case SPELLFAMILY_HUNTER:

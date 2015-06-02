@@ -23301,7 +23301,7 @@ void Player::LearnDefaultSkills()
         LearnSpell(63644, true);
         LearnSpell(63645, true);
     }
-    UpdateSpecCount(2
+    UpdateSpecCount(2);
 }
 
 void Player::LearnDefaultSkill(uint32 skillId, uint16 rank)
