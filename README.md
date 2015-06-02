@@ -1,7 +1,3 @@
-# ![logo](http://www.trinitycore.org/f/public/style_images/1_trinitycore.png) TrinityCore
-
-`3.3.5`: [![3.3.5 Build Status](https://travis-ci.org/TrinityCore/TrinityCore.svg?branch=3.3.5)](https://travis-ci.org/TrinityCore/TrinityCore)
-
 ## Introduction
 ngen is based on the *MMORPG* framework Trinitycore.
 TrinityCore is a *MMORPG* Framework based mostly in C++.
