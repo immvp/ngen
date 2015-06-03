@@ -79,8 +79,11 @@ bool Map::ExistMap(uint32 mapid, int gx, int gy)
     bool ret = false;
     FILE* pf = fopen(fileName, "rb");
 
-    if (!pf)
-        TC_LOG_ERROR("maps", "Map file '%s': does not exist!", fileName);
+	if (!pf)
+	{
+		TC_LOG_ERROR("maps", "Map file '%s': does not exist!", fileName);
+		TC_LOG_ERROR("maps", "Please place MAP-files (*.map) in the appropriate directory (%s), or correct the DataDir setting in your worldserver.conf file.", (sWorld->GetDataPath() + "maps/").c_str());
+	}
     else
     {
         map_fileheader header;
