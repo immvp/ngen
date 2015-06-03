@@ -3001,6 +3001,11 @@ void SpellMgr::LoadSpellInfoCorrections()
 			spellInfo->Effects[EFFECT_0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
 			break;
 		case 49838: // Stop Time
+		case 69438: // Sample Satisfaction
+		case 69445: // Perfume Spritz
+		case 69489: // Chocolate Sample
+		case 69563: // Cologne Spritz
+		case 5171: // Slice and Dice (Might not work)
 			spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
 			break;
 		case 61407: // Energize Cores

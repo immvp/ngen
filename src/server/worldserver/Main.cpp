@@ -289,6 +289,7 @@ extern int main(int argc, char** argv)
     return World::GetExitCode();
 }
 
+
 void ShutdownCLIThread(std::thread* cliThread)
 {
     if (cliThread != nullptr)

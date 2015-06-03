@@ -23,6 +23,7 @@
 #include "ByteBuffer.h"
 
 #include <functional>
+#include <unordered_set>
 
 enum TypeID
 {
