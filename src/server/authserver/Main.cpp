@@ -58,7 +58,7 @@ boost::asio::deadline_timer _dbPingTimer(_ioService);
 uint32 _dbPingInterval;
 LoginDatabaseWorkerPool LoginDatabase;
 
-int main(int argc, char** argv)
+int mainImpl(int argc, char** argv)
 {
     std::string configFile = _TRINITY_REALM_CONFIG;
     auto vm = GetConsoleArguments(argc, argv, configFile);
@@ -143,6 +143,25 @@ int main(int argc, char** argv)
     TC_LOG_INFO("server.authserver", "Halting process...");
     return 0;
 }
+
+/// Launch the Trinity server
+extern int main(int argc, char** argv)
+ {
+	try
+		 {
+		return mainImpl(argc, argv);
+		}
+	catch (std::exception& ex)
+		 {
+		std::cerr << "Top-level exception caught:" << ex.what() << "\n";
+		
+			#ifndef NDEBUG // rethrow exception for the debugger
+			 throw;
+		#else
+			 return 1;
+		#endif
+			 }
+	}
 
 
 /// Initialize connection to the database
