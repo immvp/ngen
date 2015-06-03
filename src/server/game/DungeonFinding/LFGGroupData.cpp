@@ -22,7 +22,7 @@ namespace lfg
 {
 
 LfgGroupData::LfgGroupData(): m_State(LFG_STATE_NONE), m_OldState(LFG_STATE_NONE),
-    m_Leader(), m_Dungeon(0), m_KicksLeft(LFG_GROUP_MAX_KICKS)
+	m_Leader(), m_Dungeon(0), m_KicksLeft(LFG_GROUP_MAX_KICKS), m_VoteKickActive(false)
 { }
 
 LfgGroupData::~LfgGroupData()
@@ -125,5 +125,13 @@ uint8 LfgGroupData::GetKicksLeft() const
 {
     return m_KicksLeft;
 }
+void LfgGroupData::SetVoteKick(bool active)
+ {
+	m_VoteKickActive = active;
+	}
 
+bool LfgGroupData::IsVoteKickActive() const
+ {
+	return m_VoteKickActive;
+	}
 } // namespace lfg
