@@ -893,7 +893,7 @@ void LFGMgr::MakeNewGroup(LfgProposal const& proposal)
     for (GuidList::const_iterator it = players.begin(); it != players.end(); ++it)
     {
         ObjectGuid pguid = (*it);
-        Player* player = ObjectAccessor::FindPlayer(pguid);
+		Player* player = ObjectAccessor::FindConnectedPlayer(pguid);
         if (!player)
             continue;
 
@@ -1386,7 +1386,7 @@ void LFGMgr::FinishDungeon(ObjectGuid gguid, const uint32 dungeonId)
             continue;
         }
 
-        Player* player = ObjectAccessor::FindPlayer(guid);
+		Player* player = ObjectAccessor::FindConnectedPlayer(guid);
         if (!player)
         {
             TC_LOG_DEBUG("lfg.dungeon.finish", "Group: %s, Player: %s not found in world", gguid.ToString().c_str(), guid.ToString().c_str());
