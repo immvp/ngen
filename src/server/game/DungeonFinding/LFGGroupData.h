@@ -66,8 +66,8 @@ class LfgGroupData
         // VoteKick
         uint8 GetKicksLeft() const;
 
-		void SetVoteKick(bool active);
-		bool IsVoteKickActive() const;
+		//void SetVoteKick(bool active);//LFG Fix Revert
+		//bool IsVoteKickActive() const;//LFG Fix Revert
 
     private:
         // General
@@ -79,7 +79,7 @@ class LfgGroupData
         uint32 m_Dungeon;                                  ///< Dungeon entry
         // Vote Kick
         uint8 m_KicksLeft;                                 ///< Number of kicks left
-		bool m_VoteKickActive;
+		//bool m_VoteKickActive; //LFG Fix Revert
 };
 
 } // namespace lfg

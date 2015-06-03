@@ -323,7 +323,7 @@ class LFGMgr
         /// Get current lfg state
         LfgState GetState(ObjectGuid guid);
 		/// Get current vote kick state
-		bool IsVoteKickActive(ObjectGuid gguid);
+		//bool IsVoteKickActive(ObjectGuid gguid); //LFG Fix Revert
         /// Get current dungeon
         uint32 GetDungeon(ObjectGuid guid, bool asId = true);
         /// Get the map id of the current dungeon
@@ -427,7 +427,7 @@ class LFGMgr
         void SetSelectedDungeons(ObjectGuid guid, LfgDungeonSet const& dungeons);
         void DecreaseKicksLeft(ObjectGuid guid);
         void SetState(ObjectGuid guid, LfgState state);
-		void SetVoteKick(ObjectGuid gguid, bool active);
+		//void SetVoteKick(ObjectGuid gguid, bool active); // LFG FIX Revert
         void RemovePlayerData(ObjectGuid guid);
         void GetCompatibleDungeons(LfgDungeonSet& dungeons, GuidSet const& players, LfgLockPartyMap& lockMap, bool isContinue);
         void _SaveToDB(ObjectGuid guid, uint32 db_guid);

@@ -73,6 +73,7 @@ void LFGMgr::_LoadFromDB(Field* fields, ObjectGuid guid)
     {
         case LFG_STATE_DUNGEON:
         case LFG_STATE_FINISHED_DUNGEON:
+		case LFG_STATE_BOOT:
             SetState(guid, (LfgState)state);
             break;
         default:
@@ -311,8 +312,10 @@ void LFGMgr::Update(uint32 diff)
                 ObjectGuid pguid = itVotes->first;
                 if (pguid != boot.victim)
                     SendLfgBootProposalUpdate(pguid, boot);
+				SetState(pguid, LFG_STATE_DUNGEON);
             }
-			SetVoteKick(itBoot->first, false);
+			SetState(itBoot->first, LFG_STATE_DUNGEON);
+			//SetVoteKick(itBoot->first, false); //LFG Fix Revert
             BootsStore.erase(itBoot);
         }
     }
@@ -1154,13 +1157,14 @@ void LFGMgr::RemoveProposal(LfgProposalContainer::iterator itProposal, LfgUpdate
 */
 void LFGMgr::InitBoot(ObjectGuid gguid, ObjectGuid kicker, ObjectGuid victim, std::string const& reason)
 {
-	SetVoteKick(gguid, true)
+	SetState(gguid, LFG_STATE_BOOT);
+	//SetVoteKick(gguid, true); //LFG Fix Revert
 
-    LfgPlayerBoot& boot = BootsStore[gguid];
-    boot.inProgress = true;
-    boot.cancelTime = time_t(time(NULL)) + LFG_TIME_BOOT;
-    boot.reason = reason;
-    boot.victim = victim;
+	LfgPlayerBoot& boot = BootsStore[gguid];
+	boot.inProgress = true;
+	boot.cancelTime = time_t(time(NULL)) + LFG_TIME_BOOT;
+	boot.reason = reason;
+	boot.victim = victim;
 
     GuidSet const& players = GetPlayers(gguid);
 
@@ -1168,6 +1172,7 @@ void LFGMgr::InitBoot(ObjectGuid gguid, ObjectGuid kicker, ObjectGuid victim, st
     for (GuidSet::const_iterator itr = players.begin(); itr != players.end(); ++itr)
     {
         ObjectGuid guid = (*itr);
+		SetState(guid, LFG_STATE_BOOT);
         boot.votes[guid] = LFG_ANSWER_PENDING;
     }
 
@@ -1223,11 +1228,14 @@ void LFGMgr::UpdateBoot(ObjectGuid guid, bool accept)
     for (LfgAnswerContainer::const_iterator itVotes = boot.votes.begin(); itVotes != boot.votes.end(); ++itVotes)
     {
         ObjectGuid pguid = itVotes->first;
-        if (pguid != boot.victim)
-            SendLfgBootProposalUpdate(pguid, boot);
+		if (pguid != boot.victim)
+		{
+			SetState(pguid, LFG_STATE_DUNGEON);
+			SendLfgBootProposalUpdate(pguid, boot);
+		}
     }
-
-	SetVoteKick(gguid, false);
+	SetState(gguid, LFG_STATE_DUNGEON);
+	//SetVoteKick(gguid, false); //LFG Fix Revert
     if (agreeNum == LFG_GROUP_KICK_VOTES_NEEDED)           // Vote passed - Kick player
     {
         if (Group* group = sGroupMgr->GetGroupByGUID(gguid.GetCounter()))
@@ -1489,12 +1497,14 @@ LfgState LFGMgr::GetState(ObjectGuid guid)
     if (guid.IsGroup())
     {
         state = GroupsStore[guid].GetState();
-		TC_LOG_TRACE("lfg.data.group.state.get", "Group: %s, State: %s", guid.ToString().c_str(), GetStateString(state).c_str());
+		TC_LOG_TRACE("lfg.data.group.state.get", "Group: %s, State: %u", guid.ToString().c_str(), state);
+		//TC_LOG_TRACE("lfg.data.group.state.get", "Group: %s, State: %s", guid.ToString().c_str(), GetStateString(state).c_str()); //LFG Fix Revert
     }
     else
     {
         state = PlayersStore[guid].GetState();
-		TC_LOG_TRACE("lfg.data.player.state.get", "Player: %s, State: %s", guid.ToString().c_str(), GetStateString(state).c_str());
+		TC_LOG_TRACE("lfg.data.player.state.get", "Player: %s, State: %u", guid.ToString().c_str(), state);
+		//TC_LOG_TRACE("lfg.data.player.state.get", "Player: %s, State: %s", guid.ToString().c_str(), GetStateString(state).c_str()); //LFG Fix Revert
     }
 
     return state;
@@ -1516,7 +1526,7 @@ LfgState LFGMgr::GetOldState(ObjectGuid guid)
 
     return state;
 }
-
+/*
 bool LFGMgr::IsVoteKickActive(ObjectGuid gguid)
  {
 	ASSERT(gguid.IsGroup());
@@ -1526,7 +1536,7 @@ bool LFGMgr::IsVoteKickActive(ObjectGuid gguid)
 	
 		return active;
 	}
-
+*/
 uint32 LFGMgr::GetDungeon(ObjectGuid guid, bool asId /*= true */)
 {
     uint32 dungeon = GroupsStore[guid].GetDungeon(asId);
@@ -1686,7 +1696,7 @@ void LFGMgr::SetState(ObjectGuid guid, LfgState state)
         data.SetState(state);
     }
 }
-
+/*
 void LFGMgr::SetVoteKick(ObjectGuid gguid, bool active)
  {
 	ASSERT(gguid.IsGroup());
@@ -1697,7 +1707,7 @@ void LFGMgr::SetVoteKick(ObjectGuid gguid, bool active)
 	
 		data.SetVoteKick(active);
 	}
-
+	*/
 void LFGMgr::SetDungeon(ObjectGuid guid, uint32 dungeon)
 {
     TC_LOG_TRACE("lfg.data.group.dungeon.set", "Group: %s, Dungeon: %u", guid.ToString().c_str(), dungeon);
