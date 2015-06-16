@@ -85,7 +85,6 @@ public:
  
     bool OnGossipHello(Player* player, Creature* me)
     {
-        player->PlayerTalkClass->ClearMenus();
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER,    "Engineering", GOSSIP_SENDER_MAIN,    SKILL_ENGINEERING);
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER,    "Herbalism",   GOSSIP_SENDER_MAIN,    SKILL_HERBALISM);
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER,    "Skinning",    GOSSIP_SENDER_MAIN,    SKILL_SKINNING);
@@ -98,7 +97,7 @@ public:
  
     bool OnGossipSelect(Player* player, Creature* me, uint32 sender, uint32 skill)
     {
-        player->PlayerTalkClass->ClearMenus();
+	player->PlayerTalkClass->ClearMenus();
         if (sender == CUSTOM_OPTION_UNLEARN)
         {
             ForgotSkill(player, SKILL_ENGINEERING);
