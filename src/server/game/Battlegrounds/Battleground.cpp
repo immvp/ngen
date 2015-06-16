@@ -830,6 +830,36 @@ void Battleground::EndBattleground(uint32 winner)
         uint32 loser_kills = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_FIRST);
         uint32 winner_arena = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_FIRST);
 
+            if (team == winner)
+         {
+                uint32 reward_winner_count = 6,
+                reward_wsg = 20558;
+
+    switch(plr->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                    plr->AddItem(reward_wsg, reward_winner_count);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    else                 // Losers
+    {
+        uint32  reward_loser_count = 3,
+                reward_wsg = 20558;
+
+        switch(plr->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                    plr->AddItem(reward_wsg, reward_loser_count);
+                    break;
+                default:
+                    break;
+        }
+    }
+
         if (isBattleground() && sWorld->getBoolConfig(CONFIG_BATTLEGROUND_STORE_STATISTICS_ENABLE))
         {
             stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_PVPSTATS_PLAYER);
