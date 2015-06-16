@@ -835,10 +835,10 @@ void Battleground::EndBattleground(uint32 winner)
                 uint32 reward_winner_count = 6,
                 reward_wsg = 20558;
 
-    switch(plr->GetZoneId())
+    switch(player->GetZoneId())
             {
                 case 3277: // Warsong Gulch
-                    plr->AddItem(reward_wsg, reward_winner_count);
+                    player->AddItem(reward_wsg, reward_winner_count);
                     break;
                 default:
                     break;
@@ -850,10 +850,10 @@ void Battleground::EndBattleground(uint32 winner)
         uint32  reward_loser_count = 3,
                 reward_wsg = 20558;
 
-        switch(plr->GetZoneId())
+        switch(player->GetZoneId())
             {
                 case 3277: // Warsong Gulch
-                    plr->AddItem(reward_wsg, reward_loser_count);
+                    player->AddItem(reward_wsg, reward_loser_count);
                     break;
                 default:
                     break;
