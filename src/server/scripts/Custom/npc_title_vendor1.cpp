@@ -127,10 +127,10 @@ public:
  
         void RewardTitles(Player *player, uint8 *nextTitle, const uint16 totalTokens, const uint8 faction)
         {
-			while ((*nextTitle < 15) && titlecost[*nextTitle] <= totalTokens)
+			while ((*nextTitle <= 15) && titlecost[*nextTitle] <= totalTokens)
                 {
                         (*nextTitle)++;
-                        if(*nextTitle == 14)
+                        if(*nextTitle == 15)
                                 player->SetTitle(sCharTitlesStore.LookupEntry(72));
                         else
                                 player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
@@ -167,6 +167,7 @@ public:
                 const uint16  totalTokens = player->GetTotalTokens(player);
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
+
  
                 RewardTitles(player, &nextTitle, totalTokens, faction);
                 const char *gossipText = GetNextTitleName(nextTitle, totalTokens, player);
