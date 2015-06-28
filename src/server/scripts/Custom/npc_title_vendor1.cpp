@@ -27,7 +27,6 @@
 #define TXT_ERR_TITLE   "you already have the Title :)"
 #define TXT_NO_FLAG     "Gimi Vendor flags plz."
 #define FORMAT_END      ":20:20|t "
-#define TXT_NEXT_TITLE  "Next title : |TInterface/PvPRankBadges/PvPRank"
 #define TXT_REQ_TITLE   "you need to be at least : |TInterface/PvPRankBadges/PvPRank"
 #define TXT_MAX_RANK    "you already are max rank !"
 #define TXT_WSG_MARK    " Warsong Gulch Mark of Ranking to go! We sell the same items as the Arena Vendors do."
@@ -99,25 +98,63 @@ static char *HtitlesNames[] =
         "High Warlord",
         "Battlemaster"
 };
-
+ 
+char Atitleicons[15] =
+{
+        "|TInterface\\icons\\Achievement_PVP_A_01:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_02:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_03:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_04:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_05:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_06:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_07:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_08:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_09:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_10:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_11:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_12:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_13:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_14:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|t"
+};
+ 
+char Htitleicons[15] =
+{
+        "|TInterface\\icons\\Achievement_PVP_H_01:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_02:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_03:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_04:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_05:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_06:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_07:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_08:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_09:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_10:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_11:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_12:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_13:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_14:50:50:-25:0|t",
+        "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|t"
+};
+ 
 uint32 titlecost[15] =
 {
-	// oki bois
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
-	8,
-	9,
-	10,
-	11,
-	12,
-	13,
-	14,
-	15 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
+        // oki bois
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
 };
  
 class npc_title_giver1 : public CreatureScript
@@ -127,18 +164,18 @@ public:
  
         void RewardTitles(Player *player, uint8 *nextTitle, const uint16 totalTokens, const uint8 faction)
         {
-			while ((*nextTitle <= 15) && titlecost[*nextTitle] <= totalTokens)
+                        while ((*nextTitle <= 15) && titlecost[*nextTitle] <= totalTokens)
                 {
                         (*nextTitle)++;
                         if(*nextTitle == 15)
                                 player->SetTitle(sCharTitlesStore.LookupEntry(72));
-						else
-						{
-							if (*nextTitle >= 16)
-								return;
-							else
-								player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
-						}                                
+                                                else
+                                                {
+                                                        if (*nextTitle >= 16)
+                                                                return;
+                                                        else
+                                                                player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
+                                                }                                
                 }
         }
  
@@ -146,22 +183,27 @@ public:
         {
                 std::ostringstream  ss;
  
-                if (nextTitle > 14)
-                        ss << "|TInterface\\icons\\Achievement_pvp_a_14:50|t" + TXT_MAX_RANK;
-                else
+                if (nextTitle > 14 && player->GetTeam() == ALLIANCE)
+                        ss << "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|t" + TXT_MAX_RANK;
+                else if(nextTitle > 14 && player->GetTeam() == HORDE)
+                                        ss << "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|t" + TXT_MAX_RANK;
+                                else
                 {
-                        ss << TXT_NEXT_TITLE;
+                                        if(player->GetTeam() == ALLIANCE)
+                        ss << "Next title: " + Atitleicons[nextTitle];
+                                        else
+                                                ss << "Next title: " + Htitleicons[nextTitle];
                         if (nextTitle < 9)
                                 ss << '0';
-						if (player->GetTeam() == ALLIANCE) // compile nu lol
+                                                if (player->GetTeam() == ALLIANCE)
                         {
                                 ss << 1 + nextTitle << FORMAT_END << AtitlesNames[nextTitle];
-								ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
+                                                                ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
                         }
                         else
                         {
-                        ss << 1 + nextTitle << FORMAT_END << HtitlesNames[nextTitle];
-						ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
+                                                        ss << 1 + nextTitle << FORMAT_END << HtitlesNames[nextTitle];
+                                                        ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
                         }
                 }
                 return (ss.str().c_str());
@@ -172,7 +214,7 @@ public:
                 const uint16  totalTokens = player->GetTotalTokens(player);
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
-
+ 
  
                 RewardTitles(player, &nextTitle, totalTokens, faction);
                 const char *gossipText = GetNextTitleName(nextTitle, totalTokens, player);
