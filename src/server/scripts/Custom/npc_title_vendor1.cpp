@@ -137,10 +137,10 @@ static uint32 GetTotalTokens(Player* Player)
         return (0);
 }
  
-class npc_title_giver : public CreatureScript
+class npc_title_giver1 : public CreatureScript
 {
 public:
-        npc_title_giver() : CreatureScript("npc_title_giver1") {}
+        npc_title_giver1() : CreatureScript("npc_title_giver1") {}
  
         void RewardTitles(Player *player, uint8 *nextTitle, uint16 *reqTokens, const uint16 totalTokens, const uint8 faction)
         {
