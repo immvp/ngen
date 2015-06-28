@@ -132,8 +132,13 @@ public:
                         (*nextTitle)++;
                         if(*nextTitle == 15)
                                 player->SetTitle(sCharTitlesStore.LookupEntry(72));
-                        else
-                                player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
+						else
+						{
+							if (*nextTitle >= 16)
+								return;
+							else
+								player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
+						}                                
                 }
         }
  
