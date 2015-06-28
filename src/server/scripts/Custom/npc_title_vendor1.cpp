@@ -28,7 +28,7 @@
 #define TXT_NO_FLAG     "Gimi Vendor flags plz."
 #define FORMAT_END      ":20:20|t "
 #define TXT_REQ_TITLE   "you need to be at least : |TInterface/PvPRankBadges/PvPRank"
-#define TXT_MAX_RANK    "you already are max rank !"
+#define TXT_MAX_RANK    "You've achieved the highest Rank! New ranks are introduced every Arena Season."
 #define TXT_WSG_MARK    " Warsong Gulch Mark of Ranking to go! We sell the same items as the Arena Vendors do."
 
 enum Gossip_Option_Custom
@@ -184,9 +184,9 @@ public:
 		std::ostringstream  ss;
 
 		if (nextTitle > 14 && player->GetTeam() == ALLIANCE)
-			ss << "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|tyou already are max rank!";
+			ss << "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|tYou've achieved the highest Rank! New ranks are introduced every Arena Season.";
 		else if (nextTitle > 14 && player->GetTeam() == HORDE)
-			ss << "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|tyou already are max rank!";
+			ss << "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|tYou've achieved the highest Rank! New ranks are introduced every Arena Season.";
 		else
 		{
 			if (player->GetTeam() == ALLIANCE)
@@ -197,12 +197,12 @@ public:
 				ss << '0';
 			if (player->GetTeam() == ALLIANCE)
 			{
-				ss << 1 + nextTitle << FORMAT_END << "|cff8A0886" << AtitlesNames[nextTitle] << "|r";
+				ss << 1 + nextTitle << "|cff8A0886" << AtitlesNames[nextTitle] << "|r";
 				ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
 			}
 			else
 			{
-				ss << 1 + nextTitle << FORMAT_END << "|cff8A0886" << HtitlesNames[nextTitle] << "|r";
+				ss << 1 + nextTitle << "|cff8A0886" << HtitlesNames[nextTitle] << "|r";
 				ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
 			}
 		}
@@ -234,6 +234,4 @@ public:
 void AddSC_title_system1()
 {
 	new npc_title_giver1();
-
 }
-
