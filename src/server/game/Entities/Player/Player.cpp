@@ -12565,7 +12565,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
  
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
                 }
-                else if(force_title && HasTitle(72))
+                else if(force_title && GetSession()->GetPlayer()->HasTitle(72))
                 {
                         Field* title_tfield = force_title->Fetch();
                         uint32 item_2 = title_tfield[0].GetUInt32();
