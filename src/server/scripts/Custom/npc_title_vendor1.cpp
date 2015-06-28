@@ -99,7 +99,7 @@ static char *HtitlesNames[] =
         "Battlemaster"
 };
  
-char Atitleicons[15] =
+static char *Atitleicons[53] =
 {
         "|TInterface\\icons\\Achievement_PVP_A_01:50:50:-25:0|t",
         "|TInterface\\icons\\Achievement_PVP_A_02:50:50:-25:0|t",
@@ -118,7 +118,7 @@ char Atitleicons[15] =
         "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|t"
 };
  
-char Htitleicons[15] =
+static char *Htitleicons[53] =
 {
         "|TInterface\\icons\\Achievement_PVP_H_01:50:50:-25:0|t",
         "|TInterface\\icons\\Achievement_PVP_H_02:50:50:-25:0|t",
@@ -184,15 +184,15 @@ public:
                 std::ostringstream  ss;
  
                 if (nextTitle > 14 && player->GetTeam() == ALLIANCE)
-                        ss << "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|t" + TXT_MAX_RANK;
+                        ss << "|TInterface\\icons\\Achievement_PVP_A_15:50:50:-25:0|tyou already are max rank!";
                 else if(nextTitle > 14 && player->GetTeam() == HORDE)
-                                        ss << "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|t" + TXT_MAX_RANK;
+						ss << "|TInterface\\icons\\Achievement_PVP_H_15:50:50:-25:0|tyou already are max rank!";
                                 else
                 {
                                         if(player->GetTeam() == ALLIANCE)
-                        ss << "Next title: " + Atitleicons[nextTitle];
+                        ss << "Next title: " << Atitleicons[nextTitle];
                                         else
-                                                ss << "Next title: " + Htitleicons[nextTitle];
+                                                ss << "Next title: " << Htitleicons[nextTitle];
                         if (nextTitle < 9)
                                 ss << '0';
                                                 if (player->GetTeam() == ALLIANCE)
