@@ -12549,45 +12549,58 @@ void Player::QuickEquipItem(uint16 pos, Item* pItem)
 
 void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
-	if (pItem)
-	{
-		QueryResult char_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_character where item1 = %u and charid = %u;", pItem->GetEntry(), GetGUIDLow());
-		QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
-		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
-
-		if (char_t)
-		{
-			Field* char_tfield = char_t->Fetch();
-			uint32 item_2 = char_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
-		}
-		else if (class_t)
-		{
-			Field* class_tfield = class_t->Fetch();
-			uint32 item_2 = class_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
-		}
-		else if (force_t)
-		{
-			Field* force_tfield = force_t->Fetch();
-			uint32 item_2 = force_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
-		}
-		else
-		{
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
-		}
-		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
-		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
-	}
-	else
-	{
-		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
-		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
-	}
+        if (pItem)
+        {
+                QueryResult char_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_character where item1 = %u and charid = %u;", pItem->GetEntry(), GetGUIDLow());
+                QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+                QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
+                QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+               
+               
+       
+                if (char_t)
+                {
+                        Field* char_tfield = char_t->Fetch();
+                        uint32 item_2 = char_tfield[0].GetUInt32();
+ 
+                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+                }
+                else if(player->HasTitle(72))
+                {
+                        if(force_title)
+                        {
+                        Field* title_tfield = force_title->Fetch();
+                        uint32 item_2 = title_tfield[0].GetUInt32();
+ 
+                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+                        }
+                }
+                else if (class_t)
+                {
+                        Field* class_tfield = class_t->Fetch();
+                        uint32 item_2 = class_tfield[0].GetUInt32();
+ 
+                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+                }
+                else if (force_t)
+                {
+                        Field* force_tfield = force_t->Fetch();
+                        uint32 item_2 = force_tfield[0].GetUInt32();
+ 
+                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+                }
+                else
+                {
+                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+                }
+                SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+                SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
+        }
+        else
+        {
+                SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
+                SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
+        }
 }
 
 void Player::VisualizeItem(uint8 slot, Item* pItem)
