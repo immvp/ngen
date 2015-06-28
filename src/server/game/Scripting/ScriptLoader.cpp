@@ -1432,7 +1432,7 @@ void AddSC_TimedGobjectSpawn();
 //void npc_arena_spectator();
 //void AddSC_ProfessionNpc();
 //void AddSC_npc_suffixvendor();
-void AddSC_hat_redeemer();
+void AddSC_title_system1();
 #endif
 
 void AddCustomScripts()
@@ -1455,7 +1455,6 @@ void AddCustomScripts()
 //  npc_arena_spectator();
 //	AddSC_ProfessionNpc();
 //	AddSC_npc_suffixvendor();
-	AddSC_hat_redeemer();
 	AddSC_title_system1();
 #endif
 }
