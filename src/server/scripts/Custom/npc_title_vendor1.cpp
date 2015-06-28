@@ -147,7 +147,7 @@ public:
                 std::ostringstream  ss;
  
                 if (nextTitle > 14)
-                        ss << TXT_MAX_RANK;
+                        ss << "|TInterface\\icons\\Achievement_pvp_a_14:50|t" + TXT_MAX_RANK;
                 else
                 {
                         ss << TXT_NEXT_TITLE;
