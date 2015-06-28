@@ -119,23 +119,6 @@ uint32 titlecost[15] =
 	14,
 	15 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
 };
-
-// I k I k bare vent...
-static uint32 GetTotalTokens(Player* Player)
-{
-        //intialize an item
-        Item*           pItem;
-        //loop in the currencytoken slots
-        for (uint8 i = CURRENCYTOKEN_SLOT_START; i < CURRENCYTOKEN_SLOT_END; ++i)
-        {
-                //try to set or item to the one from this slot
-                pItem = Player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-                //if player have an item in this slot and his entry is the same has our token return the count
-                if (pItem && pItem->GetEntry() == TOKEN)
-                        return (pItem->GetCount());
-        }
-        return (0);
-}
  
 class npc_title_giver1 : public CreatureScript
 {
@@ -165,15 +148,15 @@ public:
                         ss << TXT_NEXT_TITLE;
                         if (nextTitle < 9)
                                 ss << '0';
-                        if(player->GetTeam() == TEAM_ALLIANCE)
+						if (player->GetTeam() == ALLIANCE) // compile nu lol
                         {
                                 ss << 1 + nextTitle << FORMAT_END << AtitlesNames[nextTitle];
-                        ss << " in " << reqTokens - totalTokens << " tokens.";
+								ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
                         }
                         else
                         {
                         ss << 1 + nextTitle << FORMAT_END << HtitlesNames[nextTitle];
-                        ss << " in " << reqTokens - totalTokens << " tokens.";
+						ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
                         }
                 }
                 return (ss.str().c_str());
@@ -181,7 +164,7 @@ public:
  
         bool OnGossipHello(Player* player, Creature* me)
         {
-                const uint16  totalTokens = GetTotalTokens(player);
+                const uint16  totalTokens = player->GetTotalTokens(player);
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
                 uint16        reqTokens = 0;

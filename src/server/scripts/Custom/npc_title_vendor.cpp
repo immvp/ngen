@@ -95,22 +95,6 @@ static const char   *titlesNames[28] =
 };
 
 
-static uint32 GetTotalTokens(Player* Player)
-{
-        //intialize an item
-        Item*           pItem;
-        //loop in the currencytoken slots
-        for (uint8 i = CURRENCYTOKEN_SLOT_START; i < CURRENCYTOKEN_SLOT_END; ++i)
-        {
-                //try to set or item to the one from this slot
-                pItem = Player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-                //if player have an item in this slot and his entry is the same has our token return the count
-                if (pItem && pItem->GetEntry() == TOKEN)
-                        return (pItem->GetCount());
-        }
-        return (0);
-}
-
 class npc_title_giver : public CreatureScript
 {
 public:
@@ -144,7 +128,7 @@ public:
 
         bool OnGossipHello(Player* player, Creature* me)
         {
-                const uint16  totalTokens = GetTotalTokens(player);
+			const uint16  totalTokens = player->GetTotalTokens(player); // lelelelele
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
                 uint16        reqTokens = 0;
