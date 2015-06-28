@@ -7522,7 +7522,8 @@ void Player::UpdateArea(uint32 newArea)
 
     // previously this was in UpdateZone (but after UpdateArea) so nothing will break
     pvpInfo.IsInNoPvPArea = false;
-    if (area && area->IsSanctuary() || GetAreaId() == 3475 || GetAreaId() == 327 || GetAreaId() == 3638 || GetAreaId() == 4413) // Replace the 100 with your area ID    // in sanctuary
+    // suggest paramethers around '&&' within '||' (-Wparanthese) thats it? hvem er det som siger den der onsvage lyd? haha
+    if ((area && area->IsSanctuary()) || GetAreaId() == 3475 || GetAreaId() == 327 || GetAreaId() == 3638 || GetAreaId() == 4413) // Replace the 100 with your area ID    // in sanctuary
     {
         SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_SANCTUARY);
         pvpInfo.IsInNoPvPArea = true;
@@ -12547,6 +12548,23 @@ void Player::QuickEquipItem(uint16 pos, Item* pItem)
     }
 }
 
+uint32 Player::GetTotalTokens(Player* Player)
+{
+        //intialize an item
+        Item*           pItem;
+        //loop in the currencytoken slots
+        for (uint8 i = CURRENCYTOKEN_SLOT_START; i < CURRENCYTOKEN_SLOT_END; ++i)
+        {
+                //try to set or item to the one from this slot
+                pItem = Player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+                //if player have an item in this slot and his entry is the same has our token return the count
+                if (pItem && pItem->GetEntry() == 20558)
+                        return (pItem->GetCount());
+        }
+        return (0); // Hvor meget kommer det til at koste for battlemaster title? - lavede du det ikke så man selv kan vælge hvor meget der er  jroeq.  sfeolrf  jo sel derfor sprugte jeg dig
+}
+// ved ik hvorfor din m8 lavet den static :P
+
 void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
         if (pItem)
@@ -12565,9 +12583,10 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
  
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
                 }
-                else if(force_title && GetSession()->GetPlayer()->HasTitle(72))
-                {
-                        Field* title_tfield = force_title->Fetch();
+                else if(force_title && GetTotalTokens(GetSession()->GetPlayer()) >= 15000) // giver ingen mening, hvor kan den ikke checke om player har title
+                {// okay så basically hvis du har 15000 tokens så virker det lige pt, du skal bare lige finde ud af hvad det skal koste etc og fix
+                    // er bare bange for der er nogen som har 5000 tokens så jaer erhm, men add dig selv 15000 tokens og test id er 20558 mener jeg nok
+                        Field* title_tfield = force_title->Fetch(); // bare compile det der
                         uint32 item_2 = title_tfield[0].GetUInt32();
  
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
@@ -12590,7 +12609,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
                 {
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
                 }
-                SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+                SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT)); 
                 SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
         }
         else
@@ -14099,7 +14118,7 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                             {
                                 if (item_rand_suffix->enchant_id[k] == enchant_id)
                                 {
-									if (enchant_spell_id == ITEM_MOD_STAMINA)
+                                    if (enchant_spell_id == ITEM_MOD_STAMINA)
                                     {
                                         enchant_amount = uint32((((item_rand_suffix->prefix[k] * 2) / 3) * item->GetItemSuffixFactor())  / 10000);
                                         if (!enchant_amount)

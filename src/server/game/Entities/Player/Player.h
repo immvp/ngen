@@ -1331,6 +1331,7 @@ class Player : public Unit, public GridObject<Player>
         bool CheckAmmoCompatibility(const ItemTemplate* ammo_proto) const;
         void QuickEquipItem(uint16 pos, Item* pItem);
         void VisualizeItem(uint8 slot, Item* pItem);
+        uint32 GetTotalTokens(Player* player); //korrekt?
         void SetVisibleItemSlot(uint8 slot, Item* pItem);
         Item* BankItem(ItemPosCountVec const& dest, Item* pItem, bool update);
         void RemoveItem(uint8 bag, uint8 slot, bool update);
