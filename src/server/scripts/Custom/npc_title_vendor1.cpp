@@ -125,7 +125,7 @@ class npc_title_giver1 : public CreatureScript
 public:
         npc_title_giver1() : CreatureScript("npc_title_giver1") {}
  
-        void RewardTitles(Player *player, uint8 *nextTitle, uint16 *reqTokens, const uint16 totalTokens, const uint8 faction)
+        void RewardTitles(Player *player, uint8 *nextTitle, const uint16 totalTokens, const uint8 faction)
         {
 			while ((*nextTitle < 15) && titlecost[*nextTitle] <= totalTokens)
                 {
@@ -137,7 +137,7 @@ public:
                 }
         }
  
-        const char *GetNextTitleName(const uint8 nextTitle, const uint16 reqTokens, const uint16 totalTokens, Player* player)
+        const char *GetNextTitleName(const uint8 nextTitle, const uint16 totalTokens, Player* player)
         {
                 std::ostringstream  ss;
  
@@ -167,10 +167,9 @@ public:
                 const uint16  totalTokens = player->GetTotalTokens(player);
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
-                uint16        reqTokens = 0;
  
-                RewardTitles(player, &nextTitle, &reqTokens, totalTokens, faction);
-                const char *gossipText = GetNextTitleName(nextTitle, reqTokens, totalTokens, player);
+                RewardTitles(player, &nextTitle, totalTokens, faction);
+                const char *gossipText = GetNextTitleName(nextTitle, totalTokens, player);
                 player->PlayerTalkClass->ClearMenus();
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, gossipText, GOSSIP_SENDER_MAIN, CUSTOM_OPTION_EXIT);
                 player->ADD_GOSSIP_ITEM(1, TXT_KTHXBY, GOSSIP_SENDER_MAIN, CUSTOM_OPTION_EXIT);
