@@ -108,7 +108,7 @@ public:
 			EquipNewItem(player, 6414, 11);
 			EquipNewItem(player, 19024, 12);
 			EquipNewItem(player, 19024, 13);
-			EquipRPBearItem(player, 51994, 14);
+			EquipNewItem(player, 2059, 14);
 			EquipNewItem(player, 5815, 15);
 			EquipNewItem(player, 29201, 17);
 			EquipNewItem(player, 21933, 1);
