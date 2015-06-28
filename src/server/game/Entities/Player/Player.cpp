@@ -12565,7 +12565,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
  
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
                 }
-                else if(player->HasTitle(72))
+                else if(HasTitle(72))
                 {
                         if(force_title)
                         {
