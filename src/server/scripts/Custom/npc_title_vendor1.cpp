@@ -233,12 +233,7 @@ public:
 };
 void AddSC_title_system1()
 {
-<<<<<<< HEAD
-        new npc_title_giver1();
- 
-}
-=======
 	new npc_title_giver1();
 
 }
->>>>>>> 7b68aca7b54a5ceb25c1097260a301b7c1034be6
+
