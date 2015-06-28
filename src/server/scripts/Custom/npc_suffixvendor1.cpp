@@ -156,7 +156,7 @@
 //        if (uiAction == GOSSIP_OPTION_VENDOR) 
 //        {
 //            player->PlayerTalkClass->ClearMenus();
-//            player->GetSession()->SendListInventory(me->GetGUID());
+//            player->GetSession()->SendListInventory(me->GetGUID())	;
 //        }
 //        else if (uiAction >= CUSTOM_OPTION_ITEM_MENU && uiAction < CUSTOM_OPTION_ITEM_MENU_MAX)
 //            return (GetList(player, me, data, uiAction - CUSTOM_OPTION_ITEM_MENU + 1));

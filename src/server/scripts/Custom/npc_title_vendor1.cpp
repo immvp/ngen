@@ -1,7 +1,7 @@
 #include "ScriptPCH.h"
 #include "ItemEnchantmentMgr.h"
 #include "Language.h"
-
+ 
 #define H_X             -1258.48f
 #define H_Y             63.53f
 #define H_Z             127.9f
@@ -31,7 +31,7 @@
 #define TXT_REQ_TITLE   "you need to be at least : |TInterface/PvPRankBadges/PvPRank"
 #define TXT_MAX_RANK    "you already are max rank !"
 #define TXT_WSG_MARK    " Warsong Gulch Mark of Ranking to go! We sell the same items as the Arena Vendors do."
-
+ 
 enum Gossip_Option_Custom
 {
         CUSTOM_OPTION_NONE = 20,
@@ -54,15 +54,15 @@ enum Gossip_Option_Custom
         CUSTOM_OPTION_VENDOR = 37,
         CUSTOM_OPTION_MAX
 };
-
+ 
 enum NPCs {
         NPC_ALLIANCE_LOOK_BACK = 500113,
         NPC_ALLIANCE_LOOK_ARROUND = 500114,
         NPC_HORDE_LOOK_BACK = 500115,
         NPC_HORDE_LOOK_ARROUND = 500116
 };
-
-static const char   *titlesNames[28] =
+ 
+static char   *AtitlesNames[] =
 {
         "Private",
         "Corporal",
@@ -78,6 +78,11 @@ static const char   *titlesNames[28] =
         "Marshal",
         "Field Marshal",
         "Grand Marshal",
+        "Battlemaster"
+};
+ 
+static char *HtitlesNames[] =
+{
         "Scout",
         "Grunt",
         "Sergeant",
@@ -91,10 +96,31 @@ static const char   *titlesNames[28] =
         "Lieutenant General",
         "General",
         "Warlord",
-        "High Warlord"
+        "High Warlord",
+        "Battlemaster"
 };
 
+uint32 titlecost[15] =
+{
+	// oki bois
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	8,
+	9,
+	10,
+	11,
+	12,
+	13,
+	14,
+	15 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
+};
 
+// I k I k bare vent...
 static uint32 GetTotalTokens(Player* Player)
 {
         //intialize an item
@@ -110,62 +136,73 @@ static uint32 GetTotalTokens(Player* Player)
         }
         return (0);
 }
-
+ 
 class npc_title_giver : public CreatureScript
 {
 public:
-        npc_title_giver() : CreatureScript("npc_title_giver") {}
-
+        npc_title_giver() : CreatureScript("npc_title_giver1") {}
+ 
         void RewardTitles(Player *player, uint8 *nextTitle, uint16 *reqTokens, const uint16 totalTokens, const uint8 faction)
         {
-                while ((*nextTitle < 14) && (((*reqTokens += (1 + *nextTitle) * TOKEN_COUNT)) <= totalTokens))
+			while ((*nextTitle < 15) && titlecost[*nextTitle] <= totalTokens)
                 {
                         (*nextTitle)++;
-                        player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
+                        if(*nextTitle == 14)
+                                player->SetTitle(sCharTitlesStore.LookupEntry(72));
+                        else
+                                player->SetTitle(sCharTitlesStore.LookupEntry(*nextTitle + faction));
                 }
         }
-
-        const char *GetNextTitleName(const uint8 nextTitle, const uint16 reqTokens, const uint16 totalTokens, const uint8 faction)
+ 
+        const char *GetNextTitleName(const uint8 nextTitle, const uint16 reqTokens, const uint16 totalTokens, Player* player)
         {
                 std::ostringstream  ss;
-
-                if (nextTitle > 13)
+ 
+                if (nextTitle > 14)
                         ss << TXT_MAX_RANK;
                 else
                 {
                         ss << TXT_NEXT_TITLE;
                         if (nextTitle < 9)
                                 ss << '0';
-                        ss << 1 + nextTitle << FORMAT_END << titlesNames[nextTitle + faction];
+                        if(player->GetTeam() == TEAM_ALLIANCE)
+                        {
+                                ss << 1 + nextTitle << FORMAT_END << AtitlesNames[nextTitle];
                         ss << " in " << reqTokens - totalTokens << " tokens.";
+                        }
+                        else
+                        {
+                        ss << 1 + nextTitle << FORMAT_END << HtitlesNames[nextTitle];
+                        ss << " in " << reqTokens - totalTokens << " tokens.";
+                        }
                 }
                 return (ss.str().c_str());
         }
-
+ 
         bool OnGossipHello(Player* player, Creature* me)
         {
                 const uint16  totalTokens = GetTotalTokens(player);
                 const uint8   faction = (player->GetTeam() == ALLIANCE) ? 0 : 14;
                 uint8         nextTitle = 0;
                 uint16        reqTokens = 0;
-
+ 
                 RewardTitles(player, &nextTitle, &reqTokens, totalTokens, faction);
-                const char *gossipText = GetNextTitleName(nextTitle, reqTokens, totalTokens, faction);
+                const char *gossipText = GetNextTitleName(nextTitle, reqTokens, totalTokens, player);
                 player->PlayerTalkClass->ClearMenus();
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, gossipText, GOSSIP_SENDER_MAIN, CUSTOM_OPTION_EXIT);
                 player->ADD_GOSSIP_ITEM(1, TXT_KTHXBY, GOSSIP_SENDER_MAIN, CUSTOM_OPTION_EXIT);
                 player->PlayerTalkClass->SendGossipMenu(9425, me->GetGUID());
                 return (true);
         }
-
+ 
         bool OnGossipSelect(Player* player, Creature* /*me*/, uint32 /*uiSender*/, uint32 /*uiAction*/)
         {
                 player->PlayerTalkClass->SendCloseGossip();
                 return (true);
         }
 };
-void AddSC_title_system()
+void AddSC_title_system1()
 {
-        new npc_title_giver();
-
+        new npc_title_giver1();
+ 
 }

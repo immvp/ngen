@@ -1456,5 +1456,6 @@ void AddCustomScripts()
 //	AddSC_ProfessionNpc();
 //	AddSC_npc_suffixvendor();
 	AddSC_hat_redeemer();
+	AddSC_title_system1();
 #endif
 }
