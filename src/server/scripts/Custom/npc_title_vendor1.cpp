@@ -193,16 +193,15 @@ public:
 				ss << Atitleicons[nextTitle] << "Next title: ";
 			else
 				ss << Htitleicons[nextTitle] << "Next title: ";
-			if (nextTitle < 9)
-				ss << '0';
+
 			if (player->GetTeam() == ALLIANCE)
 			{
-				ss << 1 + nextTitle << "|cff8A0886" << AtitlesNames[nextTitle] << "|r";
+				ss << "|cff8A0886" << AtitlesNames[nextTitle] << "|r";
 				ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
 			}
 			else
 			{
-				ss << 1 + nextTitle << "|cff8A0886" << HtitlesNames[nextTitle] << "|r";
+				ss << "|cff8A0886" << HtitlesNames[nextTitle] << "|r";
 				ss << " in " << titlecost[nextTitle] - totalTokens << " tokens.";
 			}
 		}
