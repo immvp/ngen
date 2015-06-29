@@ -159,7 +159,7 @@ public:
                                 player->LearnSpell(6789, false);
  
                                 player->RemoveSpell(19028);
-                                player->RemoveSpell(17962)
+								player->RemoveSpell(17962);
                                 break;
  
                         case CLASS_DRUID: // Balance
