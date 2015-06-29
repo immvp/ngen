@@ -149,7 +149,7 @@ public:
                                 break;
  
                         case CLASS_MAGE: // Arcane
-                                player->LearnSpell(29976, false);
+                                player->LearnSpell(12043, false);
  
                                 player->RemoveSpell(44572);
                                 player->RemoveSpell(12358);
@@ -229,6 +229,7 @@ public:
                                 player->LearnSpell(12358, false);
                                 player->LearnSpell(31642, false);
  
+                                player->RemoveSpell(12043);
                                 player->RemoveSpell(44572);
                                 player->RemoveSpell(29976);
                                 break;
@@ -315,6 +316,7 @@ public:
                         case CLASS_MAGE: // Frost
                                 player->LearnSpell(44572, false);
  
+                                player->RemoveSpell(12043);
                                 player->RemoveSpell(12358);
                                 player->RemoveSpell(31642);
                                 player->RemoveSpell(29976);
