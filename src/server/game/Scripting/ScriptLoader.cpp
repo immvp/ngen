@@ -1434,6 +1434,7 @@ void AddSC_TimedGobjectSpawn();
 //void AddSC_npc_suffixvendor();
 void AddSC_title_system1();
 void AddSC_fast_arena_start();
+void AddSC_npc_template();
 #endif
 
 void AddCustomScripts()
@@ -1458,5 +1459,6 @@ void AddCustomScripts()
 //	AddSC_npc_suffixvendor();
 	AddSC_title_system1();
 	AddSC_fast_arena_start();
+	AddSC_npc_template();
 #endif
 }

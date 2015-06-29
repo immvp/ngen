@@ -140,21 +140,21 @@ static char *Htitleicons[53] =
 uint32 titlecost[15] =
 {
 	// oki bois
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
 	8,
-	9,
-	10,
-	11,
-	12,
-	13,
-	14,
-	15 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
+	24,
+	48,
+	80,
+	120,
+	168,
+	224,
+	288,
+	360,
+	440,
+	568,
+	664,
+	768,
+	880,
+	1480 // Oki så de her changer du til de prices som du gerne vil have så 1 er self rank 1 2 er rank 2 etc.et
 };
 
 class npc_title_giver1 : public CreatureScript
