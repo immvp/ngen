@@ -29,6 +29,7 @@ Custom/npc_heal.cpp
 Custom/npc_changer.cpp
 Custom/go_respawn.cpp
 Custom/npc_title_vendor1.cpp
+Custom/FastArenaCrystal.cpp
 )
 
 message("  -> Prepared: Custom")
