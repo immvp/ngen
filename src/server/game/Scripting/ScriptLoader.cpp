@@ -1433,6 +1433,7 @@ void AddSC_TimedGobjectSpawn();
 //void AddSC_ProfessionNpc();
 //void AddSC_npc_suffixvendor();
 void AddSC_title_system1();
+void AddSC_fast_arena_start();
 #endif
 
 void AddCustomScripts()
@@ -1456,5 +1457,6 @@ void AddCustomScripts()
 //	AddSC_ProfessionNpc();
 //	AddSC_npc_suffixvendor();
 	AddSC_title_system1();
+	AddSC_fast_arena_start();
 #endif
 }
