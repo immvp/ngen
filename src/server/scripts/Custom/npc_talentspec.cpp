@@ -28,7 +28,7 @@ public:
                 case CLASS_ROGUE: // NOT DONE
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Rogue_Eviscerate:50:50:-25:0|t |cffb5351eAssassination\n|cffaa0ba8Passives:|r\nVigor and Overkill\n|cff6722d6Actives:|r\nCloak of Shadows", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Backstab:50:50:-25:0|t |cffb5351eCombat\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nRupture", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Stealth:50:50:-25:0|t |cffb5351eSublety\n|cffaa0ba8Passives:|r\nCheat Death\n|cff6722d6Actives:|r\nVanish", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Ability_Stealth:50:50:-25:0|t |cffb5351eSublety\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nVanish, Cheap Shot", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                         break;
  
                 case CLASS_PRIEST: // Done
@@ -111,7 +111,7 @@ public:
                                 break;
  
                         case CLASS_HUNTER: // BeastMastery
-                                player->LearnSpell(24394, false);
+                                player->LearnSpell(19577, false);
  
                                 player->RemoveSpell(53217);
                                 player->RemoveSpell(34074);
@@ -123,15 +123,16 @@ public:
                                 player->LearnSpell(14983, false);
                                 player->LearnSpell(31224, false);
  
-                                player->RemoveSpell(1943);
                                 player->RemoveSpell(31230);
+                                player->RemoveSpell(1943);
+                                player->RemoveSpell(1833);
                                 player->RemoveSpell(1856);
                                 break;
  
                         case CLASS_PRIEST: // Discipline
-                                player->LearnSpell(1, false);
+                                player->LearnSpell(984, false);
  
-                                player->RemoveSpell(1);
+                                player->RemoveSpell(64129);
                                 break;
  
                         case CLASS_DEATH_KNIGHT: // Blood
@@ -205,15 +206,16 @@ public:
  							
  								player->RemoveSpell(58426);
                                 player->RemoveSpell(14983);
-                                player->RemoveSpell(31224);
                                 player->RemoveSpell(31230);
+                                player->RemoveSpell(31224);
+                                player->RemoveSpell(1833);
                                 player->RemoveSpell(1856);
                                 break;
  
                         case CLASS_PRIEST: // Holy
-                                player->LearnSpell(1, false);
+                                player->LearnSpell(64129, false);
  
-                                player->RemoveSpell(1);
+                                player->RemoveSpell(984);
                                 break;
  
                         case CLASS_DEATH_KNIGHT: // Frost
@@ -284,10 +286,11 @@ public:
                                 break;
  
                         case CLASS_ROGUE: // Sublety
-                                player->LearnSpell(31230, false);
+                                player->LearnSpell(1833, false);
                                 player->LearnSpell(1856, false);
  								
                                 player->RemoveSpell(31224);
+                                player->RemoveSpell(31230);
                                 player->RemoveSpell(1943);
                                 player->RemoveSpell(14983);
                                 player->RemoveSpell(58426);
@@ -302,7 +305,7 @@ public:
  
                         case CLASS_SHAMAN: // Restoration
                                 player->LearnSpell(8177, false);
-                                player->LearnSpell(17116, false);
+                                player->LearnSpell(16188, false);
  
                                 player->RemoveSpell(51505);
                                 player->RemoveSpell(16580);
