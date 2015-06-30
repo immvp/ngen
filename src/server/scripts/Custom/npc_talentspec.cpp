@@ -40,7 +40,7 @@ public:
                 case CLASS_DEATH_KNIGHT:
                         /*
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Deathknight_BloodPresence:50:50:-25:0|t Blood\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Deathknight_FrostPresence:50:50:-25:0|t Frost\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TIntefrace/ICONS/Spell_Deathknight_FrostPresence:50:50:-25:0|t Frost\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Deathknight_UnholyPresence:50:50:-25:0|t Unholy\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                         */
                         player->GetSession()->SendAreaTriggerMessage("Death Knights are currently not supported.");
@@ -199,6 +199,7 @@ public:
                                 player->LearnSpell(53217, false);
                                 player->LearnSpell(34074, false);
  
+                                player->RemoveSpell(19577);
                                 player->RemoveSpell(24394);
                                 player->RemoveSpell(19263);
                                 break;
@@ -284,6 +285,7 @@ public:
                         case CLASS_HUNTER: // Survival
                                 player->LearnSpell(19263, false);
  
+                                player->RemoveSpell(19577);
                                 player->RemoveSpell(53217);
                                 player->RemoveSpell(34074);
                                 player->RemoveSpell(24394);
