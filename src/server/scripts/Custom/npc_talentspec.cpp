@@ -32,7 +32,7 @@ public:
                         break;
  
                 case CLASS_PRIEST: // Done
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_PowerWordShield:50:50:-25:0|t |cffFFFFFFDiscipline\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nSmite (rank 4)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_PowerWordShield:50:50:-25:0|t |cffFFFFFFDiscipline\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nSmite (rank 4), Holy Fire (rank 1)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Holy_GuardianSpirit:50:50:-25:0|t |cffFFFFFFHoly\n|cffaa0ba8Passives:|r\nBody and Soul 2/2\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                         //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Shadow_ShadowWordPain:50:50:-25:0|t |cff160d1cShadow\n|cffaa0ba8Passives:|r\nN/A\n|cff6722d6Actives:|r\nN/A", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                         break;
@@ -130,6 +130,7 @@ public:
                                 break;
  
                         case CLASS_PRIEST: // Discipline
+                                player->LearnSpell(14914, false);
                                 player->LearnSpell(984, false);
  
                                 player->RemoveSpell(64129);
@@ -216,6 +217,7 @@ public:
                         case CLASS_PRIEST: // Holy
                                 player->LearnSpell(64129, false);
  
+                                player->RemoveSpell(14914);
                                 player->RemoveSpell(984);
                                 break;
  
