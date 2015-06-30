@@ -123,6 +123,7 @@ public:
                                 player->LearnSpell(14983, false);
                                 player->LearnSpell(31224, false);
  
+                                player->RemoveAura(58426);
                                 player->RemoveSpell(31230);
                                 player->RemoveSpell(1943);
                                 player->RemoveSpell(1833);
@@ -207,7 +208,8 @@ public:
                         case CLASS_ROGUE: // Combat
                                 player->LearnSpell(1943, false);
  							
- 								player->RemoveSpell(58426);
+ 				player->RemoveSpell(58426);
+                                player->RemoveAura(58426);
                                 player->RemoveSpell(14983);
                                 player->RemoveSpell(31230);
                                 player->RemoveSpell(31224);
@@ -295,6 +297,7 @@ public:
                                 player->LearnSpell(1833, false);
                                 player->LearnSpell(1856, false);
  								
+                                player->RemoveAura(58426);
                                 player->RemoveSpell(31224);
                                 player->RemoveSpell(31230);
                                 player->RemoveSpell(1943);

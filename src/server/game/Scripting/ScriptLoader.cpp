@@ -1435,6 +1435,7 @@ void AddSC_TimedGobjectSpawn();
 void AddSC_title_system1();
 void AddSC_fast_arena_start();
 void AddSC_npc_template();
+void AddSC_SeasonReward();
 #endif
 
 void AddCustomScripts()
@@ -1460,5 +1461,6 @@ void AddCustomScripts()
 	AddSC_title_system1();
 	AddSC_fast_arena_start();
 	AddSC_npc_template();
+	AddSC_SeasonReward();
 #endif
 }
