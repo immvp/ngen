@@ -143,7 +143,8 @@ public:
                                 player->LearnSpell(51486, false);
                                 player->LearnSpell(16580, false);
                                 player->LearnSpell(51505, false);
- 
+                                
+                                player->RemoveSpell(16188);
                                 player->RemoveSpell(8177);
                                 player->RemoveSpell(17116);
                                 break;
