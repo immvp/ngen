@@ -12569,7 +12569,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
 		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
 		QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
-		QueryResult IsRank15 = CharacterDatabase.PQuery("select count from item_instance where itemEntry = 20558 and guid = %u;", GetGUIDLow());
+		QueryResult IsRank15 = CharacterDatabase.PQuery("select count from item_instance where itemEntry = 20558 and owner_guid = %u;", GetGUIDLow());
 
 		if (char_t)
 		{
