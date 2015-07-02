@@ -12569,8 +12569,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
 		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
 		QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
-
-
+		QueryResult IsRank15 = CharacterDatabase.PQuery("select count from item_instance where itemEntry = 20558 and guid = %u;", GetGUIDLow());
 
 		if (char_t)
 		{
@@ -12588,10 +12587,13 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		}
 		else if (class_t)
 		{
-			if (GetTotalTokens(GetSession()->GetPlayer()) >= 1480)
+			if (IsRank15)
 			{
+				Field* rank_tfield = IsRank15->Fetch();
+				uint32 count = rank_tfield[0].GetUInt32();
+
 				uint32 item_2 = 0;
-				if (force_title)
+				if (count >= 1480)
 				{
 					Field* title_tfield = force_title->Fetch();
 					uint32 item_2 = title_tfield[0].GetUInt32();
