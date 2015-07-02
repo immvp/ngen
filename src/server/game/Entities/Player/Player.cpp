@@ -12578,13 +12578,6 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 
 			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 		}
-		else if (force_title && GetTotalTokens(GetSession()->GetPlayer()) >= 1480) // giver ingen mening, hvor kan den ikke checke om player har title
-		{
-			Field* title_tfield = force_title->Fetch();
-			uint32 item_2 = title_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
-		}
 		else if (class_t)
 		{
 			if (IsRank15)
