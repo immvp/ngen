@@ -12585,25 +12585,20 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 				Field* rank_tfield = IsRank15->Fetch();
 				uint32 count = rank_tfield[0].GetUInt32();
 
-				uint32 item_2 = 0;
+				Field* class_tfield = class_t->Fetch();
+				uint32 item_2 = class_tfield[0].GetUInt32();
+
 				if (count >= 1480)
 				{
 					Field* title_tfield = force_title->Fetch();
 					uint32 item_2 = title_tfield[0].GetUInt32();
 				}
-				else
-				{
-					Field* class_tfield = class_t->Fetch();
-					uint32 item_2 = class_tfield[0].GetUInt32();
-				}
-				if (item_2 != 0)
 					SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 			}
 			else
 			{
 				Field* class_tfield = class_t->Fetch();
 				uint32 item_2 = class_tfield[0].GetUInt32();
-
 				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 			}
 		}
