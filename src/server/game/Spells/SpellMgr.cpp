@@ -2913,6 +2913,10 @@ void SpellMgr::LoadSpellInfoCustomAttributes()
 			if (spellInfo->SpellFamilyFlags[0] & 0x8)
 				spellInfo->AttributesCu |= SPELL_ATTR0_CU_AURA_CC;
 			break;
+		case SPELLFAMILY_ROGUE:
+			if (spellInfo->Id == 5171 || spellInfo->Id == 6774)
+				spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
+			break;
 		default:
 			break;
 		}
