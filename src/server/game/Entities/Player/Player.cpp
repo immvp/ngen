@@ -12584,19 +12584,37 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
                 }
                 else if(force_title && GetTotalTokens(GetSession()->GetPlayer()) >= 1480) // giver ingen mening, hvor kan den ikke checke om player har title
-                {// okay så basically hvis du har 15000 tokens så virker det lige pt, du skal bare lige finde ud af hvad det skal koste etc og fix
-                    // er bare bange for der er nogen som har 5000 tokens så jaer erhm, men add dig selv 15000 tokens og test id er 20558 mener jeg nok
-                        Field* title_tfield = force_title->Fetch(); // bare compile det der
+                {
+						Field* title_tfield = force_title->Fetch();
                         uint32 item_2 = title_tfield[0].GetUInt32();
  
                         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
                 }
                 else if (class_t)
                 {
-                        Field* class_tfield = class_t->Fetch();
-                        uint32 item_2 = class_tfield[0].GetUInt32();
- 
-                        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+					if (GetTotalTokens(GetSession()->GetPlayer()) >= 1480)
+					{
+						uint32 item_2 = 0;
+						if (force_title)
+						{
+							Field* title_tfield = force_title->Fetch();
+							uint32 item_2 = title_tfield[0].GetUInt32();
+						}
+						else
+						{
+							Field* class_tfield = class_t->Fetch();
+							uint32 item_2 = class_tfield[0].GetUInt32();
+						}
+						if (item_2 != 0)
+							SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+					}
+					else
+					{
+						Field* class_tfield = class_t->Fetch();
+						uint32 item_2 = class_tfield[0].GetUInt32();
+
+						SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+					}
                 }
                 else if (force_t)
                 {
