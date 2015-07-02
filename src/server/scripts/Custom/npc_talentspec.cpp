@@ -142,7 +142,7 @@ public:
                                 break;
  
                         case CLASS_SHAMAN: // Elemental
-                                player->LearnSpell(51486, false);
+                                
                                 player->LearnSpell(16580, false);
                                 player->LearnSpell(51505, false);
                                 
@@ -318,7 +318,7 @@ public:
  
                                 player->RemoveSpell(51505);
                                 player->RemoveSpell(16580);
-                                player->RemoveSpell(51486);
+                                
                                 break;
  
                         case CLASS_MAGE: // Frost
