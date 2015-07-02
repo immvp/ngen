@@ -48,7 +48,7 @@ public:
                         break;
  
                 case CLASS_SHAMAN: // done
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_Lightning:50:50:-25:0|t |cff4000FFElemental\n|cffaa0ba8Passives:|r\nStorm, Earth and Fire 3/3, Lightning Mastery\n|cff6722d6Actives:|r\nLava Burst", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_Lightning:50:50:-25:0|t |cff4000FFElemental\n|cffaa0ba8Passives:|r\nLightning Mastery\n|cff6722d6Actives:|r\nLava Burst", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                         //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_LightningShield:50:50:-25:0|t |cff013ADFEnhancement\n|cffaa0ba8Passives:|r\nDual Wield\nImproved Stormstrike\nShamanistic Focus\n|cff6722d6Actives:|r\nStormstrike\nHealing Wave(rank 4)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_MagicImmunity:50:50:-25:0|t |cff04B404Restoration\n|cffaa0ba8Passives:|r\nNone\n|cff6722d6Actives:|r\nGrounding Totem, Nature's Swiftness", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                         break;
