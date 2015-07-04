@@ -12574,10 +12574,10 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		{
 			Field* char_tfield = char_t->Fetch();
 			uint32 item_2 = char_tfield[0].GetUInt32();
-
+			
 			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 		}
-		else if (force_title && HasItemCount(20558) >= 1480)
+		else if (GetTotalTokens(this) >= 1480)
 		{
 			Field* t_field = force_title->Fetch();
 			uint32 item_2 = t_field[0].GetUInt32();
