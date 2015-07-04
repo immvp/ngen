@@ -5,7 +5,7 @@ public:
 
 	void OnLogin(Player* player)
 	{
-		if (player->HasTitle(72))
+		if (player->GetTotalTokens(player) >= 1480)
 		{
 			for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; i++)
 			{
