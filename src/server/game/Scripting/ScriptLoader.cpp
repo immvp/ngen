@@ -1436,6 +1436,7 @@ void AddSC_title_system1();
 void AddSC_fast_arena_start();
 void AddSC_npc_template();
 void AddSC_SeasonReward();
+void AddSC_r15transmog();
 #endif
 
 void AddCustomScripts()
@@ -1462,5 +1463,6 @@ void AddCustomScripts()
 	AddSC_fast_arena_start();
 	AddSC_npc_template();
 	AddSC_SeasonReward();
+	AddSC_r15transmog();
 #endif
 }

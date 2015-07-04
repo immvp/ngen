@@ -832,13 +832,6 @@ void Battleground::EndBattleground(uint32 winner)
 		uint32 loser_kills = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_FIRST);
 		uint32 winner_arena = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_FIRST);
 		uint32 reward_wsg = 20558;
-		uint32 rank15 = 0;
-		QueryResult r15 = CharacterDatabase.PQuery("select rank15 from characters where guid = %u;", player->GetGUIDLow());
-		if (r15)
-		{
-			Field* r15_field = r15->Fetch();
-			rank15 = r15_field[0].GetUInt32();
-		}
 
 		if (team == winner)
 		{
@@ -848,8 +841,6 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 			case 3277: // Warsong Gulch
 				player->AddItem(reward_wsg, reward_winner_count);
-				if (player->HasItemCount(20558) >= 1480 && rank15 == 0)
-					CharacterDatabase.PExecute("INSERT INTO characters set rank15 = 1 where guid = %u;", player->GetGUIDLow());
 				break;
 			default:
 				break;
@@ -864,8 +855,6 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 			case 3277: // Warsong Gulch
 				player->AddItem(reward_wsg, reward_loser_count);
-				if (player->HasItemCount(20558) >= 1480 && rank15 == 0)
-					CharacterDatabase.PExecute("INSERT INTO characters set rank15 = 1 where guid = %u;", player->GetGUIDLow());
 				break;
 			default:
 				break;

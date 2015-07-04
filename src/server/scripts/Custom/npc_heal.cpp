@@ -1,5 +1,4 @@
 #include "ScriptMgr.h"
-#include "ScriptPCH.h"
 
 class npc_heal : public CreatureScript
 {
