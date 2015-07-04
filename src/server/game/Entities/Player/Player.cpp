@@ -12557,71 +12557,80 @@ uint32 Player::GetTotalTokens(Player* Player)
 		if (pItem && pItem->GetEntry() == 20558)
 			return (pItem->GetCount());
 	}
-	return (0); // Hvor meget kommer det til at koste for battlemaster title? - lavede du det ikke så man selv kan vælge hvor meget der er  jroeq.  sfeolrf  jo sel derfor sprugte jeg dig
+	return (0);
 }
-// ved ik hvorfor din m8 lavet den static :P
+
 
 void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
 	if (pItem)
 	{
-		QueryResult char_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_character where item1 = %u and charid = %u;", pItem->GetEntry(), GetGUIDLow());
-		QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
-		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
-		QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+		bool Rank15 = false;
+
 		QueryResult r15 = CharacterDatabase.PQuery("select rank15 from characters where guid = %u;", GetGUIDLow());
-		uint32 item2 = 0;
-		uint32 rank15 = 0;
-		bool R15active = false;
-
-		if (char_t)
+		if (r15)
 		{
-			Field* char_tfield = char_t->Fetch();
-			uint32 item_2 = char_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
-		}
-		else if (class_t)
-		{
-			if (r15)
+			Field* r15_field = r15->Fetch();
+			uint32 rank15 = r15_field[0].GetUInt32();
+			
+			if (rank15 >= 1)
 			{
-				Field* r15_field = r15->Fetch();
-				rank15 = r15_field[0].GetUInt32();
-				R15active = true;
+				QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+				if (force_title)
+				{
+					Field* t_field = force_title->Fetch();
+					uint32 item_2 = t_field[0].GetUInt32();
+
+					SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+
+					SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+					SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
+
+					Rank15 = true;
+				}
 			}
+		}
 
-			if (rank15 == 1 && R15active)
+		if (!Rank15)
+		{
+			QueryResult char_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_character where item1 = %u and charid = %u;", pItem->GetEntry(), GetGUIDLow());
+			QueryResult class_t = CharacterDatabase.PQuery("select item2 from transmog_force_item_class where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
+			QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
+
+			if (char_t)
 			{
-				Field* title_tfield = force_title->Fetch();
-				item2 = title_tfield[0].GetUInt32();
+				Field* char_tfield = char_t->Fetch();
+				uint32 item_2 = char_tfield[0].GetUInt32();
+
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+			}
+			else if (class_t)
+			{
+
+				Field* class_tfield = class_t->Fetch();
+				uint32 item_2 = class_tfield[0].GetUInt32();
+
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+			}
+			else if (force_t)
+			{
+				Field* force_tfield = force_t->Fetch();
+				uint32 item_2 = force_tfield[0].GetUInt32();
+
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 			}
 			else
 			{
-				Field* class_tfield = class_t->Fetch();
-				item2 = class_tfield[0].GetUInt32();
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
 			}
-
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item2);
-		}
-		else if (force_t)
-		{
-			Field* force_tfield = force_t->Fetch();
-			uint32 item_2 = force_tfield[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+			SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+			SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
 		}
 		else
 		{
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
 		}
-		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
-		SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
-	}
-	else
-	{
-		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), 0);
-		SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0);
 	}
 }
 
