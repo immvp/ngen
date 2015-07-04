@@ -12574,15 +12574,26 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		{
 			Field* char_tfield = char_t->Fetch();
 			uint32 item_2 = char_tfield[0].GetUInt32();
-			
+
 			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 		}
 		else if (GetTotalTokens(this) >= 1480)
 		{
-			Field* t_field = force_title->Fetch();
-			uint32 item_2 = t_field[0].GetUInt32();
-
-			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+			if (force_title)
+			{
+				Field* t_field = force_title->Fetch();
+				uint32 item_2 = t_field[0].GetUInt32();
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+			}
+			else
+			{
+				if (class_t)
+				{
+					Field* class_tfield = class_t->Fetch();
+					uint32 item_2 = class_tfield[0].GetUInt32();
+					SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
+				}
+			}
 		}
 		else if (class_t)
 		{
@@ -22704,7 +22715,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
 			TC_LOG_DEBUG("maps", "Object %u (Type: %u) out of range for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), GetGUIDLow(), GetDistance(target));
 #endif
 		}
-		}
+	}
 	else
 	{
 		if (CanSeeOrDetect(target, false, true))
@@ -22721,7 +22732,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
 			if (target->isType(TYPEMASK_UNIT))
 				SendInitialVisiblePackets((Unit*)target);
 		}
-	}
+}
 }
 
 void Player::UpdateTriggerVisibility()
@@ -22791,8 +22802,8 @@ void Player::UpdateVisibilityOf(T* target, UpdateData& data, std::set<Unit*>& vi
 #ifdef TRINITY_DEBUG
 			TC_LOG_DEBUG("maps", "Object %u (Type: %u, Entry: %u) is out of range for player %u. Distance = %f", target->GetGUIDLow(), target->GetTypeId(), target->GetEntry(), GetGUIDLow(), GetDistance(target));
 #endif
-		}
-		}
+	}
+}
 	else //if (visibleNow.size() < 30 || target->GetTypeId() == TYPEID_UNIT && target->ToCreature()->IsVehicle())
 	{
 		if (CanSeeOrDetect(target, false, true))
