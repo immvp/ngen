@@ -48,7 +48,7 @@ public:
                         break;
  
                 case CLASS_SHAMAN: // done
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_Lightning:50:50:-25:0|t |cff4000FFElemental\n|cffaa0ba8Passives:|r\nLightning Mastery\n|cff6722d6Actives:|r\nLava Burst", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_Lightning:50:50:-25:0|t |cff4000FFElemental\n|cffaa0ba8Passives:|r\nStorm, Earth and Fire 3/3, Lightning Mastery\n|cff6722d6Actives:|r\nLava Burst", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                         //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_LightningShield:50:50:-25:0|t |cff013ADFEnhancement\n|cffaa0ba8Passives:|r\nDual Wield\nImproved Stormstrike\nShamanistic Focus\n|cff6722d6Actives:|r\nStormstrike\nHealing Wave(rank 4)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "|TInterface/ICONS/Spell_Nature_MagicImmunity:50:50:-25:0|t |cff04B404Restoration\n|cffaa0ba8Passives:|r\nNone\n|cff6722d6Actives:|r\nGrounding Totem, Nature's Swiftness", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
                         break;
@@ -142,7 +142,7 @@ public:
                                 break;
  
                         case CLASS_SHAMAN: // Elemental
-                                
+                                player->LearnSpell(51486, false);
                                 player->LearnSpell(16580, false);
                                 player->LearnSpell(51505, false);
                                 
@@ -163,7 +163,7 @@ public:
                                 player->LearnSpell(6789, false);
  
                                 player->RemoveSpell(19028);
-								player->RemoveSpell(17962);
+                                player->RemoveSpell(17962);
                                 break;
  
                         case CLASS_DRUID: // Balance
@@ -207,8 +207,8 @@ public:
  
                         case CLASS_ROGUE: // Combat
                                 player->LearnSpell(1943, false);
- 							
- 				player->RemoveSpell(58426);
+                                                        
+                                player->RemoveSpell(58426);
                                 
                                 player->RemoveSpell(14983);
                                 player->RemoveSpell(31230);
@@ -296,7 +296,7 @@ public:
                         case CLASS_ROGUE: // Sublety
                                 player->LearnSpell(1833, false);
                                 player->LearnSpell(1856, false);
- 								
+                                                                
                                 
                                 player->RemoveSpell(31224);
                                 player->RemoveSpell(31230);
@@ -318,7 +318,7 @@ public:
  
                                 player->RemoveSpell(51505);
                                 player->RemoveSpell(16580);
-                                
+                                player->RemoveSpell(51486);
                                 break;
  
                         case CLASS_MAGE: // Frost
