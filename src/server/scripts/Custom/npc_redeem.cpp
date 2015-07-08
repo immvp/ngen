@@ -2,7 +2,7 @@
 
 enum defines
 {
-    HAT_TOKEN = 100, // Hat Token
+    HAT_TOKEN = 14964, // Hat Token
 };
 
 class hat_redeemer : public CreatureScript
