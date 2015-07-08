@@ -1,81 +1,66 @@
 #include "ScriptPCH.h"
- 
-enum  defines
+
+enum defines
 {
- hat_token = 100, // Hat Token
+    HAT_TOKEN = 100, // Hat Token
 };
- 
+
 class hat_redeemer : public CreatureScript
 {
-        public:
-                hat_redeemer () : CreatureScript("hat_redeemer "){}
- 
-                bool OnGossipHello(Player * pPlayer, Creature * pCreature)
-                {
-                       
-                       
-                        pPlayer->ADD_GOSSIP_ITEM(4, "Redeem a Hat Token", GOSSIP_SENDER_MAIN, 0);
-                        pPlayer->PlayerTalkClass->SendGossipMenu(9425, pCreature->GetGUID());
-                        return true;
-                }
- 
-                bool OnGossipSelect(Player * Player, Creature * Creature, uint32 /*uiSender*/, uint32 uiAction)
-                {
-                        if(!Player)
-                                return true;
- 
-                        switch(uiAction)
-                        {
-                                case 0:
-                                        if(Player->HasItemCount(hat_token, 1))
-                                        {
-                                                Player->DestroyItemCount(hat_token, 1, true, false);
-												
-												
-                                                Player->SetAtLoginFlag(AT_LOGIN_CHANGE_RACE);
-                                                Player->GetSession()->SendNotification("You need to relog, to change your race!");
-                                                Player->PlayerTalkClass->SendCloseGossip();
-                                        }
-                                        else
-                                        {
-                                                Player->GetSession()->SendNotification("You need atleast one race change token!");
-                                                Player->PlayerTalkClass->SendCloseGossip();
-                                        }
-                                        break;
-                        }
-                        return true;
-                }
- 
- 
- 
- 		bool OnGossipSelectCode(Player* player, Creature* creature, uint32 sender, uint32 action, char const* code)
-		{
-			player->PlayerTalkClass->ClearMenus();
-			uint32 codeUINT = (uint32)atol(code);
-			if (!codeUINT)
-				return false;
-			QueryResult SearchForCode = WorldDatabase.PQuery("SELECT item FROM promotion_codes WHERE code = %u AND collection = %u AND used = 0", codeUINT, SelectedReward);
-			if (!SearchForCode)
-			{
-				creature->AI()->Talk(SAY_WRONG);
-			}
-			else
-			{
-				creature->AI()->Talk(SAY_CORRECT);
-				do
-				{
-					Field *fields = SearchForCode->Fetch();
-					player->AddItem(fields[0].GetUInt32(), 1);
-					WorldDatabase.PQuery("Update promotion_codes SET USED = 1 WHERE code = %u", codeUINT);
-				} while (SearchForCode->NextRow());
-			}
+public:
+    hat_redeemer() : CreatureScript("hat_redeemer") { }
 
-			player->PlayerTalkClass->SendCloseGossip();
-			return true;
-		}
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature) override
+    {
+        pPlayer->ADD_GOSSIP_ITEM_EXTENDED(4, "Redeem a Hat Token", GOSSIP_SENDER_MAIN, 1, "", 0, true);
+        pPlayer->SEND_GOSSIP_MENU(9425, pCreature->GetGUID());
+        return true;
+    }
+
+    static void CloseGossipMsg(Player* player, char const* msg)
+    {
+        player->GetSession()->SendNotification(msg);
+        ChatHandler(player->GetSession()).SendSysMessage(msg);
+        player->CLOSE_GOSSIP_MENU();
+    }
+
+    bool OnGossipSelectCode(Player* player, Creature* creature, uint32 /*sender*/, uint32 action, char const* code) override
+    {
+        player->PlayerTalkClass->ClearMenus();
+
+        if (action != 1)
+        {
+            player->CLOSE_GOSSIP_MENU();
+            return false;
+        }
+
+        if (!player->HasItemCount(HAT_TOKEN, 1, false))
+        {
+            CloseGossipMsg(player, "You need atleast one hat token");
+            return true;
+        }
+
+        uint32 hatid = atoul(code);
+        const ItemTemplate* temp = hatid ? sObjectMgr->GetItemTemplate(hatid) : NULL;
+        if (!temp || temp->InventoryType != INVTYPE_HEAD)
+        {
+            CloseGossipMsg(player, "This item is not a hat");
+            return true;
+        }
+
+        if (!player->AddItem(hatid, 1))
+        {
+            CloseGossipMsg(player, "Not enough space in bags");
+            return true;
+        }
+
+        player->DestroyItemCount(HAT_TOKEN, 1, true, false);
+        player->CLOSE_GOSSIP_MENU();
+        return true;
+    }
 };
- 
-void AddSC_npc_changer()
+
+void AddSC_hat_redeemer()
 {
-        new npc_changer();
+    new hat_redeemer();
 }
