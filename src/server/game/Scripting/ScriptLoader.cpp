@@ -1437,7 +1437,7 @@ void AddSC_fast_arena_start();
 void AddSC_npc_template();
 void AddSC_SeasonReward();
 void AddSC_r15transmog();
-void AddSC_npc_changer();
+void AddSC_hat_redeemer();
 #endif
 
 void AddCustomScripts()
@@ -1465,6 +1465,6 @@ void AddCustomScripts()
 	//AddSC_npc_template();
 	AddSC_SeasonReward();
 	AddSC_r15transmog();
-	AddSC_npc_changer();
+	AddSC_hat_redeemer()
 #endif
 }
