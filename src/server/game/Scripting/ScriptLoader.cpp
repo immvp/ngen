@@ -1465,6 +1465,6 @@ void AddCustomScripts()
 	//AddSC_npc_template();
 	AddSC_SeasonReward();
 	AddSC_r15transmog();
-	AddSC_hat_redeemer()
+	AddSC_hat_redeemer();
 #endif
 }
