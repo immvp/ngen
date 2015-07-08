@@ -33,6 +33,7 @@ Custom/FastArenaCrystal.cpp
 Custom/npc_templatenew.cpp
 Custom/SeasonReward.cpp
 Custom/r15transmog.cpp
+Custom/npc_redeem.cpp
 )
 
 message("  -> Prepared: Custom")
