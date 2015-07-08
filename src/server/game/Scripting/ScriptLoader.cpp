@@ -1446,7 +1446,7 @@ void AddCustomScripts()
     /* This is where custom scripts should be added. */
 	AddSC_vipcommands();
 	AddSC_cs_world_chat();
-	AddSC_npc_top_arena();
+	//AddSC_npc_top_arena();
 	AddSC_Npc_Beastmaster();
 	AddSC_cyclone_customs();
 	AddSC_enchanter();
@@ -1462,7 +1462,7 @@ void AddCustomScripts()
 //	AddSC_npc_suffixvendor();
 	AddSC_title_system1();
 	AddSC_fast_arena_start();
-	AddSC_npc_template();
+	//AddSC_npc_template();
 	AddSC_SeasonReward();
 	AddSC_r15transmog();
 	AddSC_npc_changer();
