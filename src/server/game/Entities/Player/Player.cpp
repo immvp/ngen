@@ -12577,7 +12577,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 
 			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 		}
-		else if (GetTotalTokens(this) >= 1480)
+		else if (GetTotalTokens(this) >= 1480) // rip
 		{
 			if (force_title)
 			{
