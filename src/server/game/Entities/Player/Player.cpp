@@ -12594,7 +12594,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 			}
 			else
 			{
-				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
+				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry()); // rip
 			}
 		}
 		else if (class_t)
