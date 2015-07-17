@@ -217,6 +217,9 @@ void Arena::EndBattleground(uint32 winner)
                 // per player calculation
                 if (team == winner)
                 {
+                    player->ModifyMoney(500);
+					if (roll_chance_i(50))
+						player->AddItem(6354, 1);
                     // update achievement BEFORE personal rating update
                     uint32 rating = player->GetArenaPersonalRating(winnerArenaTeam->GetSlot());
                     player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, rating ? rating : 1);
@@ -236,64 +239,6 @@ void Arena::EndBattleground(uint32 winner)
                     player->ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE);
                 }
             }
-
-
-				for (auto const& i : GetPlayers())
-				{
-					Player* player = _GetPlayer(i.first, false, "Arena::EndBattleground");
-					if (!player)
-						continue;
-
-					int pchance = rand() % 100 + 1;
-					if (pchance <= 5)
-					{
-						//int ichance = rand() % 100 + 1;
-						int rewarditem = 0;
-
-						//if (ichance <= 5)
-							player->AddItem(rewarditem, 1);
-						/*
-						else if (ichance > 5 && ichance <= 10)
-							player->AddItem(0, 1);
-						else if (ichance > 10 && ichance <= 15)
-							player->AddItem(0, 1);
-						else if (ichance > 15 && ichance <= 20)
-							player->AddItem(0, 1);
-						else if (ichance > 20 && ichance <= 25)
-							player->AddItem(0, 1);
-						else if (ichance > 25 && ichance <= 30)
-							player->AddItem(0, 1);
-						else if (ichance > 30 && ichance <= 35)
-							player->AddItem(0, 1);
-						else if (ichance > 35 && ichance <= 40)
-							player->AddItem(0, 1);
-						else if (ichance > 40 && ichance <= 45)
-							player->AddItem(0, 1);
-						else if (ichance > 45 && ichance <= 50)
-							player->AddItem(0, 1);
-						else if (ichance > 50 && ichance <= 55)
-							player->AddItem(0, 1);
-						else if (ichance > 55 && ichance <= 60)
-							player->AddItem(0, 1);
-						else if (ichance > 60 && ichance <= 65)
-							player->AddItem(0, 1);
-						else if (ichance > 65 && ichance <= 70)
-							player->AddItem(0, 1);
-						else if (ichance > 70 && ichance <= 75)
-							player->AddItem(0, 1);
-						else if (ichance > 75 && ichance <= 80)
-							player->AddItem(0, 1);
-						else if (ichance > 80 && ichance <= 85)
-							player->AddItem(0, 1);
-						else if (ichance > 85 && ichance <= 90)
-							player->AddItem(0, 1);
-						else if (ichance > 90 && ichance <= 95)
-							player->AddItem(0, 1);
-						else if (ichance > 95 && ichance <= 100)
-							player->AddItem(0, 1);
-							*/
-					}
-				}
 
             // save the stat changes
             winnerArenaTeam->SaveToDB();

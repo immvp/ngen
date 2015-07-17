@@ -832,7 +832,7 @@ void Battleground::EndBattleground(uint32 winner)
 		uint32 loser_kills = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_FIRST);
 		uint32 winner_arena = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_FIRST);
 		uint32 reward_wsg = 20558;
-		int pchance = rand() % 100 + 1;
+		//int pchance = rand() % 100 + 1;
 
 		if (team == winner)
 		{
@@ -845,8 +845,8 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 				player->AddItem(reward_wsg, reward_winner_count);
 
-				if (pchance <= 100)
-				{
+				//if (pchance <= 25)
+				//{
 					//int ichance = rand() % 100 + 1;
 					int rewarditem = 6354;
 
@@ -892,7 +892,7 @@ void Battleground::EndBattleground(uint32 winner)
 					else if (ichance > 95 && ichance <= 100)
 					player->AddItem(0, 1);
 					*/
-				}
+				//}
 			}
 				break;
 			default:
@@ -903,6 +903,7 @@ void Battleground::EndBattleground(uint32 winner)
 		else                 // Losers
 		{
 			uint32  reward_loser_count = 3;
+			player->ModifyMoney(1000);
 
 			switch (player->GetZoneId())
 			{
@@ -910,13 +911,13 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 				player->AddItem(reward_wsg, reward_loser_count);
 
-				if (pchance <= 0)
-				{
+				//if (pchance <= 0)
+				//{
 					//int ichance = rand() % 100 + 1;
-					int rewarditem = 0;
+					//int rewarditem = 0;
 
 					//if (ichance <= 5)
-					player->AddItem(rewarditem, 1);
+					//player->AddItem(rewarditem, 1);
 					/*
 					else if (ichance > 5 && ichance <= 10)
 					player->AddItem(0, 1);
@@ -957,7 +958,7 @@ void Battleground::EndBattleground(uint32 winner)
 					else if (ichance > 95 && ichance <= 100)
 					player->AddItem(0, 1);
 					*/
-				}
+				//}
 			}
 				break;
 			default:
