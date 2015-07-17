@@ -10,12 +10,12 @@ class hat_redeemer : public CreatureScript
 public:
 	hat_redeemer() : CreatureScript("hat_redeemer") { }
 
-	bool OnGossipHello(Player* pPlayer, Creature* pCreature) override
-	{
-		pPlayer->ADD_GOSSIP_ITEM_EXTENDED(4, "Redeem a Hat Token", GOSSIP_SENDER_MAIN, 1, "", 0, true);
-		pPlayer->SEND_GOSSIP_MENU(9425, pCreature->GetGUID());
-		return true;
-	}
+    bool OnGossipHello(Player* pPlayer, Creature* pCreature) override
+    {
+        pPlayer->ADD_GOSSIP_ITEM_EXTENDED(4, "Redeem a Hat Token", GOSSIP_SENDER_MAIN, 1, "", 0, true);
+        pPlayer->SEND_GOSSIP_MENU(9425, pCreature->GetGUID());
+        return true;
+    }
 
 	static void CloseGossipMsg(Player* player, char const* msg)
 	{
@@ -48,7 +48,7 @@ public:
 			return true;
 		}
 
-		if (temp->ItemId == 3536)
+		if (temp->ItemId == (51231 || 31547 || 18817 || 23758 || 28220 || 30206 || 21524 || 35693 || 20551 || 3345 || 14263 || 50442 || 3536)
 		{
 			CloseGossipMsg(player, "You do not have permission to receive this hat.");
 			return true;
