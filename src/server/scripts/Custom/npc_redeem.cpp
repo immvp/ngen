@@ -48,7 +48,7 @@ public:
 			return true;
 		}
 
-		if (temp->ItemId == (51231 || 31547 || 18817 || 23758 || 28220 || 30206 || 21524 || 35693 || 20551 || 3345 || 14263 || 50442 || 3536)
+		if (temp->ItemId == (51231 || 31547 || 18817 || 23758 || 28220 || 30206 || 21524 || 35693 || 20551 || 3345 || 14263 || 50442 || 3536))
 		{
 			CloseGossipMsg(player, "You do not have permission to receive this hat.");
 			return true;
