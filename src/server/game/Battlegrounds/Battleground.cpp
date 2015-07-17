@@ -837,6 +837,7 @@ void Battleground::EndBattleground(uint32 winner)
 		if (team == winner)
 		{
 			uint32 reward_winner_count = 6;
+			player->ModifyMoney(5000);
 
 			switch (player->GetZoneId())
 			{
@@ -844,10 +845,10 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 				player->AddItem(reward_wsg, reward_winner_count);
 
-				if (pchance <= 25)
+				if (pchance <= 100)
 				{
 					//int ichance = rand() % 100 + 1;
-					int rewarditem = 0;
+					int rewarditem = 6354;
 
 					//if (ichance <= 5)
 					player->AddItem(rewarditem, 1);
@@ -909,7 +910,7 @@ void Battleground::EndBattleground(uint32 winner)
 			{
 				player->AddItem(reward_wsg, reward_loser_count);
 
-				if (pchance <= 25)
+				if (pchance <= 0)
 				{
 					//int ichance = rand() % 100 + 1;
 					int rewarditem = 0;
