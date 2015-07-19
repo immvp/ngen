@@ -590,6 +590,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			if (player->GetArenaPersonalRating(0) < rating && player->GetArenaPersonalRating(1) < rating && player->GetArenaPersonalRating(2) < rating)
 			{
 				player->GetSession()->SendNotification("You need %u rating to transmog this item", rating);
+				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating");
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 			}
 
@@ -909,7 +910,7 @@ public:
                             data << uint32(count + 1);
                             data << uint32(curtemp->ItemId);
                             data << uint32(curtemp->DisplayInfoID);
-                            data << int32(0xFFFFFFFF);
+                            data << int32(0);
                             data << uint32(0);
                             data << uint32(curtemp->MaxDurability);
                             data << uint32(curtemp->BuyCount);
