@@ -11,6 +11,7 @@ https://rochet2.github.io/?page=Transmogrification
 */
 
 #include "ScriptPCH.h"
+#include "Battleground.h"
 #include "TransmogDisplayVendorConf.h"
 
 // Config start
@@ -578,6 +579,18 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
                 }
             }
 
+			auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", itemEntry);
+
+			Field* q = Q->Fetch();
+
+			uint32 rating = q[0].GetUInt32();
+
+			if (player->GetArenaPersonalRating(ARENA_TYPE_2v2) < rating || player->GetArenaPersonalRating(ARENA_TYPE_3v3) < rating || player->GetArenaPersonalRating(ARENA_TYPE_5v5) < rating)
+			{
+				player->GetSession()->SendNotification("You need %u rating to transmog this item", rating);
+				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
+			}
+
             SetFakeEntry(player, itemTransmogrified, itemTransmogrifier->ItemId);
 
             itemTransmogrified->UpdatePlayedTime(player);
@@ -890,6 +903,10 @@ public:
                         {
                             if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
                                 continue;
+							auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", curtemp->ItemId);
+
+							Field* q = Q->Fetch();
+							uint32 rating = q[0].GetUInt32();
 
                             data << uint32(count + 1);
                             data << uint32(curtemp->ItemId);
