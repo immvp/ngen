@@ -18,7 +18,7 @@ https://rochet2.github.io/?page=Transmogrification
 // Edit Transmogrification compatibility in TransmogDisplayVendorConf.h
 
 // A multiplier for the default gold cost (change to 0.0f for no default cost)
-const float TransmogDisplayVendorMgr::ScaledCostModifier = 1.0f;
+const float TransmogDisplayVendorMgr::ScaledCostModifier = 0.0f;
 // Cost added on top of other costs (can be negative)
 const int32 TransmogDisplayVendorMgr::CopperCost = 0;
 // For custom gold cost set ScaledCostModifier to 0.0f and CopperCost to what ever cost you want
@@ -27,29 +27,29 @@ const bool TransmogDisplayVendorMgr::RequireToken = false;
 const uint32 TransmogDisplayVendorMgr::TokenEntry = 49426;
 const uint32 TransmogDisplayVendorMgr::TokenAmount = 1;
 
-const bool TransmogDisplayVendorMgr::AllowPoor = false;
-const bool TransmogDisplayVendorMgr::AllowCommon = false;
+const bool TransmogDisplayVendorMgr::AllowPoor = true;
+const bool TransmogDisplayVendorMgr::AllowCommon = true;
 const bool TransmogDisplayVendorMgr::AllowUncommon = true;
 const bool TransmogDisplayVendorMgr::AllowRare = true;
 const bool TransmogDisplayVendorMgr::AllowEpic = true;
-const bool TransmogDisplayVendorMgr::AllowLegendary = false;
-const bool TransmogDisplayVendorMgr::AllowArtifact = false;
+const bool TransmogDisplayVendorMgr::AllowLegendary = true;
+const bool TransmogDisplayVendorMgr::AllowArtifact = true;
 const bool TransmogDisplayVendorMgr::AllowHeirloom = true;
 
-const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = false;
-const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
-const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
+const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = true;
+const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = true;
+const bool TransmogDisplayVendorMgr::AllowFishingPoles = true;
 
-const bool TransmogDisplayVendorMgr::IgnoreReqRace = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqSkill = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqSpell = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqLevel = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqEvent = false;
-const bool TransmogDisplayVendorMgr::IgnoreReqStats = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqRace = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqClass = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqSpell = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqLevel = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqEvent = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
-static const uint32 AllowedItems[] = { 0 };
+static const uint32 AllowedItems[] = { 49888 };
 static const uint32 NotAllowedItems[] = { 0 };
 
 // Config end
