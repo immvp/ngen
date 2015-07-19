@@ -589,8 +589,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 
 			if (player->GetArenaPersonalRating(0) < rating && player->GetArenaPersonalRating(1) < rating && player->GetArenaPersonalRating(2) < rating)
 			{
-				player->GetSession()->SendNotification("You need %u rating to transmog this item", rating);
-				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating");
+				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating", rating);
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 			}
 
@@ -907,10 +906,25 @@ public:
                             if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
                                 continue;
 
+							auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", curtemp->ItemId);
+
+							Field* q = Q->Fetch();
+
+							uint32 rating = q[0].GetUInt32();
+							bool grey = false;
+
+							if (player->GetArenaPersonalRating(0) < rating && player->GetArenaPersonalRating(1) < rating && player->GetArenaPersonalRating(2) < rating)
+							{
+								grey = true;
+							}
+
                             data << uint32(count + 1);
                             data << uint32(curtemp->ItemId);
                             data << uint32(curtemp->DisplayInfoID);
-                            data << int32(0);
+							if (!grey)
+								data << int32(0xFFFFFFFF);
+							else
+								data << int32(0);
                             data << uint32(0);
                             data << uint32(curtemp->MaxDurability);
                             data << uint32(curtemp->BuyCount);
