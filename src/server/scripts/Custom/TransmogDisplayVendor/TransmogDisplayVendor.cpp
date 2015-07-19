@@ -474,7 +474,6 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
             {
                 if (fakeItemTemplate->DisplayInfoID == itemTransmogrifier->DisplayInfoID)
                 {
-                    player->GetSession()->SendNotification("%s already transmogrified with %s", slotname, getItemName(itemTransmogrifier, player->GetSession()).c_str());
                     return;
                 }
             }
@@ -690,27 +689,12 @@ public:
 
                 for (std::map<uint32, uint32>::const_iterator it = L.begin(); it != L.end(); ++it)
                 {
-                    for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
-                    {
-                        std::ostringstream ss;
-                        ss << getQualityName(it->first);
-                        if (count)
-                            ss << " [" << count << "]";
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
-                    }
-                }
 
-                if (player->PlayerTalkClass->GetGossipMenu().GetMenuItemCount() <= 1)
-                {
-                    if (const char* slotname = TransmogDisplayVendorMgr::getSlotName(action, player->GetSession()))
-                        session->SendNotification("No transmogrifications available for %s", slotname);
-                    OnGossipHello(player, creature);
-                    return true;
+                       player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Items", it->first, MAX_VENDOR_ITEMS);
                 }
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
                 selectionStore.SetSelection(player->GetGUIDLow(), temp);
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Back..", SENDER_BACK, 0);
                 player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
             } break;
             case SENDER_BACK: // Back
