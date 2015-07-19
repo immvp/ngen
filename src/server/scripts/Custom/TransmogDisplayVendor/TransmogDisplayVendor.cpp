@@ -11,7 +11,6 @@ https://rochet2.github.io/?page=Transmogrification
 */
 
 #include "ScriptPCH.h"
-#include "player.h"
 #include "TransmogDisplayVendorConf.h"
 
 // Config start
