@@ -623,8 +623,8 @@ public:
         WorldSession* session = player->GetSession();
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; slot++)
         {
-			if (slot == 0 || slot == 1 || slot == 2 || slot == 4 || slot == 11 || slot == 12
-				|| slot == 13 || slot == 14 || slot == 19)
+			if (slot == 1 || slot == 3 || slot == 10 || slot == 11 || slot == 12 || slot == 13
+				|| slot == 18)
 				continue;
 			
 
