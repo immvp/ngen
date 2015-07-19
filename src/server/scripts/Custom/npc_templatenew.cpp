@@ -3719,6 +3719,7 @@ public:
             break;
         }
         player->CLOSE_GOSSIP_MENU();
+		return true;
     }
 };
 

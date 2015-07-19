@@ -1068,6 +1068,11 @@ public:
 				oM = new EntryVector();
 				optionMap[(itrsecond->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itrsecond->SubClass][getCorrectInvType(itrsecond->InventoryType)][itrsecond->Quality] = oM;
 				}
+			if (oM->size() < MAX_VENDOR_ITEMS * 3)
+				 {
+				oM->push_back(itrsecond->ItemId);
+				displays.insert(itrsecond->DisplayInfoID);
+				}
 			// rest of the old loop
 		} while (Q->NextRow());
 
