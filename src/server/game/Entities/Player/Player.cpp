@@ -3173,7 +3173,7 @@ void Player::InitTalentForLevel()
 		if (m_usedTalentCount > talentPointsForLevel)
 		{
 		if (!GetSession()->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_MORE_TALENTS_THAN_ALLOWED))
-				ResetTalents(true);
+				//ResetTalents(true);
 			else
 				SetFreeTalentPoints(0);
 		}
@@ -3500,7 +3500,7 @@ void DeleteSpellFromAllPlayers(uint32 spellId)
 }
 
 bool Player::AddTalent(uint32 spellId, uint8 spec, bool learning)
-
+{
 	SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
 	if (!spellInfo)
 	{
