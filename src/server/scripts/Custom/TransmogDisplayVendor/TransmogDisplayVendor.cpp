@@ -36,9 +36,9 @@ const bool TransmogDisplayVendorMgr::AllowLegendary = true;
 const bool TransmogDisplayVendorMgr::AllowArtifact = true;
 const bool TransmogDisplayVendorMgr::AllowHeirloom = true;
 
-const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = true;
-const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = true;
-const bool TransmogDisplayVendorMgr::AllowFishingPoles = true;
+const bool TransmogDisplayVendorMgr::AllowMixedArmorTypes = false;
+const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
+const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
 
 const bool TransmogDisplayVendorMgr::IgnoreReqRace = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqClass = true;
@@ -1054,31 +1054,22 @@ public:
                     delete optionMap[i][j][k], optionMap[i][j][k] = NULL;
 
         std::unordered_set<uint32> displays;
-        ItemTemplateContainer const* its = sObjectMgr->GetItemTemplateStore();
-        for (ItemTemplateContainer::const_iterator itr = its->begin(); itr != its->end(); ++itr)
-        {
-            if (itr->second.Class != ITEM_CLASS_WEAPON && itr->second.Class != ITEM_CLASS_ARMOR)
-                continue;
-            if (!TransmogDisplayVendorMgr::SuitableForTransmogrification(NULL, &itr->second))
-                continue;
-            if (displays.find(itr->second.DisplayInfoID) != displays.end()) // skip duplicate item displays
-                continue;
-            EntryVector* oM = optionMap[(itr->second.Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itr->second.SubClass][getCorrectInvType(itr->second.InventoryType)][itr->second.Quality];
-            if (!oM)
-            {
-                oM = new EntryVector();
-                optionMap[(itr->second.Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itr->second.SubClass][getCorrectInvType(itr->second.InventoryType)][itr->second.Quality] = oM;
-            }
-            if (oM->size() < MAX_VENDOR_ITEMS * 3)
-            {
-                oM->push_back(itr->second.ItemId);
-                displays.insert(itr->second.DisplayInfoID);
-            }
-            else
-            {
-                TC_LOG_INFO("server.loading", "Too many items for transmogrification: Class: %u SubClass: %u InventoryType: %u Quality: %u", itr->second.Class, itr->second.SubClass, getCorrectInvType(itr->second.InventoryType), itr->second.Quality);
-            }
-        }
+        
+		auto Q = WorldDatabase.PQuery("SELECT * FROM transmog_vendor_items");
+		if (!Q)
+			return;
+		do
+		{
+			auto itrsecond = sObjectMgr->GetItemTemplate(Q->Fetch()[0].GetUInt32()); // same as itr second in old script
+
+			EntryVector* oM = optionMap[(itrsecond->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itrsecond->SubClass][getCorrectInvType(itrsecond->InventoryType)][itrsecond->Quality];
+			if (!oM)
+				 {
+				oM = new EntryVector();
+				optionMap[(itrsecond->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itrsecond->SubClass][getCorrectInvType(itrsecond->InventoryType)][itrsecond->Quality] = oM;
+				}
+			// rest of the old loop
+		} while (Q->NextRow());
 
         // resize entry lists
         for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_WEAPON + MAX_ITEM_SUBCLASS_ARMOR; ++i)
