@@ -11,6 +11,8 @@ https://rochet2.github.io/?page=Transmogrification
 */
 
 #include "ScriptPCH.h"
+#include "ArenaTeam.h"
+#include "ArenaTeamMgr.h"
 #include "Battleground.h"
 #include "TransmogDisplayVendorConf.h"
 
@@ -580,13 +582,12 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
             }
 
 			auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", itemEntry);
-
+			
 			Field* q = Q->Fetch();
 
 			uint32 rating = q[0].GetUInt32();
 
-
-			if (player->GetArenaPersonalRating(ARENA_TYPE_2v2) < rating && player->GetArenaPersonalRating(ARENA_TYPE_3v3) < rating && player->GetArenaPersonalRating(ARENA_TYPE_5v5) < rating)
+			if (player->GetArenaPersonalRating(0) < rating && player->GetArenaPersonalRating(1) < rating && player->GetArenaPersonalRating(2) < rating)
 			{
 				player->GetSession()->SendNotification("You need %u rating to transmog this item", rating);
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
@@ -1069,7 +1070,7 @@ public:
 
         std::unordered_set<uint32> displays;
         
-		auto Q = WorldDatabase.PQuery("SELECT * FROM transmog_vendor_items");
+		auto Q = WorldDatabase.PQuery("SELECT entry FROM transmog_vendor_items");
 		if (!Q)
 			return;
 		do
