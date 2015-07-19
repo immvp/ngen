@@ -623,6 +623,11 @@ public:
         WorldSession* session = player->GetSession();
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; slot++)
         {
+			if (slot == 0 || slot == 1 || slot == 2 || slot == 4 || slot == 11 || slot == 12
+				|| slot == 13 || slot == 14 || slot == 19)
+				continue;
+			
+
             // if (player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
             if (const char* slotName = TransmogDisplayVendorMgr::getSlotName(slot, session))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, slotName, SENDER_SELECT_VENDOR, slot);
@@ -687,7 +692,7 @@ public:
                 {
                     for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
                     {
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Transmog", it->first, count*MAX_VENDOR_ITEMS);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", it->first, count*MAX_VENDOR_ITEMS);
                     }
                 }
 
