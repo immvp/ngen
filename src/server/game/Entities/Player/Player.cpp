@@ -3172,10 +3172,10 @@ void Player::InitTalentForLevel()
 		// if used more that have then reset
 		if (m_usedTalentCount > talentPointsForLevel)
 		{
-			if (!GetSession()->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_MORE_TALENTS_THAN_ALLOWED))
+			/*if (!GetSession()->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_MORE_TALENTS_THAN_ALLOWED))
 				ResetTalents(true);
 			else
-				SetFreeTalentPoints(0);
+				SetFreeTalentPoints(0);*/
 		}
 		// else update amount of free points
 		else
