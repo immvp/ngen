@@ -903,10 +903,6 @@ public:
                         {
                             if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
                                 continue;
-							auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", curtemp->ItemId);
-
-							Field* q = Q->Fetch();
-							uint32 rating = q[0].GetUInt32();
 
                             data << uint32(count + 1);
                             data << uint32(curtemp->ItemId);
