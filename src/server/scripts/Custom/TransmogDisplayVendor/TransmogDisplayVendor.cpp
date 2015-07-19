@@ -700,7 +700,7 @@ public:
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
                 selectionStore.SetSelection(player->GetGUIDLow(), temp);
-                player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+                player->SEND_GOSSIP_MENU(0, creature->GetGUID());
             } break;
             case SENDER_BACK: // Back
             {
