@@ -687,11 +687,7 @@ public:
                 {
                     for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
                     {
-                        std::ostringstream ss;
-                        ss << getQualityName(it->first);
-                        if (count)
-                            ss << " [" << count << "]";
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Transmog", it->first, count*MAX_VENDOR_ITEMS);
                     }
                 }
 
