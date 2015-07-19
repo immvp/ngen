@@ -13,6 +13,8 @@
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
 #  ${sources_Custom}
+Custom/TransmogDisplayVendor/TransmogDisplayVendorConf.h
+Custom/TransmogDisplayVendor/TransmogDisplayVendor.cpp
 Custom/player_commands.cpp
 Custom/world_chat.cpp
 Custom/npc_top_arena.cpp

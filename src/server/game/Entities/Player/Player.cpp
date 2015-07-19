@@ -16,6 +16,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../../../scripts/Custom/TransmogDisplayVendor/TransmogDisplayVendorConf.h"
 #include "Player.h"
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
@@ -12570,7 +12571,11 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 		QueryResult force_t = CharacterDatabase.PQuery("select item2 from transmog_force_item where item1 = %u;", pItem->GetEntry());
 		QueryResult force_title = CharacterDatabase.PQuery("select item2 from transmog_force_item_title where item1 = %u and classid = %u;", pItem->GetEntry(), uint32(getClass()));
 
-		if (char_t)
+		if (uint32 entry = TransmogDisplayVendorMgr::GetFakeEntry(pItem))
+		{
+			SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), entry);
+		}
+		else if (char_t)
 		{
 			Field* char_tfield = char_t->Fetch();
 			uint32 item_2 = char_tfield[0].GetUInt32();
@@ -12599,7 +12604,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 
 				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), item_2);
 			}
-			else 
+			else
 			{
 				SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry()); // ripa
 			}
@@ -12748,6 +12753,7 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
 {
 	if (Item* it = GetItemByPos(bag, slot))
 	{
+		TransmogDisplayVendorMgr::DeleteFakeEntry(this, it);
 		ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
 		RemoveItem(bag, slot, update);
 		it->SetNotRefundable(this, false);
@@ -21842,6 +21848,20 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
 		return false;
 	}
 
+	Creature* creature = GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
+	if (!creature)
+	{
+		TC_LOG_DEBUG("network", "WORLD: BuyItemFromVendor - %s not found or you can't interact with him.", vendorguid.ToString().c_str());
+		SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, NULL, item, 0);
+		return false;
+	}
+
+	if (creature->GetScriptName() == "NPC_TransmogDisplayVendor")
+	{
+		TransmogDisplayVendorMgr::HandleTransmogrify(this, creature, vendorslot, item);
+		return false;
+	}
+
 	if (!(pProto->AllowableClass & getClassMask()) && pProto->Bonding == BIND_WHEN_PICKED_UP && !IsGameMaster())
 	{
 		SendBuyError(BUY_ERR_CANT_FIND_ITEM, NULL, item, 0);
@@ -21850,14 +21870,6 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
 
 	if (!IsGameMaster() && ((pProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY && GetTeam() == ALLIANCE) || (pProto->Flags2 == ITEM_FLAGS_EXTRA_ALLIANCE_ONLY && GetTeam() == HORDE)))
 		return false;
-
-	Creature* creature = GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
-	if (!creature)
-	{
-		TC_LOG_DEBUG("network", "WORLD: BuyItemFromVendor - %s not found or you can't interact with him.", vendorguid.ToString().c_str());
-		SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, NULL, item, 0);
-		return false;
-	}
 
 	ConditionList conditions = sConditionMgr->GetConditionsForNpcVendorEvent(creature->GetEntry(), item);
 	if (!sConditionMgr->IsObjectMeetToConditions(this, creature, conditions))

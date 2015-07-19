@@ -1438,6 +1438,7 @@ void AddSC_npc_template();
 void AddSC_SeasonReward();
 void AddSC_r15transmog();
 void AddSC_hat_redeemer();
+void AddSC_NPC_TransmogDisplayVendor();
 #endif
 
 void AddCustomScripts()
@@ -1466,5 +1467,6 @@ void AddCustomScripts()
 	AddSC_SeasonReward();
 	AddSC_r15transmog();
 	AddSC_hat_redeemer();
+	AddSC_NPC_TransmogDisplayVendor();
 #endif
 }
