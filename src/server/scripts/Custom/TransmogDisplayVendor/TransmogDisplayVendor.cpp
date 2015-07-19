@@ -692,7 +692,7 @@ public:
                         if (count)
                             ss << " [" << count << "]";
                         //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
-						player->GetSession()->SendListInventory(creature->GetGUID(), creature->GetEntry());
+						OnGossipSelect(player, creature, SENDER_SELECT_VENDOR, 10000);
                     }
                 }
 
