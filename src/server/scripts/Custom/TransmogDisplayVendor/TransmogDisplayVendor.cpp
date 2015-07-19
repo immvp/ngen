@@ -624,7 +624,7 @@ public:
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; slot++)
         {
 			if (slot == 0 || slot == 1 || slot == 3 || slot == 10 || slot == 11 || slot == 12 || slot == 13
-				|| slot == 18)
+				|| slot == 18 || slot == 15 || slot == 16)
 				continue;
 			
 
