@@ -652,7 +652,6 @@ public:
                     return true;
                 }
                 const ItemTemplate * itemTemplate = item->GetTemplate();
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, (std::string)"Update selected; " + getItemName(itemTemplate, session), sender, action);
 
                 // [quality] = {size}
                 std::map<uint32, uint32> L;
@@ -689,8 +688,14 @@ public:
 
                 for (std::map<uint32, uint32>::const_iterator it = L.begin(); it != L.end(); ++it)
                 {
-
-                       player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Items", it->first, MAX_VENDOR_ITEMS);
+                    for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
+                    {
+                        std::ostringstream ss;
+                        ss << getQualityName(it->first);
+                        if (count)
+                            ss << " [" << count << "]";
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
+                    }
                 }
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
