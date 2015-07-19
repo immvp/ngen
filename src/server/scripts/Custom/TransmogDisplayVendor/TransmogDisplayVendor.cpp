@@ -585,7 +585,8 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 
 			uint32 rating = q[0].GetUInt32();
 
-			if (player->GetArenaPersonalRating(ARENA_TYPE_2v2) < rating || player->GetArenaPersonalRating(ARENA_TYPE_3v3) < rating || player->GetArenaPersonalRating(ARENA_TYPE_5v5) < rating)
+
+			if (player->GetMaxPersonalArenaRatingRequirement(ARENA_TYPE_2v2) < rating || player->GetMaxPersonalArenaRatingRequirement(ARENA_TYPE_3v3) < rating || player->GetMaxPersonalArenaRatingRequirement(ARENA_TYPE_5v5) < rating)
 			{
 				player->GetSession()->SendNotification("You need %u rating to transmog this item", rating);
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
