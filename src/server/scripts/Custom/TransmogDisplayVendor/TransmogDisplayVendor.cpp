@@ -11,9 +11,7 @@ https://rochet2.github.io/?page=Transmogrification
 */
 
 #include "ScriptPCH.h"
-#include "ArenaTeam.h"
-#include "ArenaTeamMgr.h"
-#include "Battleground.h"
+#include "player.h"
 #include "TransmogDisplayVendorConf.h"
 
 // Config start
@@ -694,13 +692,15 @@ public:
                         ss << getQualityName(it->first);
                         if (count)
                             ss << " [" << count << "]";
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
+                        //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, ss.str().c_str(), it->first, count*MAX_VENDOR_ITEMS);
+						player->GetSession()->SendListInventory(creature->GetGUID(), creature->GetEntry());
                     }
                 }
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
                 selectionStore.SetSelection(player->GetGUIDLow(), temp);
-                player->SEND_GOSSIP_MENU(1, creature->GetGUID());
+                //player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+				//return true;
             } break;
             case SENDER_BACK: // Back
             {
