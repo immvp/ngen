@@ -12,14 +12,9 @@ https://rochet2.github.io/?page=Transmogrification
 
 #include "ScriptPCH.h"
 #include "TransmogDisplayVendorConf.h"
-#include "ScriptMgr.h"
-#include "ObjectMgr.h"
-#include "MapManager.h"
 #include "Chat.h"
 #include "Common.h"
 #include "Language.h"
-#include "CellImpl.h"
-#include "GridNotifiers.h"
 
 // Config start
 
