@@ -682,9 +682,9 @@ public:
 					}
 
 					if (twohighest < item.second.tworating && threehighest < item.second.threerating)
-					{
-							grey = true;										
-					}
+						grey = true;
+					else
+						grey = false;
 				}
 
 				data << uint32(count + 1);
