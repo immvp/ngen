@@ -113,8 +113,6 @@ static SelectionStore selectionStore; // selectionStore[GUID] = Slot
 struct ItemData
 {
 	uint32 entry;
-	uint32 two;
-	uint32 three;
 	uint32 tworating;
 	uint32 threerating;
 };
@@ -480,7 +478,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (item_data->two == 1 || item_data->three == 1)
+		if (item_data->tworating <= 0 || item_data->threerating <= 0)
 		{
 			auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
 			auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
@@ -502,9 +500,9 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 
 			if (twohighest < item_data->tworating && threehighest < item_data->threerating)
 			{
-				if (item_data->two == 0)
+				if (item_data->tworating == 0)
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 3v3 personal rating", item_data->threerating);
-				else if (item_data->three == 0)
+				else if (item_data->threerating == 0)
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 personal rating", item_data->tworating);
 				else
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 or %u 3v3 personal rating", item_data->tworating, item_data->threerating);
@@ -667,7 +665,7 @@ public:
 				}
 
 				bool grey = false;
-				if (item.second.two == 1 || item.second.three == 1)
+				if (item.second.tworating <= 0 || item.second.threerating <= 0)
 				{
 					auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
 					auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
@@ -926,9 +924,7 @@ public:
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.two = Q->Fetch()[1].GetUInt32();
 				data.tworating = Q->Fetch()[2].GetUInt32();
-				data.three = Q->Fetch()[3].GetUInt32();
 				data.threerating = Q->Fetch()[4].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
