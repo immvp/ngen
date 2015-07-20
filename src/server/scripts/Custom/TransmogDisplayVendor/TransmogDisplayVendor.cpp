@@ -655,12 +655,12 @@ public:
                 }
                 const ItemTemplate * itemTemplate = item->GetTemplate();
 
+                // [quality] = {size}
+                std::map<uint32, uint32> L;
+
                 for (std::map<uint32, uint32>::const_iterator it = L.begin(); it != L.end(); ++it)
                 {
-                    for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
-                    {
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", it->first, count*MAX_VENDOR_ITEMS);
-                    }
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", it->first, MAX_VENDOR_ITEMS);
                 }
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
