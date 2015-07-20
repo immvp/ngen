@@ -1,7 +1,7 @@
 /*
 Transmog display vendor
 Code by Rochet2
-Modification by Lightning Blade
+Ideas LilleCarl
 
 ScriptName for NPC:
 NPC_TransmogDisplayVendor
@@ -12,9 +12,6 @@ https://rochet2.github.io/?page=Transmogrification
 
 #include "ScriptPCH.h"
 #include "TransmogDisplayVendorConf.h"
-#include "Chat.h"
-#include "Common.h"
-#include "Language.h"
 
 // Config start
 
@@ -113,8 +110,7 @@ static SelectionStore selectionStore; // selectionStore[GUID] = Slot
 struct ItemData
 {
 	uint32 entry;
-	uint32 tworating;
-	uint32 threerating;
+	uint32 rating;
 };
 static const std::vector<ItemData> itemList;
 
@@ -235,9 +231,6 @@ bool TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(Player* player, ItemT
 			(source->InventoryType == INVTYPE_ROBE && target->InventoryType == INVTYPE_CHEST)))
 			return false;
 	}
-
-	if (!IgnoreReqClass && (target->AllowableClass & player->getClassMask()) == 0)
-		return false;
 
 	return true;
 }
@@ -478,9 +471,9 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (player->GetArenaPersonalRating(0) < item_data->tworating && player->GetArenaPersonalRating(1) < item_data->threerating)
+		if (player->GetArenaPersonalRating(0) < item_data->rating && player->GetArenaPersonalRating(1) < item_data->rating && player->GetArenaPersonalRating(2) < item_data->rating)
 		{
-			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, item_data->threerating);
+			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating", item_data->rating);
 			return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 		}
 
@@ -638,7 +631,7 @@ public:
 				}
 
 				bool grey = false;
-				if (player->GetArenaPersonalRating(0) < item.second.tworating && player->GetArenaPersonalRating(1) < item.second.threerating)
+				if (player->GetArenaPersonalRating(0) < item.second.rating && player->GetArenaPersonalRating(1) < item.second.rating && player->GetArenaPersonalRating(2) < item.second.rating)
 				{
 					grey = true;
 				}
@@ -872,14 +865,13 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, rating FROM transmog_vendor_items"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.tworating = Q->Fetch()[1].GetUInt32();
-				data.threerating = Q->Fetch()[2].GetUInt32();
+				data.rating = Q->Fetch()[1].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
@@ -892,67 +884,6 @@ public:
 
 		TC_LOG_INFO("custom.transmog", "Deleting non-existing transmogrification entries...");
 		CharacterDatabase.DirectExecute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
-	}
-};
-
-class transmogcommands : public CommandScript
-{
-public:
-	transmogcommands() : CommandScript("transmogcommands") { }
-
-	ChatCommand* GetCommands() const
-	{
-		static ChatCommand transmogCommandTable[] =
-
-		{
-			{ "reload", rbac::RBAC_PERM_COMMAND_RELOAD_TRANSMOG, true, &HandleReloadTransmog, "", NULL },
-			{ NULL, 0, false, NULL, "", NULL }
-		};
-		static ChatCommand commandTable[] =
-		{
-			{ "transmog", rbac::RBAC_PERM_COMMAND_TRANSMOG, false, NULL, "", transmogCommandTable },
-			{ NULL, 0, false, NULL, "", NULL }
-		};
-		return commandTable;
-	}
-
-	static bool HandleReloadTransmog(ChatHandler* handler, const char* args)
-	{
-
-		// perform a const cast on the item list so we can modify it in this function
-		// otherwise it should be read only data!
-		std::vector<ItemData>& mod_itemList = const_cast<std::vector<ItemData>&>(itemList);
-
-		for (size_t i = 0; i < sizeof(AllowedItems) / sizeof(*AllowedItems); ++i)
-			TransmogDisplayVendorMgr::Allowed.insert(AllowedItems[i]);
-		for (size_t i = 0; i < sizeof(NotAllowedItems) / sizeof(*NotAllowedItems); ++i)
-			TransmogDisplayVendorMgr::NotAllowed.insert(NotAllowedItems[i]);
-
-		TC_LOG_INFO("server.loading", "Creating a list of usable transmogrification entries...");
-		// clear for reload
-		mod_itemList.clear();
-
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating FROM transmog_vendor_items ORDER BY rating"))
-		{
-			do
-			{
-				ItemData data;
-				data.entry = Q->Fetch()[0].GetUInt32();
-				data.tworating = Q->Fetch()[1].GetUInt32();
-				data.threerating = Q->Fetch()[2].GetUInt32();
-				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
-					mod_itemList.push_back(data);
-				else
-					TC_LOG_ERROR("custom.transmog", "transmog_vendor_items has a non-existing item entry %u", data.entry);
-			} while (Q->NextRow());
-		}
-
-		// resize entry list
-		mod_itemList.shrink_to_fit();
-
-		TC_LOG_INFO("custom.transmog", "Deleting non-existing transmogrification entries...");
-		CharacterDatabase.DirectExecute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
-		return true;
 	}
 };
 
@@ -961,5 +892,4 @@ void AddSC_NPC_TransmogDisplayVendor()
 	new NPC_TransmogDisplayVendor();
 	new PREP_TransmogDisplayVendor();
 	new Player_Transmogrify();
-	new transmogcommands();
 }
