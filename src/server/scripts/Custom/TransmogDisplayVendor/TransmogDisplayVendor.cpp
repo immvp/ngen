@@ -49,8 +49,8 @@ const bool TransmogDisplayVendorMgr::IgnoreReqEvent = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
-static const uint32 AllowedItems[] = { 49888 };
-static const uint32 NotAllowedItems[] = { 0 };
+	static const uint32 AllowedItems[] = { 0 };
+	static const uint32 NotAllowedItems[] = { 0 };
 
 // Config end
 
@@ -264,11 +264,11 @@ bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, Ite
 
 	if (player)
 	{
-		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
-			return false;
+		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
+			//return false;
 
-		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
-			return false;
+		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
+			//return false;
 
 		if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
 			return false;
