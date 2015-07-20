@@ -662,8 +662,7 @@ public:
                     for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_ARMOR; ++i)
                     {
                         EntryVector** oM = optionMap[MAX_ITEM_SUBCLASS_WEAPON + i][getCorrectInvType(itemTemplate->InventoryType)];
-                        for (uint32 i = 0; i < 1; ++i, ++oM)
-                            if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
+                        for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                                 if (*oM)
                                     L[i] += (*oM)->size();
                     }
@@ -673,7 +672,7 @@ public:
                     for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_WEAPON; ++i)
                     {
                         EntryVector** oM = optionMap[i][getCorrectInvType(itemTemplate->InventoryType)];
-                        for (uint32 i = 0; i < 1; ++i, ++oM)
+                        for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                             if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
                                 if (*oM)
                                     L[i] += (*oM)->size();
@@ -688,13 +687,7 @@ public:
                                 L[i] += (*oM)->size();
                 }
 
-                for (std::map<uint32, uint32>::const_iterator it = L.begin(); it != L.end(); ++it)
-                {
-                    for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
-                    {
-                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", it->first, count*MAX_VENDOR_ITEMS);
-                    }
-                }
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", 1, MAX_VENDOR_ITEMS);
 
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
                 selectionStore.SetSelection(player->GetGUIDLow(), temp);
