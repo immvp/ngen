@@ -232,7 +232,7 @@ bool TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(Player* player, ItemT
 			return false;
 	}
 
-	if (player->getClassMask() != target->AllowableClass)
+	if (!IgnoreReqClass && (target->AllowableClass & player->getClassMask()) == 0)
 		return false;
 
 	return true;
