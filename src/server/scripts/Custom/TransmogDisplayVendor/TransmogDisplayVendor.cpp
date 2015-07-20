@@ -884,8 +884,8 @@ public:
                     {
                         if (ItemTemplate const* curtemp = sObjectMgr->GetItemTemplate(*it))
                         {
-                            if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
-                                continue;
+                            //if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
+                               // continue;
 
 							auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", curtemp->ItemId);
 
