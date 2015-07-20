@@ -664,7 +664,7 @@ public:
                         EntryVector** oM = optionMap[MAX_ITEM_SUBCLASS_WEAPON + i][getCorrectInvType(itemTemplate->InventoryType)];
                         for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                                 if (*oM)
-                                    L[i] += (*oM)->size();
+                                    L[1] += (*oM)->size();
                     }
                 }
                 else if (itemTemplate->Class == ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedWeaponTypes)
@@ -675,7 +675,7 @@ public:
                         for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                             if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
                                 if (*oM)
-                                    L[i] += (*oM)->size();
+                                    L[1] += (*oM)->size();
                     }
                 }
                 else
@@ -684,7 +684,7 @@ public:
                     for (uint32 i = 0; i < 1; ++i, ++oM)
                         if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
                             if (*oM)
-                                L[i] += (*oM)->size();
+                                L[1] += (*oM)->size();
                 }
 
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", 1, MAX_VENDOR_ITEMS);
@@ -914,17 +914,8 @@ public:
                         }
                     }
 
-                    if (!item_amount)
-                    {
-                        session->SendAreaTriggerMessage("No transmogrifications found for equipped item");
-                        OnGossipSelect(player, creature, SENDER_SELECT_VENDOR, slot);
-                        return true;
-                    }
-                    else
-                    {
                         data.put<uint8>(countPos, item_amount);
                         session->SendPacket(&data);
-                    }
                 }
                 else
                 {
