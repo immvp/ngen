@@ -508,6 +508,8 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 				else
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, item_data->threerating);
 
+				ChatHandler(player->GetSession()).PSendSysMessage("2 rating: %u, 3 rating: %u", item_data->tworating, item_data->threerating);
+
 
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 			}
