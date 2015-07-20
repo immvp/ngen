@@ -481,7 +481,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 		}
 
 		if (item_data->two || item_data->three == 1)
-			if (player->GetMaxPersonalArenaRatingRequirement(0) < item_data->tworating && player->GetMaxPersonalArenaRatingRequirement(1) < item_data->threerating)
+			if (player->GetMaxPersonalArenaRatingRequirement(2) < item_data->tworating && player->GetMaxPersonalArenaRatingRequirement(3) < item_data->threerating)
 			{
 				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 or %u 3v3 personal rating", item_data->tworating, item_data->threerating);
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
@@ -642,7 +642,7 @@ public:
 
 				bool grey = false;
 				if (item.second.two == 1 || item.second.three == 1)
-					if (player->GetMaxPersonalArenaRatingRequirement(0) < item.second.tworating && player->GetMaxPersonalArenaRatingRequirement(1) < item.second.threerating)
+					if (player->GetMaxPersonalArenaRatingRequirement(2) < item.second.tworating && player->GetMaxPersonalArenaRatingRequirement(3) < item.second.threerating)
 					{
 						grey = true;
 					}
