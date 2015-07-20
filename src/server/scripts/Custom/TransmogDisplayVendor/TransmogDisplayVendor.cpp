@@ -478,7 +478,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (item_data->tworating >= 0 || item_data->threerating >= 0)
+		if (item_data->tworating > 0 || item_data->threerating > 0)
 		{
 			auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
 			auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
@@ -663,7 +663,7 @@ public:
 				}
 
 				bool grey = false;
-				if (item.second.tworating >= 0 || item.second.threerating >= 0)
+				if (item.second.tworating > 0 || item.second.threerating > 0)
 				{
 					auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
 					auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
@@ -674,6 +674,7 @@ public:
 					{
 						Field* qfield = Q->Fetch();
 						twohighest = qfield[0].GetUInt32();
+
 					}
 					if (W)
 					{
