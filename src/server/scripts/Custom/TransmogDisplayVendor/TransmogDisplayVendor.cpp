@@ -872,7 +872,7 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
@@ -932,7 +932,7 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
