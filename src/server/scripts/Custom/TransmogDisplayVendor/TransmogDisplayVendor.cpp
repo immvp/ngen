@@ -44,7 +44,7 @@ const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
 const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
 
 const bool TransmogDisplayVendorMgr::IgnoreReqRace = true;
-const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
+const bool TransmogDisplayVendorMgr::IgnoreReqClass = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqSpell = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqLevel = true;
@@ -52,8 +52,8 @@ const bool TransmogDisplayVendorMgr::IgnoreReqEvent = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
-	static const uint32 AllowedItems[] = { 0 };
-	static const uint32 NotAllowedItems[] = { 0 };
+static const uint32 AllowedItems[] = { 49888 };
+static const uint32 NotAllowedItems[] = { 0 };
 
 // Config end
 
@@ -268,11 +268,11 @@ bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, Ite
 
 	if (player)
 	{
-		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
-			//return false;
+		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
+			return false;
 
-		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
-			//return false;
+		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
+			return false;
 
 		if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
 			return false;
@@ -478,35 +478,10 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (item_data->tworating > 0 || item_data->threerating > 0)
+		if (player->GetArenaPersonalRating(0) < item_data->tworating && player->GetArenaPersonalRating(1) < item_data->threerating)
 		{
-			auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
-			auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
-			uint32 twohighest = 0;
-			uint32 threehighest = 0;
-
-			if (Q)
-			{
-				Field* qfield = Q->Fetch();
-				twohighest = qfield[0].GetUInt32();
-
-			}
-			if (W)
-			{
-				Field* wfield = W->Fetch();
-				threehighest = wfield[0].GetUInt32();
-			}
-
-			if (twohighest < item_data->tworating && threehighest < item_data->threerating)
-			{
-				if (item_data->tworating == 0)
-					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 3v3 personal rating", item_data->threerating);
-				else if (item_data->threerating == 0)
-					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 personal rating", item_data->tworating);
-				else
-					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, item_data->threerating);
-				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
-			}
+			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, item_data->threerating);
+			return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 		}
 
 		if (!no_cost)
@@ -663,31 +638,9 @@ public:
 				}
 
 				bool grey = false;
-
-				if (item.second.tworating > 0 || item.second.threerating > 0)
+				if (player->GetArenaPersonalRating(0) < item.second.tworating && player->GetArenaPersonalRating(1) < item.second.threerating)
 				{
-					auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
-					auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
-					uint32 twohighest = 0;
-					uint32 threehighest = 0;
-
-					if (Q)
-					{
-						Field* qfield = Q->Fetch();
-						twohighest = qfield[0].GetUInt32();
-					}
-					if (W)
-					{
-						Field* wfield = W->Fetch();
-						threehighest = wfield[0].GetUInt32();
-					}
-
-					if (twohighest < item.second.tworating && threehighest < item.second.threerating)
-						grey = true;
-					else
-						grey = false;
-
-					ChatHandler(player->GetSession()).PSendSysMessage("TowHighest: %u, ThreeHighest: %u, tworating: %u, threerating: %u", twohighest, threehighest, item.second.tworating, item.second.threerating);
+					grey = true;
 				}
 
 				data << uint32(count + 1);
