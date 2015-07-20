@@ -664,7 +664,7 @@ public:
                         EntryVector** oM = optionMap[MAX_ITEM_SUBCLASS_WEAPON + i][getCorrectInvType(itemTemplate->InventoryType)];
                         for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                                 if (*oM)
-                                    L[1] += (*oM)->size();
+                                    L[i] += (*oM)->size();
                     }
                 }
                 else if (itemTemplate->Class == ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedWeaponTypes)
@@ -675,7 +675,7 @@ public:
                         for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
                             if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
                                 if (*oM)
-                                    L[1] += (*oM)->size();
+                                    L[i] += (*oM)->size();
                     }
                 }
                 else
@@ -684,7 +684,7 @@ public:
                     for (uint32 i = 0; i < 1; ++i, ++oM)
                         if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
                             if (*oM)
-                                L[1] += (*oM)->size();
+                                L[i] += (*oM)->size();
                 }
 
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Arena Transmog", 1, MAX_VENDOR_ITEMS);
@@ -692,7 +692,6 @@ public:
                 SelectionStore::Selection temp = { item->GetEntry(), action, 0, 0 }; // entry, slot, offset, quality
                 selectionStore.SetSelection(player->GetGUIDLow(), temp);
                 player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
-				return true;
             } break;
             case SENDER_BACK: // Back
             {
@@ -825,7 +824,7 @@ public:
                     }
                     else
                     {
-                        const EntryVector* oM = optionMap[(itemTemplate->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itemTemplate->SubClass][getCorrectInvType(itemTemplate->InventoryType)][1];
+                        const EntryVector* oM = optionMap[(itemTemplate->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itemTemplate->SubClass][getCorrectInvType(itemTemplate->InventoryType)][selection.quality];
                         if (oM)
                         {
                             if (!over && counter + oM->size() < selection.offset)
@@ -884,8 +883,8 @@ public:
                     {
                         if (ItemTemplate const* curtemp = sObjectMgr->GetItemTemplate(*it))
                         {
-                            //if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
-                               // continue;
+                            if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
+                                continue;
 
 							auto Q = WorldDatabase.PQuery("SELECT rating FROM transmog_vendor_items WHERE entry=%u", curtemp->ItemId);
 
@@ -914,8 +913,19 @@ public:
                         }
                     }
 
+                    if (!item_amount)
+                    {
+                        //session->SendAreaTriggerMessage("No transmogrifications found for equipped item");
+                        //OnGossipSelect(player, creature, SENDER_SELECT_VENDOR, slot);
+                        //return true;
+						data.put<uint8>(countPos, item_amount);
+						session->SendPacket(&data);
+                    }
+                    else
+                    {
                         data.put<uint8>(countPos, item_amount);
                         session->SendPacket(&data);
+                    }
                 }
                 else
                 {
