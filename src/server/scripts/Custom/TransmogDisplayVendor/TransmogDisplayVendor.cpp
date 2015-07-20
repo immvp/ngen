@@ -663,6 +663,7 @@ public:
 				}
 
 				bool grey = false;
+
 				if (item.second.tworating > 0 || item.second.threerating > 0)
 				{
 					auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
@@ -674,7 +675,6 @@ public:
 					{
 						Field* qfield = Q->Fetch();
 						twohighest = qfield[0].GetUInt32();
-
 					}
 					if (W)
 					{
@@ -686,6 +686,8 @@ public:
 						grey = true;
 					else
 						grey = false;
+
+					ChatHandler(player->GetSession()).PSendSysMessage("TowHighest: %u, ThreeHighest: %u, tworating: %u, threerating: %u", twohighest, threehighest, item.second.tworating, item.second.threerating);
 				}
 
 				data << uint32(count + 1);
