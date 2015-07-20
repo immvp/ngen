@@ -480,8 +480,27 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (item_data->two || item_data->three == 1)
-			if (player->GetArenaPersonalRating(0) < item_data->tworating && player->GetArenaPersonalRating(1) < item_data->threerating)
+		if (item_data->two == 1 || item_data->three == 1)
+		{
+			auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+			auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
+			uint32 twohighest = 0;
+			uint32 threehighest = 0;
+
+			if (Q)
+			{
+				Field* qfield = Q->Fetch();
+				twohighest = qfield[0].GetUInt32();
+
+			}
+			if (W)
+			{
+				Field* wfield = W->Fetch();
+				threehighest = wfield[0].GetUInt32();
+			}
+
+
+			if (twohighest < item_data->tworating && threehighest < item_data->threerating)
 			{
 				if (item_data->two == 0)
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 3v3 personal rating", item_data->threerating);
@@ -489,8 +508,10 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 personal rating", item_data->tworating);
 				else
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 or %u 3v3 personal rating", item_data->tworating, item_data->threerating);
+
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 			}
+		}
 
 		if (!no_cost)
 		{
@@ -647,10 +668,28 @@ public:
 
 				bool grey = false;
 				if (item.second.two == 1 || item.second.three == 1)
-					if (player->GetArenaPersonalRating(0) < item.second.tworating && player->GetArenaPersonalRating(1) < item.second.threerating)
+				{
+					auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+					auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
+					uint32 twohighest = 0;
+					uint32 threehighest = 0;
+
+					if (Q)
+					{
+						Field* qfield = Q->Fetch();
+						twohighest = qfield[0].GetUInt32();
+					}
+					if (W)
+					{
+						Field* wfield = W->Fetch();
+						threehighest = wfield[0].GetUInt32();
+					}
+
+					if (twohighest < item.second.tworating && threehighest < item.second.threerating)
 					{
 						grey = true;
 					}
+				}
 
 				data << uint32(count + 1);
 				data << uint32(item.first->ItemId);
@@ -881,14 +920,16 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2, 2v2_rating, 3v3, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.tworating = Q->Fetch()[1].GetUInt32();
-				data.threerating = Q->Fetch()[2].GetUInt32();
+				data.two = Q->Fetch()[1].GetUInt32();
+				data.tworating = Q->Fetch()[2].GetUInt32();
+				data.three = Q->Fetch()[3].GetUInt32();
+				data.threerating = Q->Fetch()[4].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
