@@ -497,7 +497,6 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 				threehighest = wfield[0].GetUInt32();
 			}
 
-			ChatHandler(player->GetSession()).PSendSysMessage("Debug: 2v2 Hrating = %u; 3v3 Hrating = %u; item 2v2 rating: %u; item 3v3 rating: %u", twohighest, threehighest, item_data->tworating, item_data->threerating);
 			if (twohighest < item_data->tworating && threehighest < item_data->threerating)
 			{
 				if (item_data->tworating == 0)
@@ -505,7 +504,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 				else if (item_data->threerating == 0)
 					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 personal rating", item_data->tworating);
 				else
-					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 or %u 3v3 personal rating", item_data->tworating, item_data->threerating);
+					ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, item_data->threerating);
 
 				return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 			}
@@ -683,10 +682,14 @@ public:
 						threehighest = wfield[0].GetUInt32();
 					}
 
-					ChatHandler(player->GetSession()).PSendSysMessage("VIEW Debug: 2v2 Hrating = %u; 3v3 Hrating = %u; item 2v2 rating: %u; item 3v3 rating: %u", twohighest, threehighest, item.second.tworating, item.second.threerating);
 					if (twohighest < item.second.tworating && threehighest < item.second.threerating)
 					{
-						grey = true;
+						if (item.second.tworating <= 0 && item.second.threerating > 0)
+							grey = true;
+						else if (item.second.threerating <= 0 && item.second.tworating > 0)
+							grey = true;
+						else
+							grey = true;										
 					}
 				}
 
