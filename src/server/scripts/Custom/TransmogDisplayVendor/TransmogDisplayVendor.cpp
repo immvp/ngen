@@ -918,14 +918,14 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2, 2v2_rating, 3v3, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.tworating = Q->Fetch()[2].GetUInt32();
-				data.threerating = Q->Fetch()[4].GetUInt32();
+				data.tworating = Q->Fetch()[1].GetUInt32();
+				data.threerating = Q->Fetch()[2].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
@@ -978,16 +978,14 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2, 2v2_rating, 3v3, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating, 3v3_rating rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.two = Q->Fetch()[1].GetUInt32();
-				data.tworating = Q->Fetch()[2].GetUInt32();
-				data.three = Q->Fetch()[3].GetUInt32();
-				data.threerating = Q->Fetch()[4].GetUInt32();
+				data.tworating = Q->Fetch()[1].GetUInt32();
+				data.threerating = Q->Fetch()[2].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
