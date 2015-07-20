@@ -497,7 +497,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 				threehighest = wfield[0].GetUInt32();
 			}
 
-			ChatHandler(player->GetSession()).PSendSysMessage("debug, chat handler");
+			ChatHandler(player->GetSession()).PSendSysMessage("Debug: 2v2 Hrating = %u; 3v3 Hrating = %u; item 2v2 rating: %u; item 3v3 rating: %u", twohighest, threehighest, item_data->tworating, item_data->threerating);
 			if (twohighest < item_data->tworating && threehighest < item_data->threerating)
 			{
 				if (item_data->tworating == 0)
@@ -683,6 +683,7 @@ public:
 						threehighest = wfield[0].GetUInt32();
 					}
 
+					ChatHandler(player->GetSession()).PSendSysMessage("VIEW Debug: 2v2 Hrating = %u; 3v3 Hrating = %u; item 2v2 rating: %u; item 3v3 rating: %u", twohighest, threehighest, item.second.tworating, item.second.threerating);
 					if (twohighest < item.second.tworating && threehighest < item.second.threerating)
 					{
 						grey = true;
