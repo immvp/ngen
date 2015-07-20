@@ -655,39 +655,6 @@ public:
                 }
                 const ItemTemplate * itemTemplate = item->GetTemplate();
 
-                // [quality] = {size}
-                std::map<uint32, uint32> L;
-                if (itemTemplate->Class != ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedArmorTypes)
-                {
-                    for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_ARMOR; ++i)
-                    {
-                        EntryVector** oM = optionMap[MAX_ITEM_SUBCLASS_WEAPON + i][getCorrectInvType(itemTemplate->InventoryType)];
-                        for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
-                            if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
-                                if (*oM)
-                                    L[i] += (*oM)->size();
-                    }
-                }
-                else if (itemTemplate->Class == ITEM_CLASS_WEAPON && TransmogDisplayVendorMgr::AllowMixedWeaponTypes)
-                {
-                    for (uint32 i = 0; i < MAX_ITEM_SUBCLASS_WEAPON; ++i)
-                    {
-                        EntryVector** oM = optionMap[i][getCorrectInvType(itemTemplate->InventoryType)];
-                        for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
-                            if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
-                                if (*oM)
-                                    L[i] += (*oM)->size();
-                    }
-                }
-                else
-                {
-                    EntryVector** oM = optionMap[(itemTemplate->Class != ITEM_CLASS_WEAPON ? MAX_ITEM_SUBCLASS_WEAPON : 0) + itemTemplate->SubClass][getCorrectInvType(itemTemplate->InventoryType)];
-                    for (uint32 i = 0; i < MAX_ITEM_QUALITY; ++i, ++oM)
-                        if (TransmogDisplayVendorMgr::IsAllowedQuality(i)) // skip not allowed qualities
-                            if (*oM)
-                                L[i] += (*oM)->size();
-                }
-
                 for (std::map<uint32, uint32>::const_iterator it = L.begin(); it != L.end(); ++it)
                 {
                     for (uint32 count = 0; count*MAX_VENDOR_ITEMS < it->second; ++count)
