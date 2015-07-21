@@ -41,7 +41,7 @@ const bool TransmogDisplayVendorMgr::AllowMixedWeaponTypes = false;
 const bool TransmogDisplayVendorMgr::AllowFishingPoles = false;
 
 const bool TransmogDisplayVendorMgr::IgnoreReqRace = true;
-const bool TransmogDisplayVendorMgr::IgnoreReqClass = true;
+const bool TransmogDisplayVendorMgr::IgnoreReqClass = false;
 const bool TransmogDisplayVendorMgr::IgnoreReqSkill = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqSpell = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqLevel = true;
