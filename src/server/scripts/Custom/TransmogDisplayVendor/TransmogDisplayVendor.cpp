@@ -471,7 +471,7 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (player->GetArenaPersonalRating(0) < item_data->rating && player->GetArenaPersonalRating(1) < item_data->rating && player->GetArenaPersonalRating(2) < item_data->rating)
+		if (player->GetArenaPersonalRating(0) < item_data->rating && player->GetArenaPersonalRating(1) < item_data->rating)
 		{
 			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating", item_data->rating);
 			return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
@@ -631,7 +631,7 @@ public:
 				}
 
 				bool grey = false;
-				if (player->GetArenaPersonalRating(0) < item.second.rating && player->GetArenaPersonalRating(1) < item.second.rating && player->GetArenaPersonalRating(2) < item.second.rating)
+				if (player->GetArenaPersonalRating(0) < item.second.rating && player->GetArenaPersonalRating(1) < item.second.rating)
 				{
 					grey = true;
 				}
@@ -648,6 +648,7 @@ public:
 				data << uint32(item.first->BuyCount);
 				data << uint32(0);
 				++item_amount;
+				grey = false;
 			}
 
 			if (!item_amount)
