@@ -1,15 +1,3 @@
-/*
-Transmog display vendor
-Code by Rochet2
-Ideas LilleCarl
-
-ScriptName for NPC:
-NPC_TransmogDisplayVendor
-
-Compatible with Transmogrification 6.1 by Rochet2
-https://rochet2.github.io/?page=Transmogrification
-*/
-
 #include "ScriptPCH.h"
 #include "TransmogDisplayVendorConf.h"
 
@@ -49,7 +37,7 @@ const bool TransmogDisplayVendorMgr::IgnoreReqEvent = true;
 const bool TransmogDisplayVendorMgr::IgnoreReqStats = true;
 
 // Example AllowedItems[] = { 123, 234, 345 };
-static const uint32 AllowedItems[] = { 49888 };
+static const uint32 AllowedItems[] = { 0 };
 static const uint32 NotAllowedItems[] = { 0 };
 
 // Config end
@@ -232,6 +220,8 @@ bool TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(Player* player, ItemT
 			return false;
 	}
 
+	if (!IgnoreReqClass && (source->AllowableClass & player->getClassMask()) == 0)
+		
 	return true;
 }
 bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, ItemTemplate const* proto)
@@ -631,10 +621,9 @@ public:
 				}
 
 				bool grey = false;
+				
 				if (player->GetArenaPersonalRating(0) < item.second.rating && player->GetArenaPersonalRating(1) < item.second.rating)
-				{
 					grey = true;
-				}
 
 				data << uint32(count + 1);
 				data << uint32(item.first->ItemId);
@@ -648,7 +637,6 @@ public:
 				data << uint32(item.first->BuyCount);
 				data << uint32(0);
 				++item_amount;
-				grey = false;
 			}
 
 			if (!item_amount)
