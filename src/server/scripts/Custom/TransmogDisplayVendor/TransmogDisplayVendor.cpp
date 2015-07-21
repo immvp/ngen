@@ -253,16 +253,16 @@ bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, Ite
 	if (player)
 	{
 		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
-			//return false;
+		//return false;
 
 		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
-			//return false;
+		//return false;
 
 		//if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
-			//return false;
+		//return false;
 
 		//if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
-			//return false;
+		//return false;
 
 		if (!IgnoreReqSkill && proto->RequiredSkill != 0)
 		{
@@ -462,9 +462,18 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			return; // either cheat or changed items (not found in correct place in transmog vendor view)
 		}
 
-		if (player->GetArenaPersonalRating(0) < item_data->rating && player->GetArenaPersonalRating(1) < item_data->rating)
+		auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+		uint32 twohighest = 0;
+
+		if (Q)
 		{
-			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2, 3v3, 5v5 personal rating", item_data->rating);
+			Field* qfield = Q->Fetch();
+			twohighest = qfield[0].GetUInt32();
+		}
+
+		if (twohighest < item_data->rating)
+		{
+			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating", item_data->rating);
 			return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 		}
 
@@ -571,7 +580,7 @@ public:
 			}
 
 			// items to show in vendor
-			std::vector< std::pair<const ItemTemplate*, const ItemData&> > vendorItems;
+			std::vector< std::pair<const ItemTemplate*, uint32> > vendorItems;
 
 			ItemTemplate const* itemTemplate = item->GetTemplate();
 			for (auto&& data : itemList)
@@ -583,7 +592,7 @@ public:
 				if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
 					continue;
 
-				vendorItems.push_back(std::make_pair(curtemp, data));
+				vendorItems.push_back(std::make_pair(curtemp, data.rating));
 			}
 
 			player->CLOSE_GOSSIP_MENU();
@@ -613,7 +622,7 @@ public:
 			data << uint8(count);
 
 			uint32 item_amount = 0;
-			for (auto&& item : vendorItems)
+			for (auto&& vendorItem : vendorItems)
 			{
 				if (item_amount >= MAX_VENDOR_ITEMS)
 				{
@@ -621,21 +630,29 @@ public:
 					break;
 				}
 
+				auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+				uint32 twohighest = 0;
+
+				if (Q)
+				{
+					Field* qfield = Q->Fetch();
+					twohighest = qfield[0].GetUInt32();
+				}
+
 				bool grey = false;
-				
-				if (player->GetArenaPersonalRating(0) < item.second.rating && player->GetArenaPersonalRating(1) < item.second.rating)
+				if (twohighest < vendorItem.second)
 					grey = true;
 
 				data << uint32(count + 1);
-				data << uint32(item.first->ItemId);
-				data << uint32(item.first->DisplayInfoID);
+				data << uint32(vendorItem.first->ItemId);
+				data << uint32(vendorItem.first->DisplayInfoID);
 				if (!grey)
 					data << int32(0xFFFFFFFF);
 				else
 					data << int32(0);
 				data << uint32(0);
-				data << uint32(item.first->MaxDurability);
-				data << uint32(item.first->BuyCount);
+				data << uint32(vendorItem.first->MaxDurability);
+				data << uint32(vendorItem.first->BuyCount);
 				data << uint32(0);
 				++item_amount;
 			}
@@ -880,19 +897,20 @@ public:
 class transmogcommands : public CommandScript
 {
 public:
-	transmogcommands() : CommandScript("transmogcommands") { }
+	transmogcommands() : CommandScript("transmogcommands")
+	{
+	}
 
 	ChatCommand* GetCommands() const
 	{
 		static ChatCommand transmogCommandTable[] =
-
 		{
-			{ "reload", rbac::RBAC_PERM_COMMAND_RELOAD_TRANSMOG, true, &HandleReloadTransmog, "", NULL },
+			{ "reload", rbac::RBAC_PERM_COMMAND_RELOAD, true, &HandleReloadTransmog, "", NULL },
 			{ NULL, 0, false, NULL, "", NULL }
 		};
 		static ChatCommand commandTable[] =
 		{
-			{ "transmog", rbac::RBAC_PERM_COMMAND_TRANSMOG, false, NULL, "", transmogCommandTable },
+			{ "transmog", rbac::RBAC_PERM_COMMAND_RELOAD, false, NULL, "", transmogCommandTable },
 			{ NULL, 0, false, NULL, "", NULL }
 		};
 		return commandTable;
