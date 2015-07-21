@@ -673,7 +673,7 @@ public:
 
 
 				bool grey = false;
-				if (twohighest < vendorItem.second && vendorItem.second != 0 && threehighest < threerating && threerating != 0)
+				if ((twohighest < vendorItem.second && vendorItem.second == 0) && (threehighest < threerating && threerating == 0))
 					grey = true;
 
 				data << uint32(count + 1);
