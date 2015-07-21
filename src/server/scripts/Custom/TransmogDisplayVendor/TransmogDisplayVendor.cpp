@@ -98,7 +98,7 @@ static SelectionStore selectionStore; // selectionStore[GUID] = Slot
 struct ItemData
 {
 	uint32 entry;
-	uint32 rating;
+	uint32 tworating;
 };
 static const std::vector<ItemData> itemList;
 
@@ -463,7 +463,12 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 		}
 
 		auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+		auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
+		auto E = WorldDatabase.PQuery("SELECT 3v3_rating FROM transmog_vendor_items WHERE entry=%u", item_data->entry);
 		uint32 twohighest = 0;
+		uint32 threehighest = 0;
+		uint32 threerating = 5000;
+
 
 		if (Q)
 		{
@@ -471,9 +476,26 @@ void TransmogDisplayVendorMgr::HandleTransmogrify(Player* player, Creature* /*cr
 			twohighest = qfield[0].GetUInt32();
 		}
 
-		if (twohighest < item_data->rating)
+		if (W)
 		{
-			ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating", item_data->rating);
+			Field* wfield = W->Fetch();
+			threehighest = wfield[0].GetUInt32();
+		}
+
+		if (E)
+		{
+			Field* efield = E->Fetch();
+			threerating = efield[0].GetUInt32();
+		}
+
+		if (twohighest < item_data->tworating || threehighest < threerating)
+		{
+			if (twohighest == 0)
+				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 3v3 rating", threerating);
+			else if (threehighest == 0)
+				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating", item_data->tworating);
+			else
+				ChatHandler(player->GetSession()).PSendSysMessage("You need to have achieved %u 2v2 rating or %u 3v3 rating", item_data->tworating, threerating);
 			return; // LANG_ERR_TRANSMOG_NOT_ENOUGH_RATING
 		}
 
@@ -549,8 +571,8 @@ public:
 		WorldSession* session = player->GetSession();
 		for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; slot++)
 		{
-			if (slot == 0 || slot == 1 || slot == 3 || slot == 10 || slot == 11 || slot == 12 || slot == 13
-				|| slot == 18 || slot == 15 || slot == 16)
+			if (slot == 0 || slot == 1 || slot == 10 || slot == 11 || slot == 12 || slot == 13 
+				|| slot == 14 || slot == 15 || slot == 16 || slot == 17 || slot == 18)
 				continue;
 
 			// if (player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
@@ -592,7 +614,7 @@ public:
 				if (!TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(player, itemTemplate, curtemp))
 					continue;
 
-				vendorItems.push_back(std::make_pair(curtemp, data.rating));
+				vendorItems.push_back(std::make_pair(curtemp, data.tworating));
 			}
 
 			player->CLOSE_GOSSIP_MENU();
@@ -631,7 +653,11 @@ public:
 				}
 
 				auto Q = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=451 AND guid=%u", player->GetGUIDLow());
+				auto W = CharacterDatabase.PQuery("SELECT counter FROM character_achievement_progress WHERE criteria=447 AND guid=%u", player->GetGUIDLow());
+				auto E = WorldDatabase.PQuery("SELECT 3v3_rating FROM transmog_vendor_items WHERE entry=%u", vendorItem.first->ItemId);
 				uint32 twohighest = 0;
+				uint32 threehighest = 0;
+				uint32 threerating = 5000;
 
 				if (Q)
 				{
@@ -639,8 +665,15 @@ public:
 					twohighest = qfield[0].GetUInt32();
 				}
 
+				if (E)
+				{
+					Field* efield = E->Fetch();
+					threerating = efield[0].GetUInt32();
+				}
+
+
 				bool grey = false;
-				if (twohighest < vendorItem.second)
+				if (twohighest < vendorItem.second && threehighest < threerating)
 					grey = true;
 
 				data << uint32(count + 1);
@@ -872,13 +905,13 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, rating FROM transmog_vendor_items"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.rating = Q->Fetch()[1].GetUInt32();
+				data.tworating = Q->Fetch()[1].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
@@ -932,13 +965,13 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, rating FROM transmog_vendor_items"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, 2v2_rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
 				ItemData data;
 				data.entry = Q->Fetch()[0].GetUInt32();
-				data.rating = Q->Fetch()[1].GetUInt32();
+				data.tworating = Q->Fetch()[1].GetUInt32();
 				if (auto itrsecond = sObjectMgr->GetItemTemplate(data.entry))
 					mod_itemList.push_back(data);
 				else
