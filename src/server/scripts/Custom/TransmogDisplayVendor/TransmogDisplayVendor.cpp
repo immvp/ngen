@@ -221,7 +221,8 @@ bool TransmogDisplayVendorMgr::CanTransmogrifyItemWithItem(Player* player, ItemT
 	}
 
 	if (!IgnoreReqClass && (source->AllowableClass & player->getClassMask()) == 0)
-		
+		return false;
+
 	return true;
 }
 bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, ItemTemplate const* proto)
