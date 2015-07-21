@@ -154,7 +154,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
         index += BG_TEAMS_COUNT;
     if (ginfo->Team == HORDE)
         index++;
-	if (BgTypeId == 2)
+	if (BgTypeId == BATTLEGROUND_WS)
 		ginfo->BgTypeId = BATTLEGROUND_AB;
 
     if (sWorld->getBoolConfig(BATTLEGROUND_CROSSFACTION_ENABLED) && ArenaType == 0)
