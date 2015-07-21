@@ -261,17 +261,17 @@ bool TransmogDisplayVendorMgr::SuitableForTransmogrification(Player* player, Ite
 
 	if (player)
 	{
-		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
-			return false;
+		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeam() != HORDE)
+			//return false;
 
-		if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
-			return false;
+		//if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeam() != ALLIANCE)
+			//return false;
 
-		if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
-			return false;
+		//if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
+			//return false;
 
-		if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
-			return false;
+		//if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
+			//return false;
 
 		if (!IgnoreReqSkill && proto->RequiredSkill != 0)
 		{
