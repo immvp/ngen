@@ -932,7 +932,7 @@ public:
 		// clear for reload
 		mod_itemList.clear();
 
-		if (auto Q = WorldDatabase.PQuery("SELECT entry, rating FROM transmog_vendor_items"))
+		if (auto Q = WorldDatabase.PQuery("SELECT entry, rating FROM transmog_vendor_items ORDER BY rating"))
 		{
 			do
 			{
